@@ -26,7 +26,7 @@ function loadBigPlaylist() {
         // change window.playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
         $('#ulPlay').replaceWith($('<table>',{'id':'tablePlaylist'}));
-        $('#tablePlaylist').css('width','100%')
+        $('#tablePlaylist').css('width','100%').css('table-layout','fixed');
         $('#tablePlaylist td').css('overflow','scroll');
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
@@ -94,7 +94,7 @@ function loadBigPlaylist() {
                         ).append( // overlay icon for youtube or vimeo, bottom right
                             $('<img>',{'src':vidicon}).css('width','16').css('position','absolute').css('right','0px').css('bottom','0px')
                         )
-                    ).css('padding','0px').css('position','relative')
+                    ).css('padding','0px').css('position','relative').css('width','45px')
                 ).append(
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
@@ -114,11 +114,11 @@ function loadBigPlaylist() {
                                 }
                             }
                         }
-                    ).css('cursor','pointer')
+                    ).css('cursor','pointer').css('width','auto').css('word-break','break-all')
                 ).append(
-                    $('<td>').html(window.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
+                    $('<td>').html(window.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','93px')
                 ).append(
-                    $('<td>').append(removeBtn).append($('<br>'))
+                    $('<td>').append(removeBtn).append($('<br>')).css('width','13px')
                 )
             );
             window.totalTime += vidinfo.duration;
