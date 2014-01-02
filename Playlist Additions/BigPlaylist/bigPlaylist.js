@@ -89,12 +89,12 @@ function loadBigPlaylist() {
             $('#tablePlaylistBody').append(
                 $('<tr>', {'data':{info: vidinfo.info}}).append(
                     $('<td>').append(
-                        $('<a>',{'href':vidurl,'target':'_blank'}).append(
+                        $('<a>',{'href':vidurl,'target':'_blank'}).css('position','relative').append(
                             $('<img>',{'src':vidinfo.info.thumbnail}).css('width','45px')
                         ).append( // overlay icon for youtube or vimeo, bottom right
                             $('<img>',{'src':vidicon}).css('width','16').css('position','absolute').css('right','0px').css('bottom','0px')
                         )
-                    ).css('padding','0px').css('position','relative').css('width','45px')
+                    ).css('padding','0px').css('width','45px')
                 ).append(
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
