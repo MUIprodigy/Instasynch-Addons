@@ -112,20 +112,17 @@ function loadOnClickKickBan(){
     };
     var chatCtrlDown = false,
         oldScroll,
-        blockScrolling = function(event){
-            event.stopPropagation();
-        },
         chatKeyDown = function (event) {
             if(!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
                 window.autoscroll = false;
-                $('#chat_list').bind('scroll',blockScrolling);
+                $('#chat_list').bind('scroll',blockEvent);
                 chatCtrlDown = true;
             }
         },
         chatKeyUp = function (event) {
             if(chatCtrlDown && !event.ctrlKey){
                 window.autoscroll = true;
-                $('#chat_list').unbind('scroll',blockScrolling);
+                $('#chat_list').unbind('scroll',blockEvent);
                 $('#chat_list').scrollTop($('#chat_list')[0].scrollHeight);
                 chatCtrlDown = false;
             }

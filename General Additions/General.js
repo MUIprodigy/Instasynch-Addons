@@ -25,7 +25,7 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    window.addMessage('', '<strong>Scripts 1.30.1 loaded. Recent changes:<br>'+
+    window.addMessage('', '<strong>Scripts 1.30.2 loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
@@ -55,7 +55,9 @@ function getIndexOfUser(id){
     }
     return -1;
 }
-
+function blockEvent(event){
+    event.stopPropagation();
+}
 function getUsernameArray(lowerCase){
     var arr = [];
     for(i = 0; i< window.users.length;i++){

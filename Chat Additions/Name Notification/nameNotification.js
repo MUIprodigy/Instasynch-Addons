@@ -26,18 +26,14 @@ function loadNameNotification(){
 
     //overwrite InstaSynch's addMessage function
     window.addMessage = function(username, message, userstyle, textstyle) {
-        //continue with InstaSynch's addMessage function
-        oldAddMessage(username, message, userstyle, textstyle);
-        if(!newMsg){
-            return;
-        }
         var possibleNames = [],
             exactMatches = [],
             nameStart = -1,
             name = '',
             end = false,
             i,
-            j;
+            j,
+            found = false;
         
         while(!end){
             nameStart = message.indexOf('@',nameStart+1);
@@ -68,15 +64,29 @@ function loadNameNotification(){
                 }
                 if(exactMatches.length != 0){
                     if(thisUsername === exactMatches[exactMatches.length-1]){
-                        toggleNotify();
+                        found = true;
                     }
                 }
                 nameStart = i-1;
             }
         }
+        if(found){
+            message = message.replace(new RegExp('(@'+thisUsername+')', 'g'),'<strong><font color=red>$1</font></strong>');
+        }
+        //continue with InstaSynch's addMessage function
+        oldAddMessage(username, message, userstyle, textstyle);
+        console.log(window.newMsg);
+        if(!window.newMsg){
+            return;
+        }
+        if(found && !notified){
+            toggleNotify();
+        }
     };
    $('#cin').focus(function () {
-        toggleNotify();
+        if(notified){
+            toggleNotify();
+        }
     });
 }
 var notified = false;
@@ -84,7 +94,6 @@ var notified = false;
 function toggleNotify(){
     if(window.newMsg && !notified){
         $('head > link:last-of-type')[0].href = 'https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Name%20Notification/notificationFavicon.ico?raw=true';
-        $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
         notified = true;
     }else{
         $('head > link:last-of-type')[0].href = 'http://instasynch.com/favicon.ico';
