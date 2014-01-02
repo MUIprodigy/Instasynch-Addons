@@ -31,6 +31,8 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
+        $('#playlist_items').css('width','97.5%');
+
         var oldMakeLeader = window.makeLeader,
             oldIsLeader;
         window.makeLeader = function(userId){
@@ -118,7 +120,7 @@ function loadBigPlaylist() {
                 ).append(
                     $('<td>').html(window.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','93px')
                 ).append(
-                    $('<td>').append(removeBtn).append($('<br>')).css('width','13px')
+                    $('<td>').append(removeBtn).append($('<br>')).css('width','15px')
                 )
             );
             window.totalTime += vidinfo.duration;
