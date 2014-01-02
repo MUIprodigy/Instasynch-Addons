@@ -4,6 +4,7 @@
 
     <Bibbytube - Modified InstaSynch client code>
     Copyright (C) 2013  Bibbytube
+    Copyright (C) 2014  fugXD, restructure, convert to jquery.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +22,6 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-
 var resultsPerPage = 9,
     indexOfSearch,
     entries = [],
@@ -31,24 +31,49 @@ var resultsPerPage = 9,
     searchTimeout;
 
 // Search results container
-var divresults = document.createElement("div");
-divresults.id = "searchResults";
-applyStyle(divresults);
+var divresults = document.createElement('div');
+divresults.id = 'searchResults';
+divresults.style.cssFloat = 'right'; // All but IE
+divresults.style.styleFloat = 'right'; //IE
+divresults.style.width = '380px'; 
+divresults.style.marginTop = '10px';
+divresults.style.backgroundColor = '#DFDFDF';
+divresults.style.opacity = '0.9';
+divresults.style.padding = '5px';
+divresults.style.display = 'none';
+divresults.style.position = 'relative';
 
 // Close button container
-var divremove = document.createElement("div");
-divremove.id = "divclosesearch";
-applyStyle(divremove);
+var divremove = document.createElement('div');
+divremove.id = 'divclosesearch';
+divremove.innerHTML = '<img src="http://www.instasynch.com/images/close.png">';
+divremove.style.cssFloat = 'right'; // All but IE
+divremove.style.styleFloat = 'right'; //IE
+divremove.style.cursor = 'pointer';
+divremove.style.display = 'none';
+divremove.style.position = 'absolute';
+divremove.style.right = '0px';
+divremove.style.top = '0px';    
 
-// "Moar" link container
-var divmore = document.createElement("div");
-divmore.id = "divmore";
+// 'Moar' link container
+var divmore = document.createElement('div');
+divmore.id = 'divmore';
+var nextDisabled = false;
+var prevDisabled = false;
+
+divmore.innerHTML = '<input id="prevButton" disabled type="button" style="cursor:pointer" value="&lt&lt Prev"/> </span>';
+divmore.innerHTML += '<input id="nextButton" disabled type="button" style="cursor:pointer" value="Next &gt&gt"/>';
+
+divmore.style.textAlign='center';
+divmore.style.height='300px';
+divmore.style.width = '380px'; 
+divmore.style.position='relative';
+divmore.style.zIndex='1';
 
 // Getting poll container's parent to insert search result container
-var divpolls = document.getElementsByClassName("poll-container")[0];
+var divpolls = document.getElementsByClassName('poll-container')[0];
 var divpollparent = divpolls.parentNode;
 divpollparent.insertBefore(divresults,divpolls);
-
 
 // Setting events on the URL input
 $("#URLinput").bind("keydown", function(event) {
@@ -180,33 +205,45 @@ function showResults(entries, index) {
             }
 
             link += id;
-            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'>");
-            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;' onClick='addLinkToPl(this)'>");
-            html.push("<img src=\"" + thumbnailUrl + "\">");
-            html.push("<p  style='position:absolute;top:5px;left:5px;visibility:hidden'>");
-            html.push("<span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span>");
-            html.push("</p>");
-            html.push("<p style='display:none'>" + link + "</p>");
-            html.push("<p  style='position:absolute;bottom:0px;right:0px'>");
-            html.push("<span style='background:rgba(0, 0, 0, 0.7);color:" + durationColor + "'>" + duration +  "</span>");
-            html.push("</p>");
-            html.push("</div>");
-            html.push("</div>");
+
+            $("#searchResults").append(
+                $('<div>')
+            ).append(
+                $('<div>').append(
+                    $('<img>',{'src':thumbnailUrl})
+                ).append(
+                    $('<p>').append(
+                        $('<span>').text(title).css('background','rgba(0, 0, 0, 0.7)').css('color','white')
+                    ).css('position','absolute').css('top','5px').css('left','5px').css('display','none')
+                ).append(
+                    $('<p>').text(link).css('display','none').addClass('videourl')
+                ).append(
+                    $('<p>').append(
+                        $('<span>').text(duration).css('background','rgba(0, 0, 0, 0.7').css('color',durationColor)
+                    ).css('position','absolute').css('bottom','0px').css('right','0px')
+                ).css('overflow','hidden').css('position','relative').css('float','left').css('height','90px').css('width','120px').css('margin','1px').css('cursor','pointer').css('z-index','2').click(addLinkToPl).hover(showTitle,hideTitle)
+            )
         }else{
             html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
         }
     }
     $(html.join('')).appendTo("#searchResults");
-    applyStyle(divmore);
+
     divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
     divresults.appendChild(divmore);
-    divresults.style.display = "block";
-    divremove.style.display = "block";
+    $('#searchResults').css('display','block');
+    $('#divclosesearch').css('display','block').click(closeResults);
+    // update buttons
+    prevDisabled = (indexOfSearch > 0) ? false : true;
+    nextDisabled = (indexOfSearch < entries.length - resultsPerPage) ? false : true;
+
+    $('#nextButton').attr('disabled',nextDisabled).click(getNextResultPage);
+    $('#prevButton').attr('disabled',prevDisabled).click(getPreviousResultPage);
 } 
 
 function getNextResultPage() {
     indexOfSearch += resultsPerPage;
-    showResults(entries, indexOfSearch);
+    showResults(entries, indexOfSearch);  
 }
 
 function getPreviousResultPage() {
@@ -216,19 +253,17 @@ function getPreviousResultPage() {
 
 // shows the video title on hover
 function showTitle(e){
-    var titleToShow = e.firstChild.childNodes[1];
-    titleToShow.style.visibility='visible';
+    e.currentTarget.childNodes[1].style.display='block';
 }
 
 // hide the video title on mouse out
 function hideTitle(e){
-    var titleToHide = e.firstChild.childNodes[1];
-    titleToHide.style.visibility='hidden';
+    e.currentTarget.childNodes[1].style.display='none';
 }
-    
+
 // Paste the title clicked in the add bar
 function addLinkToPl(e) {
-    var linkToPaste = e.childNodes[2].innerHTML,
+    var linkToPaste = e.currentTarget.childNodes[2].innerHTML,
         addbox = document.getElementById("URLinput");
     addbox.value = linkToPaste;
 }
@@ -240,46 +275,4 @@ function closeResults(){
     partialEntries = [];
     divresults.style.display = "none";
     divremove.style.display = "none";
-}
-
-// css thingies
-function applyStyle(e){
-    if (e.id === "searchResults"){
-        divresults.style.cssFloat = "right"; // All but IE
-        divresults.style.styleFloat = "right"; //IE
-        divresults.style.width = "380px"; 
-        divresults.style.marginTop = "10px";
-        divresults.style.backgroundColor = "#DFDFDF";
-        divresults.style.opacity = "0.9";
-        divresults.style.padding = "5px";
-        divresults.style.display = "none";
-        divresults.style.position = "relative";
-    }
-    if (e.id === "divclosesearch"){
-        divremove.innerHTML = "<img onClick=closeResults() src='http://www.instasynch.com/images/close.png'>";
-        divremove.style.cssFloat = "right"; // All but IE
-        divremove.style.styleFloat = "right"; //IE
-        divremove.style.cursor = "pointer";
-        divremove.style.display = "none";
-        divremove.style.position = "absolute";
-        divremove.style.left = "375px";
-        divremove.style.top = "0px";    
-    }
-    if (e.id === "divmore"){
-        var nextDisabled = false;
-        var prevDisabled = false;
-        prevDisabled = (indexOfSearch > 0) ? '' : 'disabled';
-        nextDisabled = (indexOfSearch < entries.length - 9) ? '' : 'disabled';
-
-        divmore.innerHTML = "<input "+ prevDisabled +" type='button' style='cursor:pointer' onClick=getPreviousResultPage() value='&lt&lt Prev'/> </span>";
-        divmore.innerHTML += "<input "+ nextDisabled +" type='button' style='cursor:pointer' onClick=getNextResultPage() value='Next &gt&gt'/>";
-
-
-        divmore.style.textAlign="center";
-        //divmore.style.cursor="pointer";
-        divmore.style.height="300px";
-        divmore.style.width = "380px"; 
-        divmore.style.position="relative";
-        divmore.style.zIndex="1";
-    }
 }
