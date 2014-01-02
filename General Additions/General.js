@@ -25,7 +25,7 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    window.addMessage('', '<strong>Scripts 1.3 loaded. Recent changes:<br>'+
+    window.addMessage('', '<strong>Scripts 1.30.1 loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+

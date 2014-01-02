@@ -66,8 +66,8 @@ function loadWallCounter(){
     //     oldRemoveVideo(vidinfo);
     // };    
 
-    window.window.addMessage = function(username, message, userstyle, textstyle) {
-        if(username === '' && message === 'Video added succesfully.'){
+    window.addMessage = function(username, message, userstyle, textstyle) {
+        if(username === '' && message === 'Video added successfully.'){
             resetWallCounter();
             message +='WallCounter: ['+window.secondsToTime(wallCounter[thisUsername])+']';
         }
