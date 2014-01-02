@@ -56,7 +56,7 @@ function printAddonSettings(){
         keyArr = settings.getAll(),
         i;
     for(i = 0; i < keyArr.length;i++) {
-        output += "["+keyArr[i]+": "+GM_getValue(keyArr[i])+"] ";
+        output += "["+keyArr[i]+": "+settings.get(keyArr[i])+"] ";
     }
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
