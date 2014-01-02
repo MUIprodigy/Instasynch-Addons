@@ -30,14 +30,14 @@ function exportPlaylist(){
     var output='',
         i;
 
-    for (i = 0; i < window.playlist.length; i++) {
-        switch(window.playlist[i].info.provider){
+    for (i = 0; i < unsafeWindow.playlist.length; i++) {
+        switch(unsafeWindow.playlist[i].info.provider){
             case 'youtube': output+='http://youtu.be/';break;
             case 'vimeo':output+='http://vimeo.com/';break;
             default: continue;
         }
-        output += window.playlist[i].info.id+'\n ';
+        output += unsafeWindow.playlist[i].info.id+'\n ';
     }
-    window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
+    unsafeWindow.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
 preConnectFunctions.push(loadExportPlaylist);

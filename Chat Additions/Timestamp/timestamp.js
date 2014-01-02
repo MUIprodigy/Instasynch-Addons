@@ -24,19 +24,19 @@
 
 function loadTimestamp(){
     //load settings
-    addTimestamp = settings.get('addTimestamp','true');
+    timestamp = settings.get('Timestamp',true);
 
     //add the commands
     commands.set('addOnSettings',"Timestamp",toggleTimestamp);
 
-    var oldAddMessage = window.addMessage,
+    var oldAddMessage = unsafeWindow.addMessage,
         date,
         hours,
         minutes;
 
     //overwrite InstaSynch's addMessage function
-    window.addMessage = function(username, message, userstyle, textstyle) {
-        if(addTimestamp){
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
+        if(timestamp){
             date = new Date();
             minutes = date.getMinutes();
             if(minutes < 10){
@@ -53,9 +53,9 @@ function loadTimestamp(){
     };
 }
 function toggleTimestamp(){
-    addTimestamp = !addTimestamp; 
-    settings.set('addTimestamp',addTimestamp);
+    timestamp = !timestamp; 
+    settings.set('Timestamp',timestamp);
 }
-var addTimestamp = true;
+var timestamp = true;
 
 preConnectFunctions.push(loadTimestamp);

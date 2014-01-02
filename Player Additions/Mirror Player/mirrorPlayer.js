@@ -24,7 +24,7 @@
 
 function loadMirrorPlayer(){
     //load settings
-    automaticMirror = settings.get('automaticMirror','true');
+    automaticPlayerMirror = settings.get('AutomaticPlayerMirror',true);
     
     //add the command
     commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
@@ -33,15 +33,15 @@ function loadMirrorPlayer(){
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
     var mirrorClass =".mirror { -moz-transform: scaleX(-1); /* Gecko */ -o-transform: scaleX(-1); /* Operah */ -webkit-transform: scaleX(-1); /* webkit */ transform: scaleX(-1); /* standard */ filter: FlipH; /* IE 6/7/8 */}",
-        oldPlayVideo = window.playVideo,
+        oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
         title;
     $('<style>'+mirrorClass+'</style>').appendTo('body');
 
 
-    window.playVideo = function(vidinfo, time, playing) {
-        indexOfVid = window.getVideoIndex(vidinfo);
-        title = window.playlist[indexOfVid].title;
+    unsafeWindow.playVideo = function(vidinfo, time, playing) {
+        indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
+        title = unsafeWindow.playlist[indexOfVid].title;
         if(containsMirrored(title)){
             if(!isPlayerMirrored){
                 toggleMirrorPlayer();
@@ -53,16 +53,16 @@ function loadMirrorPlayer(){
     };
 
     //checking the current video after loading the first time
-    if(window.playlist.length != 0){
+    if(unsafeWindow.playlist.length != 0){
         setTimeout(function(){
-            if(window.playlist && window.playlist[getActiveVideoIndex()] && containsMirrored(window.playlist[getActiveVideoIndex()].title)){
+            if(unsafeWindow.playlist && unsafeWindow.playlist[getActiveVideoIndex()] && containsMirrored(unsafeWindow.playlist[getActiveVideoIndex()].title)){
                 toggleMirrorPlayer();
             }
         },2500);
     }
 }
 function containsMirrored(title){
-    if(!automaticMirror){
+    if(!automaticPlayerMirror){
         return false;
     }
     var found = false,
@@ -81,11 +81,11 @@ function containsMirrored(title){
     return found;
 }
 
-var automaticMirror = true,
+var automaticPlayerMirror = true,
     isPlayerMirrored = false;
 function toggleAutomaticMirrorPlayer(){
-    automaticMirror = !automaticMirror; 
-    settings.set('automaticMirror',automaticMirror);
+    automaticPlayerMirror = !automaticPlayerMirror; 
+    settings.set('AutomaticPlayerMirror',automaticPlayerMirror);
 }
 
 function toggleMirrorPlayer(){

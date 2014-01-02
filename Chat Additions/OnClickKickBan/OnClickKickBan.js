@@ -25,10 +25,10 @@ function loadOnClickKickBan(){
     if(!isUserMod()){
         return;
     }
-    var oldAddMessage = window.addMessage;
+    var oldAddMessage = unsafeWindow.addMessage;
 
     //overwrite InstaSynch's  addMessage function
-    window.addMessage = function(username, message, userstyle, textstyle) {
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
@@ -60,38 +60,38 @@ function loadOnClickKickBan(){
                         userId,
                         i;
                     user = user.match(/([^ ]* - )?([\w_-]*):/)[2];
-                    for(i = 0; i< window.users.length;i++){
-                        if(window.users[i].username === user ) {
-                            if(window.users[i].permissions > 0){
+                    for(i = 0; i< unsafeWindow.users.length;i++){
+                        if(unsafeWindow.users[i].username === user ) {
+                            if(unsafeWindow.users[i].permissions > 0){
                                 isMod = true;
                                 break;
                             }
-                            userId = window.users[i].id;
+                            userId = unsafeWindow.users[i].id;
                             userFound = true;
                             break;
                         }
                     }       
                     if(event.altKey){
                         if(isMod){
-                            window.addMessage('', "Can't ban a mod", '', 'hashtext');
+                            unsafeWindow.addMessage('', "Can't ban a mod", '', 'hashtext');
                         }else{
                             if(userFound){
-                                window.sendcmd('ban', {userid: userId});    
-                                window.addMessage('', 'b& user: '+user, '', 'hashtext');
+                                unsafeWindow.sendcmd('ban', {userid: userId});    
+                                unsafeWindow.addMessage('', 'b& user: '+user, '', 'hashtext');
                             }else{
-                                window.sendcmd('leaverban', {username: user});    
-                                window.addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
+                                unsafeWindow.sendcmd('leaverban', {username: user});    
+                                unsafeWindow.addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
                             }
                         }
                     }else{          
                     if(isMod){
-                            window.addMessage('', "Can't kick a mod", '', 'hashtext');
+                            unsafeWindow.addMessage('', "Can't kick a mod", '', 'hashtext');
                         }else{
                             if(userFound){
-                                window.sendcmd('kick', {userid: userId});   
-                                window.addMessage('', 'Kicked user: '+user, '', 'hashtext');
+                                unsafeWindow.sendcmd('kick', {userid: userId});   
+                                unsafeWindow.addMessage('', 'Kicked user: '+user, '', 'hashtext');
                             }else{
-                                window.addMessage('', "Didn't find the user", '', 'hashtext');
+                                unsafeWindow.addMessage('', "Didn't find the user", '', 'hashtext');
                             }
                         }
                     }
@@ -114,14 +114,14 @@ function loadOnClickKickBan(){
         oldScroll,
         chatKeyDown = function (event) {
             if(!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
-                window.autoscroll = false;
+                unsafeWindow.autoscroll = false;
                 $('#chat_list').bind('scroll',blockEvent);
                 chatCtrlDown = true;
             }
         },
         chatKeyUp = function (event) {
             if(chatCtrlDown && !event.ctrlKey){
-                window.autoscroll = true;
+                unsafeWindow.autoscroll = true;
                 $('#chat_list').unbind('scroll',blockEvent);
                 $('#chat_list').scrollTop($('#chat_list')[0].scrollHeight);
                 chatCtrlDown = false;

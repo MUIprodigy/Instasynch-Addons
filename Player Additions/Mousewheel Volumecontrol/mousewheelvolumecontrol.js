@@ -26,7 +26,7 @@ var previousVolumeScrollTime = new Date().getTime(); // used to measure speed of
 
 function loadMouseWheelVolumecontrol(){
 
-    autocompleteBotCommands = settings.get('mouseWheelVolumecontrol','true');
+    autocompleteBotCommands = settings.get('MouseWheelVolumecontrol',true);
     commands.set('addOnSettings',"MouseWheelVolumecontrol",toggleMouseWheelVolumecontrol);
     //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
     
@@ -37,8 +37,8 @@ function loadMouseWheelVolumecontrol(){
             event.preventDefault();
             event.returnValue=!mouserOverPlayer;
             
-            var currentVolumeScrollTime = new Date().getTime();
-            var scrollDirection = 1.0*(event.wheelDeltaY/Math.abs(event.wheelDeltaY)); // -1 or 1 depending on direction, *1.0 forces float div
+            var currentVolumeScrollTime = new Date().getTime(),
+                scrollDirection = (1.0*(event.wheelDeltaY/Math.abs(event.wheelDeltaY))); // -1 or 1 depending on direction, *1.0 forces float div
             
             if ((currentVolumeScrollTime - previousVolumeScrollTime) < 10) {
                 // discard near simultaneous events, to get rougly one event per 'scroll'
@@ -50,9 +50,9 @@ function loadMouseWheelVolumecontrol(){
             previousVolumeScrollTime = currentVolumeScrollTime;
         }
     }
-    window.onmousewheel=document.onmousewheel=preventScroll;
-    if(window.addEventListener){
-        window.addEventListener('DOMMouseScroll',preventScroll,false);
+    unsafeWindow.onmousewheel=document.onmousewheel=preventScroll;
+    if(unsafeWindow.addEventListener){
+        unsafeWindow.addEventListener('DOMMouseScroll',preventScroll,false);
     }
     //add hover event to the player
     $('#media').hover(
@@ -82,10 +82,10 @@ function loadMouseWheelVolumecontrol(){
     //     //set the globalVolume to the player after it has been loaded
     // };
 
-    var oldPlayVideo = window.playVideo,
+    var oldPlayVideo = unsafeWindow.playVideo,
         newPlayer = false;
 
-    window.playVideo = function(vidinfo, time, playing){
+    unsafeWindow.playVideo = function(vidinfo, time, playing){
         oldPlayVideo(vidinfo,time,playing);
         if(oldProvider !== vidinfo.provider){
             newPlayer = true;
@@ -102,7 +102,7 @@ function loadMouseWheelVolumecontrol(){
                     };
                 }break;
                 case 'vimeo':{
-                    $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
+                    $f($('#vimeo')[0]).addEvent('ready',initGlobalVolume);
                 }break;
             }
         }
@@ -117,7 +117,7 @@ var isPlayerRead = false,
 
 function toggleMouseWheelVolumecontrol(){
     mouseWheelVolumecontrol = !mouseWheelVolumecontrol; 
-    settings.set('mouseWheelVolumecontrol',mouseWheelVolumecontrol);
+    settings.set('MouseWheelVolumecontrol',mouseWheelVolumecontrol);
 }
 function initGlobalVolume(){
     if(isPlayerRead){

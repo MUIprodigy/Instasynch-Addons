@@ -23,21 +23,21 @@
 
 function loadLogInOffMessages(){
     //load settings
-    logInOffMessages = settings.get('logInOffMessages','false');
+    logInOffMessages = settings.get('LogInOffMessages',false);
     
     //add the command
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
     // Overwriting Adduser
-    var oldAddUser = window.addUser,
-        oldRemoveUser = window.removeUser;
+    var oldAddUser = unsafeWindow.addUser,
+        oldRemoveUser = unsafeWindow.removeUser;
 
-    window.addUser = function(user, css, sort) {
+    unsafeWindow.addUser = function(user, css, sort) {
         // Only if blackname or mod
         if (user.loggedin && logInOffMessages){
-            window.addMessage('', user.username + ' logged on.', '','hashtext'); 
+            unsafeWindow.addMessage('', user.username + ' logged on.', '','hashtext'); 
             if (user.username === 'JustPassingBy'){
-                window.addMessage('','Wish him a happy birthday !', '', 'hastext');
+                unsafeWindow.addMessage('','Wish him a happy birthday !', '', 'hastext');
             }
         }
         oldAddUser(user,css,sort);
@@ -45,10 +45,10 @@ function loadLogInOffMessages(){
 
     // Overwriting removeUser
 
-    window.removeUser = function(id) {
-        var user = window.users[getIndexOfUser(id)];
+    unsafeWindow.removeUser = function(id) {
+        var user = unsafeWindow.users[getIndexOfUser(id)];
         if (user.loggedin && logInOffMessages){
-            window.addMessage('',user.username + ' logged off.', '','hashtext');
+            unsafeWindow.addMessage('',user.username + ' logged off.', '','hashtext');
         }
         oldRemoveUser(id);
     };
@@ -58,7 +58,7 @@ var logInOffMessages = false;
 
 function toggleLogInOffMessages(){
     logInOffMessages = !logInOffMessages;
-    settings.set('logInOffMessages',logInOffMessages);
+    settings.set('LogInOffMessages',logInOffMessages);
 }
 
 postConnectFunctions.push(loadLogInOffMessages);

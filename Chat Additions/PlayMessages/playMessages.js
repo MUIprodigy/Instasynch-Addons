@@ -19,22 +19,21 @@
 
 function loadPlayMessages(){
     //load settings
-    playMessages = settings.get('playMessages','true');
-    
+    playMessages = settings.get('PlayMessages',true);
     //add the command
     commands.set('addOnSettings',"PlayMessages",togglePlayMessages);
     
     // Overwriting Adduser
-    var oldPlayVideo = window.playVideo,
+    var oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
         title;
 
-    window.playVideo = function(vidinfo, time, playing) {
+    unsafeWindow.playVideo = function(vidinfo, time, playing) {
         // Only if blackname or mod
         if (playMessages){
-            indexOfVid = window.getVideoIndex(vidinfo); 
-            title = ((window.playlist[indexOfVid].title.length>240)?window.playlist[indexOfVid].title.substring(0,240)+"...":window.playlist[indexOfVid].title);
-            window.addMessage('', 'Now playing: ' + title, '','hashtext'); 
+            indexOfVid = unsafeWindow.getVideoIndex(vidinfo); 
+            title = ((unsafeWindow.playlist[indexOfVid].title.length>240)?unsafeWindow.playlist[indexOfVid].title.substring(0,240)+"...":unsafeWindow.playlist[indexOfVid].title);
+            unsafeWindow.addMessage('', 'Now playing: ' + title, '','hashtext'); 
         }
         oldPlayVideo(vidinfo, time, playing);
     };
@@ -44,7 +43,7 @@ var playMessages = true;
 
 function togglePlayMessages(){
     playMessages = !playMessages;
-    settings.set('playMessages',playMessages);
+    settings.set('PlayMessages',playMessages);
 }
 
 postConnectFunctions.push(loadPlayMessages);

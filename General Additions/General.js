@@ -25,7 +25,7 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    window.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>'+
+    unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
@@ -39,17 +39,17 @@ function getActiveVideoIndex(){
 }
 
 function isUserMod(){
-    return window.isMod;
+    return unsafeWindow.isMod;
 }
 
 function isBibbyRoom(){
-    return window.ROOMNAME.match(/bibby/i)?true:false;
+    return unsafeWindow.ROOMNAME.match(/bibby/i)?true:false;
 }
 
 function getIndexOfUser(id){
     var i;
-    for (i = 0; i < window.users.length; i++){
-        if (id === window.users[i].id){
+    for (i = 0; i < unsafeWindow.users.length; i++){
+        if (id === unsafeWindow.users[i].id){
             return i;
         }
     }
@@ -60,12 +60,12 @@ function blockEvent(event){
 }
 function getUsernameArray(lowerCase){
     var arr = [];
-    for(i = 0; i< window.users.length;i++){
-        if(window.users[i].username !== 'unnamed'){
+    for(i = 0; i< unsafeWindow.users.length;i++){
+        if(unsafeWindow.users[i].username !== 'unnamed'){
             if(!lowerCase){
-                arr.push(window.users[i].username);
+                arr.push(unsafeWindow.users[i].username);
             }else{
-                arr.push(window.users[i].username.toLowerCase());
+                arr.push(unsafeWindow.users[i].username.toLowerCase());
             }
         }
     }
@@ -127,9 +127,9 @@ function doSetCaretPosition(oField, position) {
 }
 function pasteTextAtCaret(text) {
     var sel, range;
-    if (window.getSelection) {
+    if (unsafeWindow.getSelection) {
         // IE9 and non-IE
-        sel = window.getSelection();
+        sel = unsafeWindow.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
             var textNode;
             range = sel.getRangeAt(0);
@@ -152,6 +152,6 @@ function pasteTextAtCaret(text) {
 }
 
 function openInNewTab(url){
-    var win=window.open(url, '_blank');
+    var win=unsafeWindow.open(url, '_blank');
     win.focus();
 }

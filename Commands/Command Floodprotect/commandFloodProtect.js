@@ -22,8 +22,8 @@
 */
 
 function loadCommandFloodProtect(){
-    var oldsendcmd = window.sendcmd;
-    window.sendcmd = function(command, data){
+    var oldsendcmd = unsafeWindow.sendcmd;
+    unsafeWindow.sendcmd = function(command, data){
         if(command){
             //add the command to the cache
             commandCache.push({command:command,data:data});
@@ -38,7 +38,7 @@ function loadCommandFloodProtect(){
                 //remove the sent command
                 commandCache.splice(0,1);
                 //after 400ms send the next command
-                setTimeout(function(){sendcmdReady = true;window.sendcmd();},400);
+                setTimeout(function(){sendcmdReady = true;unsafeWindow.sendcmd();},400);
             }
         }
     };

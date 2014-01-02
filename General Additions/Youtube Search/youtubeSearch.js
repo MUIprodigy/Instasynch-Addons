@@ -28,64 +28,73 @@ var resultsPerPage = 9,
     partialEntries = [],
     isPlaylist,
     startIndex = 1,
-    searchTimeout;
-
-// Search results container
-var divresults = document.createElement('div');
-divresults.id = 'searchResults';
-divresults.style.cssFloat = 'right'; // All but IE
-divresults.style.styleFloat = 'right'; //IE
-divresults.style.width = '380px'; 
-divresults.style.marginTop = '10px';
-divresults.style.backgroundColor = '#DFDFDF';
-divresults.style.opacity = '0.9';
-divresults.style.padding = '5px';
-divresults.style.display = 'none';
-divresults.style.position = 'relative';
-
-// Close button container
-var divremove = document.createElement('div');
-divremove.id = 'divclosesearch';
-divremove.innerHTML = '<img src="http://www.instasynch.com/images/close.png">';
-divremove.style.cssFloat = 'right'; // All but IE
-divremove.style.styleFloat = 'right'; //IE
-divremove.style.cursor = 'pointer';
-divremove.style.display = 'none';
-divremove.style.position = 'absolute';
-divremove.style.right = '0px';
-divremove.style.top = '0px';    
-
-// 'Moar' link container
-var divmore = document.createElement('div');
-divmore.id = 'divmore';
-var nextDisabled = false;
-var prevDisabled = false;
-
-divmore.innerHTML = '<input id="prevButton" disabled type="button" style="cursor:pointer" value="&lt&lt Prev"/> </span>';
-divmore.innerHTML += '<input id="nextButton" disabled type="button" style="cursor:pointer" value="Next &gt&gt"/>';
-
-divmore.style.textAlign='center';
-divmore.style.height='300px';
-divmore.style.width = '380px'; 
-divmore.style.position='relative';
-divmore.style.zIndex='1';
-
-// Getting poll container's parent to insert search result container
-var divpolls = document.getElementsByClassName('poll-container')[0];
-var divpollparent = divpolls.parentNode;
-divpollparent.insertBefore(divresults,divpolls);
-
-// Setting events on the URL input
-$("#URLinput").bind("keydown", function(event) {
-    if(event.keyCode === $.ui.keyCode.ESCAPE){
-        closeResults();
-    }else{
-        if(searchTimeout){
-            clearInterval(searchTimeout);
+    searchTimeout,
+    divresults,
+    divremove,
+    divmore,
+    nextDisabled,
+    prevDisabled,
+    divpolls,
+    divpollparent;
+    
+function loadYoutubeSearch(){
+    // Search results container
+    divresults = document.createElement('div');
+    divresults.id = 'searchResults';
+    divresults.style.cssFloat = 'right'; // All but IE
+    divresults.style.styleFloat = 'right'; //IE
+    divresults.style.width = '380px'; 
+    divresults.style.marginTop = '10px';
+    divresults.style.backgroundColor = '#DFDFDF';
+    divresults.style.opacity = '0.9';
+    divresults.style.padding = '5px';
+    divresults.style.display = 'none';
+    divresults.style.position = 'relative';
+    
+    // Close button container
+    divremove = document.createElement('div');
+    divremove.id = 'divclosesearch';
+    divremove.innerHTML = '<img src="http://www.instasynch.com/images/close.png">';
+    divremove.style.cssFloat = 'right'; // All but IE
+    divremove.style.styleFloat = 'right'; //IE
+    divremove.style.cursor = 'pointer';
+    divremove.style.display = 'none';
+    divremove.style.position = 'absolute';
+    divremove.style.right = '0px';
+    divremove.style.top = '0px';    
+    
+    // 'Moar' link container
+    divmore = document.createElement('div');
+    divmore.id = 'divmore';
+    nextDisabled = false;
+    prevDisabled = false;
+    
+    divmore.innerHTML = '<input id="prevButton" disabled type="button" style="cursor:pointer" value="&lt&lt Prev"/> </span>';
+    divmore.innerHTML += '<input id="nextButton" disabled type="button" style="cursor:pointer" value="Next &gt&gt"/>';
+    
+    divmore.style.textAlign='center';
+    divmore.style.height='300px';
+    divmore.style.width = '380px'; 
+    divmore.style.position='relative';
+    divmore.style.zIndex='1';
+    
+    // Getting poll container's parent to insert search result container
+    divpolls = document.getElementsByClassName('poll-container')[0];
+    divpollparent = divpolls.parentNode;
+    divpollparent.insertBefore(divresults,divpolls);
+    
+    // Setting events on the URL input
+    $("#URLinput").bind("keydown", function(event) {
+        if(event.keyCode === $.ui.keyCode.ESCAPE){
+            closeResults();
+        }else{
+            if(searchTimeout){
+                clearInterval(searchTimeout);
+            }
+            searchTimeout = setTimeout(startSearch,500);  
         }
-        searchTimeout = setTimeout(startSearch,500);  
-    }
-});
+    });
+}
 
 function startSearch(){
     searchTimeout = null;
@@ -201,7 +210,7 @@ function showResults(entries, index) {
                 duration += date.getUTCMinutes() + 'm';
             }
             if ((date.getUTCSeconds() != 0) || duration) {
-                duration += date.getUTCSeconds() + 's'
+                duration += date.getUTCSeconds() + 's';
             }
 
             link += id;
@@ -222,7 +231,7 @@ function showResults(entries, index) {
                         $('<span>').text(duration).css('background','rgba(0, 0, 0, 0.7').css('color',durationColor)
                     ).css('position','absolute').css('bottom','0px').css('right','0px')
                 ).css('overflow','hidden').css('position','relative').css('float','left').css('height','90px').css('width','120px').css('margin','1px').css('cursor','pointer').css('z-index','2').click(addLinkToPl).hover(showTitle,hideTitle)
-            )
+            );
         }else{
             html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
         }
@@ -276,3 +285,5 @@ function closeResults(){
     divresults.style.display = "none";
     divremove.style.display = "none";
 }
+
+preConnectFunctions.push(loadYoutubeSearch);

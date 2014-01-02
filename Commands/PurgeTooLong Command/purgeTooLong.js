@@ -31,9 +31,9 @@ function purgeTooLong(params){
         i;
 
     //get all Videos longer than maxTimeLimit
-    for (i = 0; i < window.playlist.length; i++) {
-        if(window.playlist[i].duration >= maxTimeLimit){
-            videos.push({info:window.playlist[i].info, duration:window.playlist[i].duration});
+    for (i = 0; i < unsafeWindow.playlist.length; i++) {
+        if(unsafeWindow.playlist[i].duration >= maxTimeLimit){
+            videos.push({info:unsafeWindow.playlist[i].info, duration:unsafeWindow.playlist[i].duration});
         }
     }  
 
@@ -43,7 +43,7 @@ function purgeTooLong(params){
     videos.sort(compareVideos);
 
     for (var i = 0; i < videos.length; i++) {
-        window.sendcmd('remove', {info: videos[i].info});
+        unsafeWindow.sendcmd('remove', {info: videos[i].info});
     }
 }
 

@@ -62,6 +62,17 @@ function loadCommandLoader(){
         ];
         items.addOnSettings = [];
         items.commandFunctionMap = {};
+        unsafeWindow.addEventListener ("message", 
+            function(event){
+                try{
+                    var parsed = JSON.parse(event.data);
+                    if(parsed.commandParameters){
+                        items.commandFunctionMap[parsed.commandParameters[0].toLowerCase()](parsed.commandParameters);
+                    }
+                }catch(err){
+
+                }
+        }, false);
         return {
             "set": function(arrayName, funcName, func) {
                 if(funcName[0] !== '$'){
@@ -87,13 +98,18 @@ function loadCommandLoader(){
                     return;
                 }
                 if(items.commandFunctionMap.hasOwnProperty(funcName)){
-                    items.commandFunctionMap[funcName](params);
-                    commandExecuted = true;
+                    funcName = funcName;
                 }
-                funcName = funcName +' ';
-                if(items.commandFunctionMap.hasOwnProperty(funcName)){
-                    items.commandFunctionMap[funcName](params);
+                else if(items.commandFunctionMap.hasOwnProperty(funcName+' ')){
+                    funcName = funcName+' ';
+                }else{
+                    funcName = undefined;
+                }
+                if(funcName){
                     commandExecuted = true;
+                    var messageTxt = JSON.stringify({ commandParameters: params });
+                    unsafeWindow.postMessage(messageTxt,"*");
+                    //items.commandFunctionMap[funcName](params);
                 }
             }
         };
@@ -108,3 +124,4 @@ function loadCommandLoader(){
 }
 var commands;
     commandExecuted = false;
+

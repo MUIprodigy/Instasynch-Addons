@@ -26,7 +26,7 @@ function loadSkipCommand(){
 }
 
 function skip(){	
-	window.sendcmd("skip", null);
+	unsafeWindow.sendcmd("skip", null);
 }
 
 preConnectFunctions.push(loadSkipCommand);

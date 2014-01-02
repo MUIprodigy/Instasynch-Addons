@@ -23,14 +23,14 @@
 
 function loadModSpy(){
 	//load settings
-	modSpy = settings.get('modSpy','false');
+	modSpy = settings.get('ModSpy',false);
 	
 	//add command
     commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
 	// Overwriting console.log
 	var oldLog = console.log, 
-		oldMoveVideo = window.moveVideo,
+		oldMoveVideo = unsafeWindow.moveVideo,
 		filterList = [
 			/^Resynch requested\.\./,
 			/cleaned the playlist/,
@@ -56,15 +56,15 @@ function loadModSpy(){
 					message = message.replace("moved","bumped");
 					bumpCheck = false;
 				}
-				window.addMessage('', message, '','hashtext');   
+				unsafeWindow.addMessage('', message, '','hashtext');   
 			}
 		}
 		oldLog.apply(console,arguments);
 	};
 
 	// Overwriting moveVideo to differentiate bump and move
-	window.moveVideo = function(vidinfo, position) {
-		var oldPosition = window.getVideoIndex(vidinfo);
+	unsafeWindow.moveVideo = function(vidinfo, position) {
+		var oldPosition = unsafeWindow.getVideoIndex(vidinfo);
 		oldMoveVideo(vidinfo,position);
 		
 		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar
@@ -75,7 +75,7 @@ function loadModSpy(){
 }	
 function toggleModSpy(){
 	modSpy = !modSpy; 
-	settings.set('modSpy',modSpy);
+	settings.set('ModSpy',modSpy);
 }
 var modSpy = false,
 	bumpCheck = false;

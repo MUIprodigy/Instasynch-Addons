@@ -52,26 +52,26 @@ function loadAutoscrollFix(){
         //scrollHeight - scrollTop will be 290 when the scrollbar is at the bottom
         //height of the chat window is 280, not sure where the 10 is from
         if ((scrollHeight - scrollTop) < height*1.05){
-            window.autoscroll = true;
+            unsafeWindow.autoscroll = true;
         }else{
-            window.autoscroll = false;
+            unsafeWindow.autoscroll = false;
         }
     });
 
     //overwrite cleanChat Function so it won't clean when autoscroll is off
     //,also clean all the messages until messages === MAXMESSAGES
-    window.cleanChat = function cleanChat(){
-        var max = window.MAXMESSAGES;
+    unsafeWindow.cleanChat = function cleanChat(){
+        var max = unsafeWindow.MAXMESSAGES;
         //increasing the maximum messages by the factor 2 so messages won't get cleared 
         //and won't pile up if the user goes afk with autoscroll off
-        if(!window.autoscroll){
+        if(!unsafeWindow.autoscroll){
             max = max*2;
         }
-        while(window.windmessages > max){
+        while(unsafeWindow.windmessages > max){
             $('#chat_list > :first-child').remove(); //span user
             $('#chat_list > :first-child').remove(); //span message
             $('#chat_list > :first-child').remove(); //<br>
-            window.messages--;
+            unsafeWindow.messages--;
         }
     };
 }
