@@ -28,7 +28,7 @@ function loadClearChatCommand(){
 
 function clearChat(){
 	$('#chat_list').empty();
-	window.messages = 0;
+	unsafeWindow.messages = 0;
 }
 
 

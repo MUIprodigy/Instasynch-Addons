@@ -22,8 +22,8 @@
 */
 
 function loadLeaderSeal(){
-    var oldMakeLeader = window.makeLeader;
-    window.makeLeader = function(userId){
+    var oldMakeLeader = unsafeWindow.makeLeader;
+    unsafeWindow.makeLeader = function(userId){
         oldMakeLeader(userId);
         $("#leaderSymbol").attr("src","/favicon.ico");
     };

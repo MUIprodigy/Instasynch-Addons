@@ -22,10 +22,10 @@
 */
 
 function loadNameNotification(){
-    var oldAddMessage = window.addMessage;
+    var oldAddMessage = unsafeWindow.addMessage;
 
     //overwrite InstaSynch's addMessage function
-    window.addMessage = function(username, message, userstyle, textstyle) {
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         var possibleNames = [],
             exactMatches = [],
             nameStart = -1,
@@ -75,8 +75,7 @@ function loadNameNotification(){
         }
         //continue with InstaSynch's addMessage function
         oldAddMessage(username, message, userstyle, textstyle);
-        console.log(window.newMsg);
-        if(!window.newMsg){
+        if(!unsafeWindow.newMsg){
             return;
         }
         if(found && !notified){
@@ -92,7 +91,7 @@ function loadNameNotification(){
 var notified = false;
 
 function toggleNotify(){
-    if(window.newMsg && !notified){
+    if(unsafeWindow.newMsg && !notified){
         $('head > link:last-of-type')[0].href = 'https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Name%20Notification/notificationFavicon.ico?raw=true';
         notified = true;
     }else{

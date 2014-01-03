@@ -33,7 +33,7 @@ function loadBotCommands(){
      commands.set('modCommands',"$voteBump ",emptyFunc);
      commands.set('modCommands',"$shuffle ",emptyFunc);
      commands.set('modCommands',"$exportUserBlacklist",emptyFunc);
-     commands.set('modCommands',"$poll",emptyFunc);
+     commands.set('modCommands',"$poll ",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);
      commands.set('regularCommands',"$greet",emptyFunc);

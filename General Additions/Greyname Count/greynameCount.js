@@ -22,14 +22,14 @@
 */
 
 function loadGreynameCount(){
-    var oldAddUser = window.addUser,
-        oldRemoveUser = window.removeUser;
+    var oldAddUser = unsafeWindow.addUser,
+        oldRemoveUser = unsafeWindow.removeUser;
 
-    window.addUser = function(user, css, sort) {
+    unsafeWindow.addUser = function(user, css, sort) {
         oldAddUser(user, css, sort);
         setViewerCount();
     };    
-    window.removeUser = function(id) {
+    unsafeWindow.removeUser = function(id) {
         oldRemoveUser(id);
         setViewerCount();
     };
@@ -38,12 +38,12 @@ function loadGreynameCount(){
 function setViewerCount(){
     var greynameCount = 0,
         i;
-    for (i = 0; i < window.users.length; i++) {
-        if(!window.users[i].loggedin){
+    for (i = 0; i < unsafeWindow.users.length; i++) {
+        if(!unsafeWindow.users[i].loggedin){
             greynameCount++;
         }
     };
-    $('#viewercount').html(window.users.length-greynameCount + '/' +greynameCount);
+    $('#viewercount').html(unsafeWindow.users.length-greynameCount + '/' +greynameCount);
 }
 
 preConnectFunctions.push(loadGreynameCount);

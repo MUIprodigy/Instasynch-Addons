@@ -20,70 +20,48 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
 function loadSettingsLoader(){
-    var cookieName = 'InstaSynch Addons Settings',
-        expire = { expires: 10*365 }; //settings expire in 10 years
     commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
-    //slightly changed version of this: http://stackoverflow.com/a/1960049, so it saves a hashmap rather than just a array
+    commands.set('regularCommands',"clearAddOnSettings",clearAddonSettings);
     settings = new function() {
-        var cookie = $.cookie(cookieName),
-            array = cookie ? cookie.split(/,/):[],
-            items = {},
-            i;
-    
-        for(i = 0; i<array.length;i+=2){
-            items[array[i]] = array[i+1];
-        }
-    
-        return {
-            "set": function(key, val) {
-                if(!items.hasOwnProperty(key)){
-                    array.push(key);
-                    array.push(val);
-                }else{
-                    i = array.indexOf(key);
-                    array[i+1] = val; 
-                }
-                items[key] = val;
-                window.addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
-                $.cookie(cookieName, array.join(','),expire);
-            },
-            "remove": function (key) { 
-    
-                i = array.indexOf(key); 
-                if(i!=-1) array.splice(i, 2); 
-    
-                delete items[key];
-                $.cookie(cookieName, array.join(','),expire);        
-            },
-            "clear": function() {
-                array = [];
-                items = {};
-                //clear the cookie.
-                $.cookie(cookieName, null);
-            },
-            "get": function(key, val) {
-                if(!items[key] && val){
-                    settings.set(key, val);
-                }
-                //Get all the array.
-                return items[key] === 'false'?false:true;
-            },
-            "getAll": function() {
-                return items;
+        this.set = function(key, val) {
+            GM_setValue(key,val);     
+            unsafeWindow.addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
+        };
+        this.remove = function (key) { 
+            GM_deleteValue(key);      
+        };
+        this.clear =  function() {
+            var keyArr = settings.getAll(),
+                i;
+            for(i = 0; i < keyArr.length;i++) {
+                settings.remove(keyArr[i]);
             }
+        };
+        this.get = function(key, val) {
+            if(GM_getValue(key) === undefined){
+                settings.set(key,val);
+            }
+            return GM_getValue(key);
+        };
+        this.getAll = function() {
+            return GM_listValues();
         };
     };
 }
 var settings;
 
-
 function printAddonSettings(){
     var output ="",
-        key;
-    for(key in settings.getAll()){
-        output += "["+key+": "+settings.get(key)+"] ";
+        keyArr = settings.getAll(),
+        i;
+    for(i = 0; i < keyArr.length;i++) {
+        output += "["+keyArr[i]+": "+settings.get(keyArr[i])+"] ";
     }
-    window.addMessage('', output, '', 'hashtext');
+    unsafeWindow.addMessage('', output, '', 'hashtext');
 }
+function clearAddonSettings(){
+    settings.clear();
+    unsafeWindow.addMessage('', 'Cleared the settings, hit f5 to restore default', '', 'hashtext');
+}
+

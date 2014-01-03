@@ -20,10 +20,10 @@
 */
 
 function loadBigPlaylist() {
-    bigPlaylist = settings.get('bigPlaylist','true');
+    bigPlaylist = settings.get('BigPlaylist',true);
     commands.set('addOnSettings','BigPlaylist',toggleBigPlaylist);
     if (bigPlaylist) {
-        // change window.playlist to table based
+        // change unsafeWindow.playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
         $('#ulPlay').replaceWith($('<table>',{'id':'tablePlaylist'}));
         $('#tablePlaylist').css('width','100%').css('table-layout','fixed');
@@ -33,18 +33,18 @@ function loadBigPlaylist() {
         );
         $('#playlist_items').css('width','97.5%');
 
-        var oldMakeLeader = window.makeLeader,
+        var oldMakeLeader = unsafeWindow.makeLeader,
             oldIsLeader;
-        window.makeLeader = function(userId){
-            oldIsLeader = window.isLeader;
+        unsafeWindow.makeLeader = function(userId){
+            oldIsLeader = unsafeWindow.isLeader;
             oldMakeLeader(userId);
             //InstaSynch core.js, version 0.9.7
-            if (userId === window.userInfo.id)
+            if (userId === unsafeWindow.userInfo.id)
             {
                 $( "#tablePlaylistBody" ).sortable(
                 {
                     update : function (event, ui){
-                                window.sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
+                                unsafeWindow.sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
                                 $( "#tablePlaylistBody" ).sortable( "cancel" );
                              },
                      start: function(event,ui)
@@ -59,13 +59,13 @@ function loadBigPlaylist() {
                     $("#tablePlaylistBody").sortable( "disable" );
                 }
             }
-        }
+        };
         
 
         // override functions from InstaSynch's io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
-        window.addVideo = function(vidinfo) {
-            window.playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
+        unsafeWindow.addVideo = function(vidinfo) {
+            unsafeWindow.playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
 
             var vidurl = '',
                 vidicon = '';
@@ -83,7 +83,7 @@ function loadBigPlaylist() {
             var removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
                 'click': function () {
-                    window.sendcmd('remove', {info: $(this).parent().parent().data('info')});
+                    unsafeWindow.sendcmd('remove', {info: $(this).parent().parent().data('info')});
                 }
             });
 
@@ -108,41 +108,41 @@ function loadBigPlaylist() {
                             }
                             else
                             {
-                                if (window.isLeader) {
-                                    window.sendcmd('play', {info: $(this).parent().data('info')});
+                                if (unsafeWindow.isLeader) {
+                                    unsafeWindow.sendcmd('play', {info: $(this).parent().data('info')});
                                 } else {
-                                        $('#cin').val($('#cin').val() + window.getVideoIndex($(this).parent().data('info')) + ' ');
+                                        $('#cin').val($('#cin').val() + unsafeWindow.getVideoIndex($(this).parent().data('info')) + ' ');
                                         $('#cin').focus();
                                 }
                             }
                         }
                     ).css('cursor','pointer').css('width','auto').css('word-break','break-all')
                 ).append(
-                    $('<td>').html(window.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','93px')
+                    $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','93px')
                 ).append(
                     $('<td>').append(removeBtn).append($('<br>')).css('width','15px')
                 )
             );
-            window.totalTime += vidinfo.duration;
-            $('.total-videos').html(window.playlist.length + ' videos');
-            $('.total-duration').html(window.secondsToTime(window.totalTime));
-        }
+            unsafeWindow.totalTime += vidinfo.duration;
+            $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
+            $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
+        };
 
-        window.removeVideo = function(vidinfo) {
-            var indexOfVid = window.getVideoIndex(vidinfo);
-            if (indexOfVid > -1 && indexOfVid < window.playlist.length) {
-                window.totalTime -= window.playlist[indexOfVid].duration;
-                window.playlist.splice(indexOfVid, 1);
+        unsafeWindow.removeVideo = function(vidinfo) {
+            var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
+            if (indexOfVid > -1 && indexOfVid < unsafeWindow.playlist.length) {
+                unsafeWindow.totalTime -= unsafeWindow.playlist[indexOfVid].duration;
+                unsafeWindow.playlist.splice(indexOfVid, 1);
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).remove();
             }
-            $('.total-videos').html(window.playlist.length + ' videos');
-            $('.total-duration').html(window.secondsToTime(window.totalTime));
-        }
+            $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
+            $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
+        };
 
-        window.moveVideo = function(vidinfo, position) {
-            var indexOfVid = window.getVideoIndex(vidinfo);
+        unsafeWindow.moveVideo = function(vidinfo, position) {
+            var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1) {
-                window.playlist.move(indexOfVid, position);
+                unsafeWindow.playlist.move(indexOfVid, position);
                 var playlistElements = $('#tablePlaylistBody tr').clone(true);
                 playlistElements.move = function (old_index, new_index) {
                     if (new_index >= this.length) {
@@ -157,24 +157,24 @@ function loadBigPlaylist() {
                 $('#tablePlaylistBody').empty();
                 $('#tablePlaylistBody').html(playlistElements);
             }
-        }
+        };
 
-        window.playVideo = function playVideo(vidinfo, time, playing) {
+        unsafeWindow.playVideo = function(vidinfo, time, playing) {
             var addedby = '',
                 title = '',
-                indexOfVid = window.getVideoIndex(vidinfo);
+                indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = ((window.playlist[indexOfVid].title.length>240)?window.playlist[indexOfVid].title.substring(0,240)+"...":window.playlist[indexOfVid].title);
-                addedby = window.playlist[indexOfVid].addedby;
+                title = ((unsafeWindow.playlist[indexOfVid].title.length>240)?unsafeWindow.playlist[indexOfVid].title.substring(0,240)+"...":unsafeWindow.playlist[indexOfVid].title);
+                addedby = unsafeWindow.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
                 $('#vidTitle').html(title + '<div class="via"> via ' + addedby + '</div>');
-                video.play(vidinfo, time, playing);   
-                $('#slider').slider('option', 'max', window.playlist[indexOfVid].duration);
-                $('#sliderDuration').html('/' + window.secondsToTime(window.playlist[indexOfVid].duration))
+                unsafeWindow.video.play(vidinfo, time, playing);   
+                $('#slider').slider('option', 'max', unsafeWindow.playlist[indexOfVid].duration);
+                $('#sliderDuration').html('/' + unsafeWindow.secondsToTime(unsafeWindow.playlist[indexOfVid].duration));
             }
-        }
+        };
     }
 }
 
@@ -182,6 +182,6 @@ var bigPlaylist = true;
 
 function toggleBigPlaylist(){
     bigPlaylist = !bigPlaylist;
-    settings.set('bigPlaylist',bigPlaylist);
-    window.addMessage('','This setting requires a reload of the Page.','','hashtext');
+    settings.set('BigPlaylist',bigPlaylist);
+    unsafeWindow.addMessage('','This setting requires a reload of the Page.','','hashtext');
 }

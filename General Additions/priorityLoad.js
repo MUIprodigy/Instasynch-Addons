@@ -22,10 +22,7 @@
 */
 //Scripts that need to be loaded first
 function loadPriorityScripts(){
-    loadGeneralStuff();
-    loadCommandLoader();
-    loadSettingsLoader();
-    loadBigPlaylist();
+    executeFunctions([loadGeneralStuff,loadCommandLoader,loadSettingsLoader,loadBigPlaylist]);
 }
 
 preConnectFunctions.splice(0,0,loadPriorityScripts);

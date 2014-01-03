@@ -27,7 +27,7 @@ function loadTrimWallCommand(){
 
 function trimWall(params){
     if(!params[1]){
-        window.addMessage('','No user specified: \'trimWall [user] [maxMinutes]','','hashtext');
+        unsafeWindow.addMessage('','No user specified: \'trimWall [user] [maxMinutes]','','hashtext');
         return;
     }
     resetWallCounter();
@@ -38,13 +38,13 @@ function trimWall(params){
         i;
 
     if(currentTime < maxTimeLimit){
-        window.addMessage('','The wall is smaller than the timelimit','','hashtext');
+        unsafeWindow.addMessage('','The wall is smaller than the timelimit','','hashtext');
         return;
     }
     //get all Videos for the user
-    for (i = 0; i < window.playlist.length; i++) {
-        if(window.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            videos.push({info:window.playlist[i].info, duration:window.playlist[i].duration});
+    for (i = 0; i < unsafeWindow.playlist.length; i++) {
+        if(unsafeWindow.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            videos.push({info:unsafeWindow.playlist[i].info, duration:unsafeWindow.playlist[i].duration});
         }
     }  
 
@@ -65,7 +65,7 @@ function trimWall(params){
         currentTime-= videos[i].duration;
         // rmVideo(i,videos[i].info);
         //delay via commandFloodProtect.js
-        window.sendcmd('remove', {info: videos[i].info});
+        unsafeWindow.sendcmd('remove', {info: videos[i].info});
     }
 }
 

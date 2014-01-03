@@ -29,9 +29,9 @@ function shuffle(params){
     var user = params[1],
         i,
         shuffleList = [];
-    for (i = getActiveVideoIndex()+1; i<window.playlist.length; i++) {
-        if(!user || window.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            shuffleList.push({i: i, info: window.playlist[i].info});
+    for (i = getActiveVideoIndex()+1; i<unsafeWindow.playlist.length; i++) {
+        if(!user || unsafeWindow.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            shuffleList.push({i: i, info: unsafeWindow.playlist[i].info});
         }
     }
     var tempInfo,randIndex,newPosition;
@@ -39,7 +39,7 @@ function shuffle(params){
         randIndex = Math.floor(Math.random()*shuffleList.length);
         tempInfo = shuffleList[i].info;
         newPosition = shuffleList[randIndex].i;
-        window.sendcmd('move', {info: tempInfo, position: newPosition});
+        unsafeWindow.sendcmd('move', {info: tempInfo, position: newPosition});
     }
 }
 

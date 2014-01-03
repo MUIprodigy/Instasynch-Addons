@@ -12,6 +12,7 @@ Command List
 'mirrorPlayer
 'clearChat
 'printAddonSettings
+'clearAddonSettings
 'printMyWallCounter
 'exportPlaylist
 'history
@@ -278,8 +279,8 @@ A popup with all the links will open. Just copy them and close it.
 Settings
 --------
 
-All the settings will be saved in a cookie so they aren't lost when reloading the page.
-To show all the current set values use <code>'printAddOnSettings</code>.
+All the settings will be saved with the Tamper/Greasemonkey API.
+To show all the current set values use <code>'printAddOnSettings</code>. And to restore default use <code>'clearAddOnSettings</code>
 When changing a setting the new value will be shown in the chat.
 
 
