@@ -107,6 +107,7 @@ function loadCommandLoader(){
                 }
                 if(funcName){
                     commandExecuted = true;
+                    params[0] = funcName;
                     unsafeWindow.postMessage(JSON.stringify({ commandParameters: params }),"*");
                     //items.commandFunctionMap[funcName](params);
                 }
