@@ -29,7 +29,7 @@ function loadModSpy(){
     commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
 	// Overwriting console.log
-	var oldLog = console.log, 
+	var oldLog = unsafeWindow.console.log, 
 		oldMoveVideo = unsafeWindow.moveVideo,
 		filterList = [
 			/^Resynch requested\.\./,
@@ -39,7 +39,7 @@ function loadModSpy(){
 		filter,
 		i;
 
-	console.log = function (message) {
+	unsafeWindow.console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (modSpy && message && message.match)
 		{

@@ -47,12 +47,24 @@ function loadBigPlaylist() {
                                 unsafeWindow.sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
                                 $( "#tablePlaylistBody" ).sortable( "cancel" );
                              },
-                     start: function(event,ui)
-                     {
-                         //Prevents click event from triggering when sorting videos
-                         $("#tablePlaylistBody").addClass('noclick');
-                     }
-                });
+                    start: function(event,ui)
+                    {
+                        //Prevents click event from triggering when sorting videos
+                        $("#tablePlaylistBody").addClass('noclick');
+                    },
+                    helper: function(e, tr)
+                    {
+                        var $originals = tr.children();
+                        var $helper = tr.clone();
+                        $helper.children().each(function(index)
+                        {
+                            // Set helper cell sizes to match the original sizes
+                            $(this).width($originals.eq(index).width());
+                        });
+                        return $helper;
+                    },
+                    opacity : 0.5
+                }).disableSelection();
                 $("#tablePlaylistBody").sortable( "enable" );
             }else{
                 if(oldIsLeader){
@@ -68,7 +80,8 @@ function loadBigPlaylist() {
             unsafeWindow.playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
 
             var vidurl = '',
-                vidicon = '';
+                vidicon = '',
+                removeBtn;
             if (vidinfo.info.provider === 'youtube') {
                 vidurl = 'http://www.youtube.com/watch?v=' + vidinfo.info.id;
                 vidicon = 'https://www.youtube.com/favicon.ico';
@@ -80,7 +93,7 @@ function loadBigPlaylist() {
                 vidicon = ''; // no need for icon, thumbnail for twitch says 'twitch.tv'
             }
 
-            var removeBtn = $('<div/>', {
+            removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
                 'click': function () {
                     unsafeWindow.sendcmd('remove', {info: $(this).parent().parent().data('info')});
@@ -99,7 +112,7 @@ function loadBigPlaylist() {
                     ).css('padding','0px').css('width','45px')
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
+                        $('<div>',{'title':vidinfo.title}).text(trimTitle(vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
                             //InstaSynch io.js, version 0.9.7
                             if ($("#tablePlaylistBody").hasClass("noclick"))
@@ -165,7 +178,7 @@ function loadBigPlaylist() {
                 indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = ((unsafeWindow.playlist[indexOfVid].title.length>240)?unsafeWindow.playlist[indexOfVid].title.substring(0,240)+"...":unsafeWindow.playlist[indexOfVid].title);
+                title = trimTitle(unsafeWindow.playlist[indexOfVid].title);
                 addedby = unsafeWindow.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
@@ -179,6 +192,13 @@ function loadBigPlaylist() {
 }
 
 var bigPlaylist = true;
+
+function trimTitle(title){
+    if(title.length>240){
+        title = title.substring(0,240)+"...";
+    }
+    return title;
+}
 
 function toggleBigPlaylist(){
     bigPlaylist = !bigPlaylist;
