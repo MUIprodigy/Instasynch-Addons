@@ -27,26 +27,26 @@ function loadSettingsLoader(){
         this.set = function(key, val) {
             GM_setValue(key,val);     
             unsafeWindow.addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
-        },
+        };
         this.remove = function (key) { 
             GM_deleteValue(key);      
-        },
+        };
         this.clear =  function() {
             var keyArr = settings.getAll(),
                 i;
             for(i = 0; i < keyArr.length;i++) {
                 settings.remove(keyArr[i]);
             }
-        },
+        };
         this.get = function(key, val) {
             if(GM_getValue(key) === undefined){
                 settings.set(key,val);
             }
             return GM_getValue(key);
-        },
+        };
         this.getAll = function() {
             return GM_listValues();
-        }
+        };
     };
 }
 var settings;
