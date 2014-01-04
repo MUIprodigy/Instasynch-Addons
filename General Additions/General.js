@@ -26,6 +26,7 @@ function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
     unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>'+
+                    '&bull; \'exportPlaylist will export to the clipboard. Use parameters: title, duration, addedby, thumbnail, all, xml to specify the data<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
