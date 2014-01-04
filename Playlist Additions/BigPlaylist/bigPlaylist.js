@@ -112,7 +112,7 @@ function loadBigPlaylist() {
                     ).css('padding','0px').css('width','45px')
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(trimTitle(vidinfo.title)).css('overflow','hidden')
+                        $('<div>',{'title':vidinfo.title}).text(trimTitle(vidinfo.title),100).css('overflow','hidden')
                     ).on('click', function() {
                             //InstaSynch io.js, version 0.9.7
                             if ($("#tablePlaylistBody").hasClass("noclick"))
@@ -124,14 +124,14 @@ function loadBigPlaylist() {
                                 if (unsafeWindow.isLeader) {
                                     unsafeWindow.sendcmd('play', {info: $(this).parent().data('info')});
                                 } else {
-                                        $('#cin').val($('#cin').val() + unsafeWindow.getVideoIndex($(this).parent().data('info')) + ' ');
-                                        $('#cin').focus();
+                                    $('#cin').val($('#cin').val() + unsafeWindow.getVideoIndex($(this).parent().data('info')) + ' ');
+                                    $('#cin').focus();
                                 }
                             }
                         }
                     ).css('cursor','pointer').css('width','auto').css('word-break','break-all')
                 ).append(
-                    $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','93px')
+                    $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right').css('width','100px')
                 ).append(
                     $('<td>').append(removeBtn).append($('<br>')).css('width','15px')
                 )
@@ -178,7 +178,7 @@ function loadBigPlaylist() {
                 indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = trimTitle(unsafeWindow.playlist[indexOfVid].title);
+                title = trimTitle(unsafeWindow.playlist[indexOfVid].title,240);
                 addedby = unsafeWindow.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
@@ -193,9 +193,9 @@ function loadBigPlaylist() {
 
 var bigPlaylist = true;
 
-function trimTitle(title){
-    if(title.length>240){
-        title = title.substring(0,240)+"...";
+function trimTitle(title,length){
+    if(title.length>length){
+        title = title.substring(0,length)+"...";
     }
     return title;
 }
