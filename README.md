@@ -6,7 +6,7 @@ Command List
 ------------
 
 <pre>
-<code>//Commands
+<code>//Commands ? means optional parameter
 'togglePlayer
 'printWallCounter
 'mirrorPlayer
@@ -14,16 +14,16 @@ Command List
 'printAddonSettings
 'clearAddonSettings
 'printMyWallCounter
-'exportPlaylist
+'exportPlaylist title? duration? addedby? thumbnail? all? xml?
 'history
 
 //Mod Commands
 'bump [user]
 'removeLast [user]
-'trimWall [user] [maxMinutes](optional)
-'purgeTooLong [maxMinutes](optional)
+'trimWall [user] [maxMinutes]?
+'purgeTooLong [maxMinutes]?
 'votePurge [user]
-'shuffle [user](optional)
+'shuffle [user]?
 
 //Settings
 ~TagsAutocomplete
@@ -270,11 +270,12 @@ To clear all the messages from the chat use the command <code>'clearChat</code>.
 
 Export Playlist Command
 -----------------------
-<b>Deprecated use $exportPlaylist with postvenge instead</b>
 
-To export all the videos in the playlist use the command <code>'exportPlaylist</code>.
-A popup with all the links will open. Just copy them and close it.
+To export all the videos in the playlist to the clipboard use the command <code>'exportPlaylist</code>. 
+On standard only the urls will be copied. To get more data use the parameters <code>title duration addedby thumbnail all</code>.
+To get the data in XML format use the parameter <code>xml</code>.
 
+Click <a href="Playlist Additions/ExportPlaylistCommand/exportplaylistexample.gif" >here</a> for the example.
 
 Settings
 --------

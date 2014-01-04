@@ -22,22 +22,68 @@
 */
 
 function loadExportPlaylist(){
-    commands.set('regularCommands',"exportPlaylist",exportPlaylist);
+    commands.set('regularCommands',"exportPlaylist ",exportPlaylist);
 }
 
 
-function exportPlaylist(){
-    var output='',
-        i;
+function exportPlaylist(params){
+    var rawOutput='',
+        xmlOutput = $('<playlist>'),
+        videoxml = '',
+        i = 0,
+        options = 1,
+        line = '',
+        xml = false;
+
+    for(i = 1;i<params.length;i++){
+        switch(params[i].toLowerCase()){
+            case 'title': options = options | 2; break;
+            case 'duration': options = options | 4; break;
+            case 'addedby': options = options | 8; break;
+            case 'thumbnail': options = options | 16; break;
+            case 'all': options = options | 31; break;
+            case 'xml': xml = true; break;
+        }
+    }
 
     for (i = 0; i < unsafeWindow.playlist.length; i++) {
-        switch(unsafeWindow.playlist[i].info.provider){
-            case 'youtube': output+='http://youtu.be/';break;
-            case 'vimeo':output+='http://vimeo.com/';break;
-            default: continue;
+        line = ''
+        videoxml = $('<video>');
+        line += getUrlOfInfo(unsafeWindow.playlist[i].info);
+        videoxml.append($('<url>').text(line));
+        if((options & 2) != 0){//title
+            line += " "+ unsafeWindow.playlist[i].title;
+            videoxml.append($('<title>').text(unsafeWindow.playlist[i].title));
         }
-        output += unsafeWindow.playlist[i].info.id+'\n ';
+        if((options & 4) != 0){//duration
+            line += " "+ unsafeWindow.playlist[i].duration;
+            videoxml.append($('<duration>').text(unsafeWindow.playlist[i].duration));
+        }
+        if((options & 8) != 0){//addedby
+            line += " "+ unsafeWindow.playlist[i].addedby;
+            videoxml.append($('<addedby>').text(unsafeWindow.playlist[i].addedby));
+        }
+        if((options & 16) != 0){//thumbnail
+            line += " "+ unsafeWindow.playlist[i].info.thumbnail;
+            videoxml.append($('<thumbnail>').text(unsafeWindow.playlist[i].info.thumbnail));
+        }
+        xmlOutput.append(videoxml);
+        rawOutput += line + '\n';
     }
-    unsafeWindow.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
+    if(xml){
+        rawOutput = $('<div>').append(xmlOutput.clone()).remove().html();
+        //format the xml
+        rawOutput = rawOutput.replace(/(<\/?video>)/g,'\n\t\$1');
+        rawOutput = rawOutput.replace(/(<url>)/g,'\n\t\t\$1');
+        rawOutput = rawOutput.replace(/(<title>)/g,'\n\t\t\$1');
+        rawOutput = rawOutput.replace(/(<addedby>)/g,'\n\t\t\$1');
+        rawOutput = rawOutput.replace(/(<duration>)/g,'\n\t\t\$1');
+        rawOutput = rawOutput.replace(/(<thumbnail>)/g,'\n\t\t\$1');
+        rawOutput = rawOutput.replace(/(<\/playlist>)/g,'\n\$1');
+    }
+    
+    GM_setClipboard(rawOutput,'text');
+    unsafeWindow.addMessage('', 'Playlist has been copied to the clipboard', '','hashtext'); 
 }
+
 preConnectFunctions.push(loadExportPlaylist);

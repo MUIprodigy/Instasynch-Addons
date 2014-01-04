@@ -112,7 +112,7 @@ function loadBigPlaylist() {
                     ).css('padding','0px').css('width','45px')
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(trimTitle(vidinfo.title),100).css('overflow','hidden')
+                        $('<div>',{'title':vidinfo.title}).text(trimTitle(vidinfo.title,100)).css('overflow','hidden')
                     ).on('click', function() {
                             //InstaSynch io.js, version 0.9.7
                             if ($("#tablePlaylistBody").hasClass("noclick"))

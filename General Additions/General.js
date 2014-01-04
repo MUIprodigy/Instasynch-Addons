@@ -47,6 +47,16 @@ function loadGeneralStuff(){
     //     GM_openInTab(url,options);
     // }
 }
+function getUrlOfInfo(vidinfo){
+    var url;
+    switch(vidinfo.provider){
+        case 'youtube': url='http://youtu.be/'  + vidinfo.id;      break;
+        case 'vimeo':   url='http://vimeo.com/' + vidinfo.id;      break;
+        case 'twitch':  url='http://twitch.tv/' + vidinfo.channel; break;
+        default: break;
+    }
+    return url;
+}
 function getActiveVideoIndex(){
     return $('.active').index();
 }
