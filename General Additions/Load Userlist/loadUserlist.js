@@ -29,7 +29,7 @@ function loadNewLoadUserlist() {
             i,
             userElement;
 
-        var userElement = $('<div/>', {
+        userElement = $('<div/>', {
             "class": "user_list " + muted,
             "data": {
                 username: String(user.username),
@@ -124,6 +124,7 @@ function loadNewLoadUserlist() {
     unsafeWindow.renameUser = function (id, username) {
         var user,
             i;
+        //start from the end since unnamed will be at the end of the list
         for (i = unsafeWindow.users.length - 1; i >= 0; i--) {
             if (unsafeWindow.users[i].id === id) {
                 user = unsafeWindow.users[i];
