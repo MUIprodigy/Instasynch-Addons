@@ -20,28 +20,35 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function loadShuffleCommand(){
-    commands.set('modCommands',"shuffle ",shuffle);
+function loadShuffleCommand() {
+    commands.set('modCommands', "shuffle ", shuffle, 'Shuffles the playlist or a wall of a user (prepare for spam combined with ModSpy). Possible parameters: the user');
 }
 
-function shuffle(params){
+function shuffle(params) {
     var user = params[1],
         i,
-        shuffleList = [];
-    for (i = getActiveVideoIndex()+1; i<unsafeWindow.playlist.length; i++) {
-        if(!user || unsafeWindow.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            shuffleList.push({i: i, info: unsafeWindow.playlist[i].info});
+        shuffleList = [],
+        tempInfo,
+        randIndex,
+        newPosition;
+
+    for (i = getActiveVideoIndex() + 1; i < unsafeWindow.playlist.length; i += 1) {
+        if (!user || unsafeWindow.playlist[i].addedby.toLowerCase() === user.toLowerCase()) {
+            shuffleList.push({
+                i: i,
+                info: unsafeWindow.playlist[i].info
+            });
         }
     }
-    var tempInfo,randIndex,newPosition;
-    for(i = 0; i< shuffleList.length;i++){
-        randIndex = Math.floor(Math.random()*shuffleList.length);
+    for (i = 0; i < shuffleList.length; i += 1) {
+        randIndex = Math.floor(Math.random() * shuffleList.length);
         tempInfo = shuffleList[i].info;
         newPosition = shuffleList[randIndex].i;
-        unsafeWindow.sendcmd('move', {info: tempInfo, position: newPosition});
+        unsafeWindow.sendcmd('move', {
+            info: tempInfo,
+            position: newPosition
+        });
     }
 }
-
 
 preConnectFunctions.push(loadShuffleCommand);

@@ -20,49 +20,48 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadMirrorPlayer(){
+function loadMirrorPlayer() {
     //load settings
-    automaticPlayerMirror = settings.get('AutomaticPlayerMirror',true);
-    
+    automaticPlayerMirror = settings.get('AutomaticPlayerMirror', true);
+
     //add the command
-    commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
-    commands.set('regularCommands',"mirrorPlayer",toggleMirrorPlayer);
+    commands.set('addOnSettings', "AutomaticPlayerMirror", toggleAutomaticMirrorPlayer, 'Toggles the automatic mirroring of the embedded player, which is determined by checking the title for keywords like MIRRORED.');
+    commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
-    var mirrorClass =".mirror { -moz-transform: scaleX(-1); /* Gecko */ -o-transform: scaleX(-1); /* Operah */ -webkit-transform: scaleX(-1); /* webkit */ transform: scaleX(-1); /* standard */ filter: FlipH; /* IE 6/7/8 */}",
+    var mirrorClass = ".mirror { -moz-transform: scaleX(-1); /* Gecko */ -o-transform: scaleX(-1); /* Operah */ -webkit-transform: scaleX(-1); /* webkit */ transform: scaleX(-1); /* standard */ filter: FlipH; /* IE 6/7/8 */}",
         oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
         title;
-    $('<style>'+mirrorClass+'</style>').appendTo('body');
+    $('<style>' + mirrorClass + '</style>').appendTo('body');
 
 
-    unsafeWindow.playVideo = function(vidinfo, time, playing) {
+    unsafeWindow.playVideo = function (vidinfo, time, playing) {
         indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
         title = unsafeWindow.playlist[indexOfVid].title;
-        if(containsMirrored(title)){
-            if(!isPlayerMirrored){
+        if (containsMirrored(title)) {
+            if (!isPlayerMirrored) {
                 toggleMirrorPlayer();
             }
-        }else if(isPlayerMirrored){
+        } else if (isPlayerMirrored) {
             toggleMirrorPlayer();
         }
         oldPlayVideo(vidinfo, time, playing);
     };
 
     //checking the current video after loading the first time
-    if(unsafeWindow.playlist.length != 0){
-        setTimeout(function(){
-            if(unsafeWindow.playlist && unsafeWindow.playlist[getActiveVideoIndex()] && containsMirrored(unsafeWindow.playlist[getActiveVideoIndex()].title)){
+    if (unsafeWindow.playlist.length !== 0) {
+        setTimeout(function () {
+            if (unsafeWindow.playlist && unsafeWindow.playlist[getActiveVideoIndex()] && containsMirrored(unsafeWindow.playlist[getActiveVideoIndex()].title)) {
                 toggleMirrorPlayer();
             }
-        },2500);
+        }, 2500);
     }
 }
-function containsMirrored(title){
-    if(!automaticPlayerMirror){
+
+function containsMirrored(title) {
+    if (!automaticPlayerMirror) {
         return false;
     }
     var found = false,
@@ -71,24 +70,24 @@ function containsMirrored(title){
             'mirror'
         ],
         i;
-    for(i = 0; i< words.length;i++){
-        if(title.toLowerCase().indexOf(words[i]) !== -1){
-            found =true;
+    for (i = 0; i < words.length; i += 1) {
+        if (title.toLowerCase().indexOf(words[i]) !== -1) {
+            found = true;
             break;
         }
     }
-
     return found;
 }
 
 var automaticPlayerMirror = true,
     isPlayerMirrored = false;
-function toggleAutomaticMirrorPlayer(){
-    automaticPlayerMirror = !automaticPlayerMirror; 
-    settings.set('AutomaticPlayerMirror',automaticPlayerMirror);
+
+function toggleAutomaticMirrorPlayer() {
+    automaticPlayerMirror = !automaticPlayerMirror;
+    settings.set('AutomaticPlayerMirror', automaticPlayerMirror);
 }
 
-function toggleMirrorPlayer(){
+function toggleMirrorPlayer() {
     $('#media').toggleClass('mirror');
     isPlayerMirrored = !isPlayerMirrored;
 }

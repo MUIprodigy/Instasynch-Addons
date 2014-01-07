@@ -21,12 +21,12 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-function loadSkipCommand(){
-    commands.set('regularCommands',"skip ",skip);
+function loadSkipCommand() {
+    commands.set('regularCommands', "skip ", skip);
 }
 
-function skip(){	
-	unsafeWindow.sendcmd("skip", null);
+function skip() {
+    unsafeWindow.sendcmd("skip", null);
 }
 
 preConnectFunctions.push(loadSkipCommand);

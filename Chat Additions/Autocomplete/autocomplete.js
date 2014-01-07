@@ -22,39 +22,38 @@
 */
 
 function loadAutoComplete() {
-    if(postConnectFunctions.lastIndexOf(loadAutoComplete) != postConnectFunctions.length-1){
+    if (postConnectFunctions.lastIndexOf(loadAutoComplete) !== postConnectFunctions.length - 1) {
         postConnectFunctions.push(loadAutoComplete);
         return;
     }
     //load settings
-    tagsAutoComplete = settings.get("TagsAutoComplete",true);
-    emotesAutoComplete = settings.get("EmotesAutoComplete",true);
-    commandsAutoComplete = settings.get("CommandsAutoComplete",true);
-    addOnSettingsAutoComplete = settings.get("AddOnSettingsAutoComplete",true);
-    namesAutoComplete = settings.get("NamesAutoComplete",true);
-    botCommandsAutoComplete = settings.get("BotCommandsAutoComplete",true);
+    tagsAutoComplete = settings.get("TagsAutoComplete", true);
+    emotesAutoComplete = settings.get("EmotesAutoComplete", true);
+    commandsAutoComplete = settings.get("CommandsAutoComplete", true);
+    addOnSettingsAutoComplete = settings.get("AddOnSettingsAutoComplete", true);
+    namesAutoComplete = settings.get("NamesAutoComplete", true);
+    botCommandsAutoComplete = settings.get("BotCommandsAutoComplete", true);
 
     //add the commands
-    commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
-    commands.set('addOnSettings',"EmotesAutoComplete",toggleEmotesAutocomplete);
-    commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
-    commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
-    commands.set('addOnSettings',"NamesAutoComplete",toggleNamesAutocomplete);
-    commands.set('addOnSettings',"BotCommandsAutoComplete",toggleBotCommandsAutocomplete);
+    commands.set('addOnSettings', "TagsAutoComplete", toggleTagsAutocomplete, 'Toggles the autocomplete of tags.');
+    commands.set('addOnSettings', "EmotesAutoComplete", toggleEmotesAutocomplete, 'Toggles the autocomplete of emotes.');
+    commands.set('addOnSettings', "CommandsAutoComplete", toggleCommandsAutocomplete, 'Toggles the autocomplete of commands.');
+    commands.set('addOnSettings', "AddOnSettingsAutoComplete", toggleAddonSettingsAutocomplete, 'Toggles the autocomplete of settings.');
+    commands.set('addOnSettings', "NamesAutoComplete", toggleNamesAutocomplete, 'Toggles the autocomplete of names.');
+    commands.set('addOnSettings', "BotCommandsAutoComplete", toggleBotCommandsAutocomplete, 'Toggles the autocomplete of bot commands.');
 
     var i,
-        emotes = (
-            function () {
-                var arr = Object.keys(unsafeWindow.$codes);
-                for (i = 0; i < arr.length; i++) {
-                    arr[i] = '/' + arr[i];
-                }
-                return arr;
-            })(),
+        emotes = (function () {
+            var temp = Object.keys(unsafeWindow.$codes);
+            for (i = 0; i < temp.length; i += 1) {
+                temp[i] = '/' + temp[i];
+            }
+            return temp;
+        }()),
         tagKeys = Object.keys(tags);
 
-    for (i = 0; i < tagKeys.length; i++) {
-        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
+    for (i = 0; i < tagKeys.length; i += 1) {
+        tagKeys[i] = tagKeys[i].replace(/\\/g, '');
     }
     autocompleteData = autocompleteData.concat(emotes);
     autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
@@ -66,96 +65,104 @@ function loadAutoComplete() {
     autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
 
     //add the jquery autcomplete widget to InstaSynch's input field
-    $("#chat input")    
-    .bind("keydown", function(event) {
-        // don't navigate away from the field on tab when selecting an item
-        if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
-            event.keyCode = $.ui.keyCode.ENTER;  // fake select the item
-            $(this).trigger(event);
-        }
-    })
-    .autocomplete({
-        delay: 0,
-        minLength: 0,
-        source: function (request, response) {
-            if(!autocomplete){
-                return;
+    $("#chat input")
+        .bind("keydown", function (event) {
+            // don't navigate away from the field on tab when selecting an item
+            if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
+                event.keyCode = $.ui.keyCode.ENTER; // fake select the item
+                $(this).trigger(event);
             }
-            var message = request.term,
-                caretPosition = doGetCaretPosition(unsafeWindow.cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']),
-                partToComplete = message.substring(lastIndex,caretPosition),
-                matches = [];
-
-            if(partToComplete.length>0){
-                switch(partToComplete[0]){
-                    case '/': if(!emotesAutoComplete|| (lastIndex!==0 && (!message[lastIndex-1].match(/\s/)&&!message[lastIndex-1].match(/\]/)))) return;  break;
-                    case '\'': if(!commandsAutoComplete || (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return; break;
-                    case '[': if(!tagsAutoComplete) return; break;
-                    case '~': if(!addOnSettingsAutoComplete|| (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return;  break; 
-                    case '@': if(!namesAutoComplete|| (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return;  break;
-                    case '$': if(!botCommandsAutoComplete|| (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return;  break;
-
+        })
+        .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: function (request, response) {
+                if (!autocomplete) {
+                    return;
                 }
-                if(partToComplete[0] ==='@'){
-                    matches = $.map(getUsernameArray(), function(item){
-                        item = '@' + item;
-                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
-                            return item;
-                        }
-                    });
-                }else{
-                    matches = $.map(autocompleteData, function (item) {
-                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
-                            return item;
-                        }
-                    });
+                var message = request.term,
+                    caretPosition = doGetCaretPosition(unsafeWindow.cin),
+                    lastIndex = lastIndexOfSet(message.substring(0, caretPosition), ['/', '\'', '[', '~', '@', '$']),
+                    partToComplete = message.substring(lastIndex, caretPosition),
+                    matches = [];
+                if (partToComplete.length > 0) {
+                    switch (partToComplete[0]) {
+                    case '/':
+                        if (!emotesAutoComplete || (lastIndex !== 0 && (!message[lastIndex - 1].match(/\s/) && !message[lastIndex - 1].match(/\]/)))) { return; }
+                        break;
+                    case '\'':
+                        if (!commandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        break;
+                    case '[':
+                        if (!tagsAutoComplete) { return; }
+                        break;
+                    case '~':
+                        if (!addOnSettingsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        break;
+                    case '@':
+                        if (!namesAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        break;
+                    case '$':
+                        if (!botCommandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        break;
+                    }
+                    if (partToComplete[0] === '@') {
+                        matches = $.map(getUsernameArray(), function (item) {
+                            item = '@' + item;
+                            if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                                return item;
+                            }
+                        });
+                    } else {
+                        matches = $.map(autocompleteData, function (item) {
+                            if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                                return item;
+                            }
+                        });
+                    }
                 }
-
-            }
-            //show only 7 responses
-            response(matches.slice(0, 7));
-        },
-        autoFocus: true,
-        focus: function()  {
-            return false; // prevent value inserted on focus
-        },
-        select: function(event, ui) {
-
-            var message = this.value,
-                caretPosition = doGetCaretPosition(unsafeWindow.cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']);
-            //prevent it from autocompleting when a little changed has been made and its already there
-            if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
-                doSetCaretPosition(unsafeWindow.cin,lastIndex+ui.item.value.length);
+                //show only 7 responses
+                response(matches.slice(0, 7));
+            },
+            autoFocus: true,
+            focus: function () {
+                return false;// prevent value inserted on focus
+            },
+            select: function (event, ui) {
+                var message = this.value,
+                    caretPosition = doGetCaretPosition(unsafeWindow.cin),
+                    lastIndex = lastIndexOfSet(message.substring(0, caretPosition), ['/', '\'', '[', '~', '@', '$']);
+                //prevent it from autocompleting when a little changed has been made and its already there
+                if (message.indexOf(ui.item.value) === lastIndex && lastIndex + ui.item.value.length !== caretPosition) {
+                    doSetCaretPosition(unsafeWindow.cin, lastIndex + ui.item.value.length);
+                    return false;
+                }
+                //insert the autocompleted text and set the cursor position after it
+                this.value = message.substring(0, lastIndex) + ui.item.value + message.substring(caretPosition, message.length);
+                doSetCaretPosition(unsafeWindow.cin, lastIndex + ui.item.value.length);
+                //if the selected item is a emote trigger a fake enter event
+                if (lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\'' || ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length - 1] !== ' '))) {
+                    $(this).trigger($.Event('keypress', { which: 13, keyCode : 13 }));
+                }
                 return false;
+            },
+            close : function () {
+                isAutocompleteMenuActive = false;
+            },
+            open : function () {
+                isAutocompleteMenuActive = true;
             }
-            //insert the autocompleted text and set the cursor position after it
-            this.value = message.substring(0,lastIndex) + ui.item.value + message.substring(caretPosition,message.length);
-            doSetCaretPosition(unsafeWindow.cin,lastIndex+ui.item.value.length);
-            //if the selected item is a emote trigger a fake enter event
-            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length-1] !== ' '))){
-                $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
-            }
-            return false;
-        },
-        close : function(){
-            isAutocompleteMenuActive = false;
-        },
-        open : function(){
-            isAutocompleteMenuActive = true;
-        }
-    });
+        });
 }
-function lastIndexOfSet(input, set){
+function lastIndexOfSet(input, set) {
     var index = -1,
         i;
-    for (i = 0; i < set.length; i++) {
+    for (i = 0; i < set.length; i += 1) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
-    if(index>0){
-        if(input[index] === '/' && input[index-1]==='['){
-            index--;
+    if (index > 0) {
+        if (input[index] === '/' && input[index - 1] === '[') {
+            index -= 1;
         }
     }
     return index;
@@ -167,31 +174,31 @@ var isAutocompleteMenuActive = false,
     tagsAutoComplete = true,
     addOnSettingsAutoComplete = true,
     namesAutoComplete = true,
-    botCommandsAutoComplete= true,
+    botCommandsAutoComplete = true,
     autocompleteData = [];
-function toggleBotCommandsAutocomplete(){
-    botCommandsAutoComplete = !botCommandsAutoComplete; 
-    settings.set("BotCommandsAutoComplete",botCommandsAutoComplete);
+function toggleBotCommandsAutocomplete() {
+    botCommandsAutoComplete = !botCommandsAutoComplete;
+    settings.set("BotCommandsAutoComplete", botCommandsAutoComplete);
 }
-function toggleTagsAutocomplete(){
-    tagsAutoComplete = !tagsAutoComplete; 
-    settings.set("TagsAutoComplete",tagsAutoComplete);
+function toggleTagsAutocomplete() {
+    tagsAutoComplete = !tagsAutoComplete;
+    settings.set("TagsAutoComplete", tagsAutoComplete);
 }
-function toggleEmotesAutocomplete(){
-    emotesAutoComplete = !emotesAutoComplete; 
-    settings.set("EmotesAutoComplete",emotesAutoComplete);
+function toggleEmotesAutocomplete() {
+    emotesAutoComplete = !emotesAutoComplete;
+    settings.set("EmotesAutoComplete", emotesAutoComplete);
 }
-function toggleCommandsAutocomplete(){
-    commandsAutoComplete = !commandsAutoComplete; 
-    settings.set("CommandsAutoComplete",commandsAutoComplete);
+function toggleCommandsAutocomplete() {
+    commandsAutoComplete = !commandsAutoComplete;
+    settings.set("CommandsAutoComplete", commandsAutoComplete);
 }
-function toggleAddonSettingsAutocomplete(){
-    addOnSettingsAutoComplete = !addOnSettingsAutoComplete; 
-    settings.set("AddOnSettingsAutoComplete",addOnSettingsAutoComplete);
+function toggleAddonSettingsAutocomplete() {
+    addOnSettingsAutoComplete = !addOnSettingsAutoComplete;
+    settings.set("AddOnSettingsAutoComplete", addOnSettingsAutoComplete);
 }
-function toggleNamesAutocomplete(){
-    namesAutoComplete = !namesAutoComplete; 
-    settings.set("NamesAutoComplete",namesAutoComplete);
+function toggleNamesAutocomplete() {
+    namesAutoComplete = !namesAutoComplete;
+    settings.set("NamesAutoComplete", namesAutoComplete);
 }
 
 postConnectFunctions.push(loadAutoComplete);

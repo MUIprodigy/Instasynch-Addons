@@ -20,12 +20,11 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function loadLeaderSeal(){
+function loadLeaderSeal() {
     var oldMakeLeader = unsafeWindow.makeLeader;
-    unsafeWindow.makeLeader = function(userId){
+    unsafeWindow.makeLeader = function (userId) {
         oldMakeLeader(userId);
-        $("#leaderSymbol").attr("src","/favicon.ico");
+        $("#leaderSymbol").attr("src", "/favicon.ico");
     };
 }
 

@@ -21,34 +21,31 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-function loadLogInOffMessages(){
+function loadLogInOffMessages() {
     //load settings
-    logInOffMessages = settings.get('LogInOffMessages',false);
-    
+    logInOffMessages = settings.get('LogInOffMessages', false);
     //add the command
-    commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
-    
+    commands.set('addOnSettings', "LogInOffMessages", toggleLogInOffMessages, 'Toggles the log in/off messages.');
     // Overwriting Adduser
     var oldAddUser = unsafeWindow.addUser,
-        oldRemoveUser = unsafeWindow.removeUser;
+        oldRemoveUser = unsafeWindow.removeUser,
+        user;
 
-    unsafeWindow.addUser = function(user, css, sort) {
+    unsafeWindow.addUser = function (user, css, sort) {
         // Only if blackname or mod
-        if (user.loggedin && logInOffMessages){
-            unsafeWindow.addMessage('', user.username + ' logged on.', '','hashtext'); 
-            if (user.username === 'JustPassingBy'){
-                unsafeWindow.addMessage('','Wish him a happy birthday !', '', 'hastext');
+        if (user.loggedin && logInOffMessages) {
+            unsafeWindow.addMessage('', user.username + ' logged on.', '', 'hashtext');
+            if (user.username === 'JustPassingBy') {
+                unsafeWindow.addMessage('', 'Wish him a happy birthday !', '', 'hastext');
             }
         }
-        oldAddUser(user,css,sort);
+        oldAddUser(user, css, sort);
     };
-
     // Overwriting removeUser
-
-    unsafeWindow.removeUser = function(id) {
-        var user = unsafeWindow.users[getIndexOfUser(id)];
-        if (user.loggedin && logInOffMessages){
-            unsafeWindow.addMessage('',user.username + ' logged off.', '','hashtext');
+    unsafeWindow.removeUser = function (id) {
+        user = unsafeWindow.users[getIndexOfUser(id)];
+        if (user.loggedin && logInOffMessages) {
+            unsafeWindow.addMessage('', user.username + ' logged off.', '', 'hashtext');
         }
         oldRemoveUser(id);
     };
@@ -56,9 +53,9 @@ function loadLogInOffMessages(){
 
 var logInOffMessages = false;
 
-function toggleLogInOffMessages(){
+function toggleLogInOffMessages() {
     logInOffMessages = !logInOffMessages;
-    settings.set('LogInOffMessages',logInOffMessages);
+    settings.set('LogInOffMessages', logInOffMessages);
 }
 
 postConnectFunctions.push(loadLogInOffMessages);

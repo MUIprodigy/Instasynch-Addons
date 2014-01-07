@@ -20,30 +20,30 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function loadGreynameCount(){
+function loadGreynameCount() {
     var oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser;
 
-    unsafeWindow.addUser = function(user, css, sort) {
+    unsafeWindow.addUser = function (user, css, sort) {
         oldAddUser(user, css, sort);
         setViewerCount();
-    };    
-    unsafeWindow.removeUser = function(id) {
+    };
+    unsafeWindow.removeUser = function (id) {
         oldRemoveUser(id);
         setViewerCount();
     };
     setViewerCount();
 }
-function setViewerCount(){
+
+function setViewerCount() {
     var greynameCount = 0,
         i;
-    for (i = 0; i < unsafeWindow.users.length; i++) {
-        if(!unsafeWindow.users[i].loggedin){
-            greynameCount++;
+    for (i = 0; i < unsafeWindow.users.length; i += 1) {
+        if (!unsafeWindow.users[i].loggedin) {
+            greynameCount += 1;
         }
-    };
-    $('#viewercount').html(unsafeWindow.users.length-greynameCount + '/' +greynameCount);
+    }
+    $('#viewercount').html(unsafeWindow.users.length - greynameCount + '/' + greynameCount);
 }
 
 preConnectFunctions.push(loadGreynameCount);

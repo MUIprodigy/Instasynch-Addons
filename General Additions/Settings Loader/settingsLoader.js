@@ -20,48 +20,48 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadSettingsLoader(){
-    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
-    commands.set('regularCommands',"clearAddOnSettings",clearAddonSettings);
-    settings = new function() {
-        this.set = function(key, val) {
-            GM_setValue(key,val);     
-            unsafeWindow.addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
-        };
-        this.remove = function (key) { 
-            GM_deleteValue(key);      
-        };
-        this.clear =  function() {
+function loadSettingsLoader() {
+    commands.set('regularCommands', "printAddOnSettings", printAddonSettings ,'Prints the saved settings.');
+    commands.set('regularCommands', "clearAddOnSettings", clearAddonSettings ,'Clears the saved settings.');
+    settings = {
+        set : function (key, val) {
+            GM_setValue(key, val);
+            unsafeWindow.addMessage('', String.format('[{0}: {1}]', key, val), '', 'hashtext');
+        },
+        remove : function (key) {
+            GM_deleteValue(key);
+        },
+        clear : function () {
             var keyArr = settings.getAll(),
                 i;
-            for(i = 0; i < keyArr.length;i++) {
+            for (i = 0; i < keyArr.length; i += 1) {
                 settings.remove(keyArr[i]);
             }
-        };
-        this.get = function(key, val) {
-            if(GM_getValue(key) === undefined){
-                settings.set(key,val);
+        },
+        get : function (key, val) {
+            if (GM_getValue(key) === undefined) {
+                settings.set(key, val);
             }
             return GM_getValue(key);
-        };
-        this.getAll = function() {
+        },
+        getAll : function () {
             return GM_listValues();
-        };
+        }
     };
 }
 var settings;
 
-function printAddonSettings(){
-    var output ="",
+function printAddonSettings() {
+    var output = "",
         keyArr = settings.getAll(),
         i;
-    for(i = 0; i < keyArr.length;i++) {
-        output += "["+keyArr[i]+": "+settings.get(keyArr[i])+"] ";
+    for (i = 0; i < keyArr.length; i += 1) {
+        output += String.format('[{0}: {1}]', keyArr[i], settings.get(keyArr[i]));
     }
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
-function clearAddonSettings(){
+
+function clearAddonSettings() {
     settings.clear();
     unsafeWindow.addMessage('', 'Cleared the settings, hit f5 to restore default', '', 'hashtext');
 }
-

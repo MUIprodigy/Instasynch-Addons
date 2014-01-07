@@ -20,36 +20,33 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadWallCounter(){
+function loadWallCounter() {
 
     var oldAddVideo = unsafeWindow.addVideo,
         //oldRemoveVideo = removeVideo,
         oldAddMessage = unsafeWindow.addMessage,
-        i,
-        video,
-        value;
+        value,
+        output;
 
     //add commands
-    commands.set('regularCommands',"printWallCounter",printWallCounter);
-    commands.set('regularCommands',"printMyWallCounter",printMyWallCounter);
+    commands.set('regularCommands', "printWallCounter", printWallCounter, 'Prints the length of the walls for each user.');
+    commands.set('regularCommands', "printMyWallCounter", printMyWallCounter, 'Prints the length of your own wall.');
 
 
     //overwrite InstaSynch's addVideo
-    unsafeWindow.addVideo = function(vidinfo) {
+    unsafeWindow.addVideo = function (vidinfo) {
         resetWallCounter();
         value = wallCounter[vidinfo.addedby];
-        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername){
-            var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
-            unsafeWindow.addMessage('',output,'','hashtext');
+        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
+            output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
+            unsafeWindow.addMessage('', output, '', 'hashtext');
         }
         oldAddVideo(vidinfo);
     };
 
     /*
      * Commented since this shit isnt working and I have no idea why
-    */
+     */
     // //overwrite InstaSynch's removeVideo
     // unsafeWindow.removeVideo = function(vidinfo){
     //     var indexOfVid = getVideoIndex(vidinfo);
@@ -66,52 +63,53 @@ function loadWallCounter(){
     //     oldRemoveVideo(vidinfo);
     // };    
 
-    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        if(username === '' && message === 'Video added successfully.'){
+    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+        if (username === '' && message === 'Video added successfully.') {
             resetWallCounter();
-            message +='WallCounter: ['+unsafeWindow.secondsToTime(wallCounter[thisUsername])+']';
+            message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
         }
         oldAddMessage(username, message, userstyle, textstyle);
-    };    
+    };
 
     //init the wallcounter
     resetWallCounter();
 }
 var wallCounter = {};
 
-function resetWallCounter(){
-    var video,value;
+function resetWallCounter() {
+    var video,
+        value,
+        i;
     wallCounter = {};
-    for(i = 0; i < unsafeWindow.playlist.length;i++){
+    for (i = 0; i < unsafeWindow.playlist.length; i += 1) {
         video = unsafeWindow.playlist[i];
         value = wallCounter[video.addedby];
-        value =(value||0) + video.duration;
+        value = (value || 0) + video.duration;
         wallCounter[video.addedby] = value;
-    } 
+    }
 }
 
-function printWallCounter(){
+function printWallCounter() {
     resetWallCounter();
     var output = "",
-        key;
-    for(key in wallCounter){
-        if(wallCounter[key] > 3600){
-            output += "<span style='color:red'>["+key + ": "+unsafeWindow.secondsToTime(wallCounter[key])+"]</span> ";
-        }else{
-            output += "["+key + ": "+unsafeWindow.secondsToTime(wallCounter[key])+"] ";
+        key,
+        strTemp;
+    for (key in wallCounter) {
+        if (wallCounter.hasOwnProperty(key)) {
+            strTemp = '[{0}: {1}]';
+            if (wallCounter[key] > 3600) {
+                strTemp = "<span style='color:red'>" + strTemp + "</span>";
+            }
+            output += String.format(strTemp, key, unsafeWindow.secondsToTime(wallCounter[key]));
         }
     }
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 
-function printMyWallCounter(){   
+function printMyWallCounter() {
     resetWallCounter();
     var output = "";
-    if(wallCounter[thisUsername]){
-        output = "["+ thisUsername +" : "+ unsafeWindow.secondsToTime(wallCounter[thisUsername])+"]";
-    }else{
-        output = "["+ thisUsername +" : 00:00]";
-    }
+    output = String.format('[{0}: {1}]', thisUsername, unsafeWindow.secondsToTime(wallCounter[thisUsername] || 0));
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 

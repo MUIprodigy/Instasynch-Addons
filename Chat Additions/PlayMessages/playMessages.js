@@ -16,24 +16,22 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function loadPlayMessages(){
+function loadPlayMessages() {
     //load settings
-    playMessages = settings.get('PlayMessages',true);
+    playMessages = settings.get('PlayMessages', true);
     //add the command
-    commands.set('addOnSettings',"PlayMessages",togglePlayMessages);
-    
+    commands.set('addOnSettings', "PlayMessages", togglePlayMessages, 'Toggles PlayMessages, which shows the video title in the chat.');
     // Overwriting Adduser
     var oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
         title;
 
-    unsafeWindow.playVideo = function(vidinfo, time, playing) {
+    unsafeWindow.playVideo = function (vidinfo, time, playing) {
         // Only if blackname or mod
-        if (playMessages){
-            indexOfVid = unsafeWindow.getVideoIndex(vidinfo); 
-            title = ((unsafeWindow.playlist[indexOfVid].title.length>240)?unsafeWindow.playlist[indexOfVid].title.substring(0,240)+"...":unsafeWindow.playlist[indexOfVid].title);
-            unsafeWindow.addMessage('', 'Now playing: ' + title, '','hashtext'); 
+        if (playMessages) {
+            indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
+            title = ((unsafeWindow.playlist[indexOfVid].title.length > 240) ? unsafeWindow.playlist[indexOfVid].title.substring(0, 240) + "..." : unsafeWindow.playlist[indexOfVid].title);
+            unsafeWindow.addMessage('', 'Now playing: ' + title, '', 'hashtext');
         }
         oldPlayVideo(vidinfo, time, playing);
     };
@@ -41,9 +39,9 @@ function loadPlayMessages(){
 
 var playMessages = true;
 
-function togglePlayMessages(){
+function togglePlayMessages() {
     playMessages = !playMessages;
-    settings.set('PlayMessages',playMessages);
+    settings.set('PlayMessages', playMessages);
 }
 
 postConnectFunctions.push(loadPlayMessages);

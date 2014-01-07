@@ -20,20 +20,38 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadGeneralStuff(){
+function loadGeneralStuff() {
     //get Username
     thisUsername = $.cookie('username');
-    unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>'+
-                    '&bull; \'exportPlaylist will export to the clipboard. Use parameters: title, duration, addedby, thumbnail, all, xml to specify the data<br>'+
-                    '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
-                    '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
-                    '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
-                    '&bull; \'History: shows the last 9 videos <br>'+
-                    '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
-                    '&bull; YouTube Search: type the search term into the add video field <br>'+
-                    '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong>','' ,'hashtext'); 
+    unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>' +
+        '&bull; \'help prints all the commands or more info on a single one (use http://instasynch.com/commands.txt for commands from the site). ' +
+        '&bull; \'exportPlaylist will export to the clipboard. Use parameters: title, duration, addedby, thumbnail, all, xml to specify the data<br>' +
+        '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>' +
+        '&bull; \'Shuffle: shuffles a wall or the playlist <br>' +
+        '&bull; \'History: shows the last 9 videos <br>' +
+        '&bull; YouTube Search: type the search term into the add video field', '', 'hashtext');
+
+    //http://joquery.com/2012/string-format-for-javascript
+    String.format = function () {
+        // The string containing the format items (e.g. "{0}")
+        // will and always has to be the first argument.
+        var theString = arguments[0],
+            i,
+            regEx;
+
+        // start with the second argument (i = 1)
+        for (i = 1; i < arguments.length; i += 1) {
+            // "gm" = RegEx options for Global search (more than one instance)
+            // and for Multiline search
+            regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+            theString = theString.replace(regEx, arguments[i]);
+        }
+        return theString;
+    };
+
+
+
+
     // unsafeWindow.addEventListener("message", 
     // function(event){
     //     try{
@@ -48,47 +66,59 @@ function loadGeneralStuff(){
     //     GM_openInTab(url,options);
     // }
 }
-function getUrlOfInfo(vidinfo){
+
+function getUrlOfInfo(vidinfo) {
     var url;
-    switch(vidinfo.provider){
-        case 'youtube': url='http://youtu.be/'  + vidinfo.id;      break;
-        case 'vimeo':   url='http://vimeo.com/' + vidinfo.id;      break;
-        case 'twitch':  url='http://twitch.tv/' + vidinfo.channel; break;
-        default: break;
+    switch (vidinfo.provider) {
+    case 'youtube':
+        url = 'http://youtu.be/' + vidinfo.id;
+        break;
+    case 'vimeo':
+        url = 'http://vimeo.com/' + vidinfo.id;
+        break;
+    case 'twitch':
+        url = 'http://twitch.tv/' + vidinfo.channel;
+        break;
+    default:
+        break;
     }
     return url;
 }
-function getActiveVideoIndex(){
+
+function getActiveVideoIndex() {
     return $('.active').index();
 }
 
-function isUserMod(){
+function isUserMod() {
     return unsafeWindow.isMod;
 }
 
-function isBibbyRoom(){
-    return unsafeWindow.ROOMNAME.match(/bibby/i)?true:false;
+function isBibbyRoom() {
+    return unsafeWindow.ROOMNAME.match(/bibby/i) ? true : false;
 }
 
-function getIndexOfUser(id){
+function getIndexOfUser(id) {
     var i;
-    for (i = 0; i < unsafeWindow.users.length; i++){
-        if (id === unsafeWindow.users[i].id){
+    for (i = 0; i < unsafeWindow.users.length; i += 1) {
+        if (id === unsafeWindow.users[i].id) {
             return i;
         }
     }
     return -1;
 }
-function blockEvent(event){
+
+function blockEvent(event) {
     event.stopPropagation();
 }
-function getUsernameArray(lowerCase){
-    var arr = [];
-    for(i = 0; i< unsafeWindow.users.length;i++){
-        if(unsafeWindow.users[i].username !== 'unnamed'){
-            if(!lowerCase){
+
+function getUsernameArray(lowerCase) {
+    var arr = [],
+        i;
+    for (i = 0; i < unsafeWindow.users.length; i += 1) {
+        if (unsafeWindow.users[i].username !== 'unnamed') {
+            if (!lowerCase) {
                 arr.push(unsafeWindow.users[i].username);
-            }else{
+            } else {
                 arr.push(unsafeWindow.users[i].username.toLowerCase());
             }
         }
@@ -99,63 +129,59 @@ function getUsernameArray(lowerCase){
 var thisUsername;
 
 /*
-** Returns the caret (cursor) position of the specified text field.
-** Return value range is 0-oField.value.length.
-** http://flightschool.acylt.com/devnotes/caret-position-woes/
-*/
+ ** Returns the caret (cursor) position of the specified text field.
+ ** Return value range is 0-oField.value.length.
+ ** http://flightschool.acylt.com/devnotes/caret-position-woes/
+ */
 function doGetCaretPosition(oField) {
 
     // Initialize
-    var iCaretPos = 0;
+    var iCaretPos = 0,
+        oSel;
 
     // IE Support
     if (document.selection) {
-        var oSel;
         // Set focus on the element
-        oField.focus ();
+        oField.focus();
 
         // To get cursor position, get empty selection range
-        oSel = document.selection.createRange ();
+        oSel = document.selection.createRange();
 
         // Move selection start to 0 position
-        oSel.moveStart ('character', -oField.value.length);
+        oSel.moveStart('character', -oField.value.length);
 
         // The caret position is selection length
         iCaretPos = oSel.text.length;
-    }
-
-    // Firefox support
-    else if (oField.selectionStart || oField.selectionStart == '0'){
-      iCaretPos = oField.selectionStart;
+    } else if (oField.selectionStart || oField.selectionStart === '0') { // Firefox support
+        iCaretPos = oField.selectionStart;
     }
 
     // Return results
-    return (iCaretPos);
+    return iCaretPos;
 }
 
 function doSetCaretPosition(oField, position) {
     //IE
     if (document.selection) {
         var oSel;
-        oField.focus ();
-        oSel = document.selection.createRange ();
+        oField.focus();
+        oSel = document.selection.createRange();
         oSel.moveStart('character', position);
         oSel.moveEnd('character', position);
-    }
-
-    // Firefox support
-    else if (oField.selectionStart || oField.selectionStart == '0'){
+    } else if (oField.selectionStart || oField.selectionStart === '0') { // Firefox support
         oField.selectionStart = position;
         oField.selectionEnd = position;
     }
 }
+
 function pasteTextAtCaret(text) {
-    var sel, range;
+    var sel,
+        range,
+        textNode;
     if (unsafeWindow.getSelection) {
         // IE9 and non-IE
         sel = unsafeWindow.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
-            var textNode;
             range = sel.getRangeAt(0);
             range.deleteContents();
 
@@ -169,7 +195,7 @@ function pasteTextAtCaret(text) {
             sel.removeAllRanges();
             sel.addRange(range);
         }
-    } else if (document.selection && document.selection.type != "Control") {
+    } else if (document.selection && document.selection.type !== "Control") {
         // IE < 9
         document.selection.createRange().text = text;
     }

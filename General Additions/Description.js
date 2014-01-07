@@ -16,12 +16,11 @@
    
     http://opensource.org/licenses/GPL-3.0
 */
- 
-function loadDescription(){
-    if(!isBibbyRoom()){
+function loadDescription() {
+    if (!isBibbyRoom()) {
         return;
     }
-    var descr="";
+    var descr = "";
     descr += "<p style=\"font-family: Palatino; text-align: center; \">";
     descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
     descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
@@ -69,6 +68,6 @@ function loadDescription(){
     descr += "<script type=\"text\/javascript\" src=\"http:\/\/script.footprintlive.com\/?site=www.synchtube.com\"><\/script><noscript><a href=\"http:\/\/www.footprintlive.com\" target=\"_blank\"><img src=\"http:\/\/img.footprintlive.com\/?cmd=nojs&site=www.synchtube.com\" alt=\"user analytics\" border=\"0\"><\/a><\/noscript>";
     $("div.roomFooter ").html(descr);
 }
- 
- 
+
+
 preConnectFunctions.push(loadDescription);

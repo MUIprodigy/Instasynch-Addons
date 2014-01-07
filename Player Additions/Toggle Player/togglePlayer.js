@@ -20,27 +20,25 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadTogglePlayer(){
+function loadTogglePlayer() {
     //load settings
-    playerActive = settings.get('PlayerActive',true);
-    
+    playerActive = settings.get('PlayerActive', true);
+
     //add the command
-    commands.set('regularCommands',"togglePlayer",togglePlayer);
+    commands.set('regularCommands', "togglePlayer", togglePlayer, 'Turns the embedded player on and off.');
 
     //toggle the player once if the stored setting was false
-    if(!playerActive){
+    if (!playerActive) {
         playerActive = true;
         //adding a little delay because it won't reload when destroying it immediately
-        setTimeout(togglePlayer,1500);
+        setTimeout(togglePlayer, 1500);
     }
 
     var oldPlayVideo = unsafeWindow.playVideo;
-    unsafeWindow.playVideo = function(vidinfo, time, playing){
-        if(playerActive){
+    unsafeWindow.playVideo = function (vidinfo, time, playing) {
+        if (playerActive) {
             oldPlayVideo(vidinfo, time, playing);
-        }else{
+        } else {
             //copied from InstaSynch's playVideo
             var addedby = '',
                 title = '',
@@ -50,21 +48,21 @@ function loadTogglePlayer(){
                 addedby = unsafeWindow.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#ulPlay').children('li')[indexOfVid]).addClass('active');
-                $('#vidTitle').html(title + '<div class=\'via\'> via ' + addedby + '</div>');
+                $('#vidTitle').html(String.format('{0}<div class=\'via\'> via {1}</div>', title, addedby));
             }
         }
     };
 }
 
 
-function togglePlayer(){
-    if(playerActive){
+function togglePlayer() {
+    if (playerActive) {
         video.destroyPlayer();
-    }else{
+    } else {
         unsafeWindow.sendcmd('reload', null);
     }
     playerActive = !playerActive;
-    settings.set('PlayerActive',playerActive);
+    settings.set('PlayerActive', playerActive);
 }
 
 var playerActive = true;

@@ -20,16 +20,13 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadClearChatCommand(){
-    commands.set('regularCommands',"clearChat",clearChat);
+function loadClearChatCommand() {
+    commands.set('regularCommands', "clearChat", clearChat, 'Clears the chat.');
 }
 
-function clearChat(){
-	$('#chat_list').empty();
-	unsafeWindow.messages = 0;
+function clearChat() {
+    $('#chat_list').empty();
+    unsafeWindow.messages = 0;
 }
-
 
 preConnectFunctions.push(loadClearChatCommand);

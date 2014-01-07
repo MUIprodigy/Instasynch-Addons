@@ -20,14 +20,12 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-
-function loadTimestamp(){
+function loadTimestamp() {
     //load settings
-    timestamp = settings.get('Timestamp',true);
+    timestamp = settings.get('Timestamp', true);
 
     //add the commands
-    commands.set('addOnSettings',"Timestamp",toggleTimestamp);
+    commands.set('addOnSettings', "Timestamp", toggleTimestamp, 'Toggles the timestamp in front of each message.');
 
     var oldAddMessage = unsafeWindow.addMessage,
         date,
@@ -35,15 +33,15 @@ function loadTimestamp(){
         minutes;
 
     //overwrite InstaSynch's addMessage function
-    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        if(timestamp){
+    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+        if (timestamp) {
             date = new Date();
             minutes = date.getMinutes();
-            if(minutes < 10){
+            if (minutes < 10) {
                 minutes = "0" + minutes;
             }
             hours = date.getHours();
-            if(hours < 10){
+            if (hours < 10) {
                 hours = "0" + hours;
             }
             username = hours + ":" + minutes + " - " + username;
@@ -52,9 +50,10 @@ function loadTimestamp(){
         //continue with InstaSynch's addMessage function
     };
 }
-function toggleTimestamp(){
-    timestamp = !timestamp; 
-    settings.set('Timestamp',timestamp);
+
+function toggleTimestamp() {
+    timestamp = !timestamp;
+    settings.set('Timestamp', timestamp);
 }
 var timestamp = true;
 

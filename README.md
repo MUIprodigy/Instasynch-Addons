@@ -16,6 +16,7 @@ Command List
 'printMyWallCounter
 'exportPlaylist title? duration? addedby? thumbnail? all? xml?
 'history
+'help
 
 //Mod Commands
 'bump [user]
@@ -53,6 +54,7 @@ Then go to http://userscripts.org/scripts/show/181142 and install the script.
 Changes
 ------------
 <pre>
+• Added <a href="#help">Help</a>
 • Added <a href="#playmessages">PlayMessages</a>
 • Added <a href="#bigplaylist">BigPlaylist</a>
 • Added <a href="#shuffle">Shuffle</a>
@@ -85,6 +87,11 @@ Just send a <a href="mailto:megafaqqq@gmail.com">mail</a> if you got suggestions
 
 Scripts
 =======
+
+Help
+--------------
+
+Use this command to print all the commands or get more detailed information on a single command. <code>'help [command]?</code>
 
 Message Filter
 --------------

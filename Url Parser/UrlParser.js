@@ -1,4 +1,3 @@
-
 /*
     Copyright (C) 2013  faqqq @Bibbytube
     
@@ -17,127 +16,87 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+function parseUrl(url) {
+    //Parse urls from  youtube / twitch / vimeo / dailymotion / livestream
 
+    var match = url.match(/(https?:\/\/)?([^\.]+\.)?(\w+)\./i),
+        provider = match ? match[3] : undefined, //the provider e.g. youtube,twitch ...
+        mediaType, // stream, video or playlist (no youtube streams)
+        id, //the video-id 
+        channel, //for twitch and livestream
+        playlistId; //youtube playlistId;
+    if (match === null) {
+        /*error*/
+        return false;
+    }
+    switch (provider) {
+    case 'youtu':
+    case 'youtube':
+        provider = 'youtube';
+        match = url.match(/(((v|be|videos)\/)|(v=))([\w\-]{11})/i);
+        id = match ? match[5] : undefined;
+        match = url.match(/list=([\w\-]+)/i);
+        playlistId = match ? match[1] : undefined;
 
-function parseUrl(URL){
-	//Parse URLs from  youtube / twitch / vimeo / dailymotion / livestream
- 
-	var match = URL.match(/(https?:\/\/)?([^\.]+\.)?(\w+)\./i);
-	if(match === null){
-		/*error*/
-		return false;
-	}
-	var provider = match[3], //the provider e.g. youtube,twitch ...
-		mediaType, // stream, video or playlist (this can't be determined for youtube streams, since the url is the same for a video)
-		id, //the video-id 
-		channel, //for twitch and livestream
-		playlistId; //youtube playlistId;
-	switch(provider){
-		case 'youtu':
-		case 'youtube':{ 
-			provider = 'youtube'; //so that we don't have youtu or youtube later on
-			//match for http://www.youtube.com/watch?v=12345678901
-			if((match=URL.match(/v=([\w-]{11})/i))){
-				id = match[1];
-			}//match for http://www.youtube.com/v/12345678901, http://www.youtu.be/12345678901 
-			 //and http://gdata.youtube.com/feeds/api/videos/12345678901/related
-			else if((match=URL.match(/(v|be|videos)\/([\w-]{11})/i))){
-				id = match[2];
-			}
-			//get playlist parameter
-            if((match=URL.match(/list=([\w-]+)/i))){
-				playlistId = match[1];
-			}
-			if(!id && !playlistId){
-				return false;
-			}
-			//Try to match the different youtube urls, if successful the last (=correct) id will be saved in the array
-			//Read above for RegExp explanation
-            if(id){                
-			    mediaType = 'video';
-            }else{
-			    mediaType = 'playlist';
-            }
-		}break;
-		case 'twitch':{
-			//match for http://www.twitch.tv/ <channel> /c/ <video id>
-			if((match = URL.match(/twitch\.tv\/(.*?)\/.\/(\d+)?/i))){
-			}//match for http://www.twitch.tv/* channel=<channel> *
-			else if((match = URL.match(/channel=([A-Za-z0-9_]+)/i))){
-			}//match for http://www.twitch.tv/ <channel>
-			else if((match = URL.match(/twitch\.tv\/([A-Za-z0-9_]+)/i))){
-			}else{
-				/*error*/
-				return false;
-			}
-			mediaType = 'stream';
-			if(match.length == 3){
-				//get the video id 
-				id = match[2];
-				//also it's a video then
-				mediaType = 'video';
-			}
-			//get the channel name
-			channel = match[1];
-		}break;
-		case 'vimeo':{
+        if (!id && !playlistId) {
+            return false;
+        }
+        if (id) {
+            mediaType = 'video';
+        } else {
+            mediaType = 'playlist';
+        }
+        break;
+    case 'twitch':
+        match = url.match(/twitch\.tv\/([\w]+)(\/.\/(\d+))?/i);
+        channel = match ? match[1] : undefined;
+        if (!channel) {
+            return false;
+        }
+        id = match[3];
+        if (id) {
+            mediaType = 'video';
+        } else {
+            mediaType = 'stream';
+        }
+        break;
+    case 'vimeo':
+        match = url.match(/(\/((channels\/[\w]+)|(album\/\d+)?\/video))?\/(\d+)/i);
+        id = match ? match[5] : undefined;
+        if (!id) {
+            return false;
+        }
+        mediaType = 'video';
+        break;
+    case 'dai':
+    case 'dailymotion':
+        provider = 'dailymotion';
+        match = url.match(/(((\/video)|(ly))|#video=)\/([^_]+)/i);
+        id = match ? match[5] : undefined;
+        if (!id) {
+            return false;
+        }
+        mediaType = 'video';
+        break;
+    case 'livestream':
+        match = url.match(/livestream\.com\/(\w+)/i);
+        channel = match ? match[1] : undefined;
+        if (!channel) {
+            return false;
+        }
+        mediaType = 'stream';
+        break;
+    default:
+        /*error*/
+        return false;
+    }
 
-			//match for http://vimeo.com/channels/<channel>/<video id>
-			if(match = URL.match(/\/channels\/[\w0-9]+\/(\d+)/i)){
-			}//match for http://vimeo.com/album/<album id>/video/<video id>
-			else if(match = URL.match(/\/album\/\d+\/video\/(\d+)/i)){
-			}//match for http://player.vimeo.com/video/<video id>
-			else if(match = URL.match(/\/video\/(\d+)/i)){
-			}//match for http://vimeo.com/<video id>
-			else if(match = URL.match(/\/(\d+)/i)){
-			}else{
-				/*error*/
-				return false;
-			}
-			//get the video id
-			id = match[1];
-			mediaType = 'video';
-		} break;
-		case 'dai':
-		case 'dailymotion':{
-			provider = 'dailymotion'; //same as youtube / youtu
-			//match for http://www.dailymotion.com/video/ <video id> _ <video title>
-			if((match=URL.match(/\/video\/([^_]+)/i))){
-			}//match for http://dai.ly/ <video id>
-			else if((match=URL.match(/ly\/([^_]+)/i))){	
-			}//or find the #video= tag in http://www.dailymotion.com/en/relevance/search/ <search phrase> /1#video= <video id>
-			else if((match=URL.match(/#video=([^_]+)/i))){	
-			}else{
-				/*error*/
-				return false;
-			}
-			//get the video id
-			id= match[1];
-			mediaType = 'video';
-
-		}break;
-		case 'livestream':{
-			//match for http://www.livestream.com/ <channel>
-			//not sure about new.livestream.com links tho
-			if((match = URL.match(/livestream\.com\/(\w+)/i))){	
-			}else{
-				/*error*/
-				return false;
-			}
-			//get the channel name
-			channel = match[1];
-			mediaType = 'stream';
-		}break;
-		//different provider -> error
-		default: /*error*/ return false;
-	}
-
-	//return the data
-	return {
-		'provider': provider,
-		'mediaType':mediaType,
-		'id':id,
-		'playlistId':playlistId,
-		'channel':channel
-	};
+    //return the data
+    return {
+        'provider': provider,
+        'mediaType': mediaType,
+        'id': id,
+        'playlistId': playlistId,
+        'channel': channel
+    };
 }

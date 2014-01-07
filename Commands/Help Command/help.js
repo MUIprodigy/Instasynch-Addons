@@ -20,34 +20,27 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadBumpCommand() {
-    commands.set('modCommands', "bump ", bump, 'Bumps a video right under the active video. Parameters: the user to bump.');
+function loadHelpCommand() {
+    commands.set('regularCommands', "help ", help, 'Prints out all the commands (use $help for bot commands) or prints more info on a specific command. Optional Parameter: the command to get info on.');
 }
 
-function bump(params) {
-    var user = params[1],
-        bumpIndex = -1,
-        i;
-
-    if (!user) {
-        unsafeWindow.addMessage('', 'No user specified: \'bump [user]', '', 'hashtext');
-        return;
-    }
-    for (i = unsafeWindow.playlist.length - 1; i >= 0; i -= 1) {
-        if (unsafeWindow.playlist[i].addedby.toLowerCase() === user.toLowerCase()) {
-            bumpIndex = i;
-            break;
+function help(params) {
+    var description,
+        output = '';
+    if (params[1]) {
+        description = commands.getDescription(params[1]);
+        if (!description) {
+            output = String.format('Command {0} not found', params[1]);
+        } else {
+            output = String.format('{0}: {1}', params[1], description);
         }
-    }
-    if (bumpIndex === -1) {
-        unsafeWindow.addMessage('', "The user didn't add any videos", '', 'hashtext');
     } else {
-        unsafeWindow.sendcmd('move', {
-            info: unsafeWindow.playlist[bumpIndex].info,
-            position: getActiveVideoIndex() + 1
-        });
+        output += commands.get('modCommands').join(' ') + ' ';
+        output += commands.get('regularCommands').join(' ') + ' ';
+        output += commands.get('addOnSettings').join(' ');
+        output = output.replace(/\$[\w]+ /g, '');
     }
+    unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 
-
-preConnectFunctions.push(loadBumpCommand);
+preConnectFunctions.push(loadHelpCommand);
