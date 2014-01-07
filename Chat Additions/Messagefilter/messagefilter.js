@@ -26,7 +26,7 @@ function loadMessageFilter() {
     NSFWEmotes = settings.get('NSFWEmotes', false);
 
     //add the commands
-    commands.set('addOnSettings', "Tags", toggleTags, 'Toggles the tags. Tags will just be removed when turned off. All the tags: https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/messagefilter.js#L236');
+    commands.set('addOnSettings', "Tags", toggleTags, 'Toggles the tags. Tags will just be removed when turned off. All the tags (scroll down): https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/messagefilter.js');
     commands.set('addOnSettings', "NSFWEmotes", toggleNSFWEmotes, 'Toggles the NSFW emotes (/boobies, /meatspin).');
 
     //init
@@ -136,6 +136,7 @@ function parseMessage(message, isChatMessage) {
             message = message.replace(new RegExp(word, 'g'), filteredwords[word]);
         }
     }
+
     function parseAdvancedTags(match, $0, $1) {
         var ret = '',
             format;
@@ -163,6 +164,7 @@ function parseMessage(message, isChatMessage) {
             message = message.replace(advancedTags[word], parseAdvancedTags);
         }
     }
+
     function parseTags() {
         return filterTags ? tags[word] : '';
     }
