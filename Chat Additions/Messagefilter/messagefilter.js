@@ -252,7 +252,7 @@ var filterTags = true,
         "GAY": "HETERO"
     },
     advancedTags = {
-        'hexcolor': /\[(#[0-9A-F]{1, 6})\]/ig, //[#00FFAA] any hex color as tag
+        'hexcolor': /\[(#[0-9A-F]{1,6})\]/ig, //[#00FFAA] any hex color as tag
         'marquee': /\[marquee(-)?(\d{1,2})\]/ig, //[marquee10] marquee with specified speed
         'alternate': /\[alt(\d{1,2})\]/ig, //[alt10] alternate with specified speed
         'spoiler': /\|([^\|]*)\|/ig // |spoiler| shortcut
