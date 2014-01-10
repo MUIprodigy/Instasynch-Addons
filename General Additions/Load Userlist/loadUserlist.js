@@ -59,7 +59,7 @@ function loadNewLoadUserlist() {
                 $('#bio .userinfo').html('');
                 $('#bio').show();
                 if (thisElement.data('css').indexOf('b') != -1) {
-                    getUserInfo(thisElement.data('username'), function (avatar, bio) {
+                    unsafeWindow.getUserInfo(thisElement.data('username'), function (avatar, bio) {
                         $('#bio .avatar img').attr('src', avatar);
                         $('#bio .userinfo').html(bio);
                     });
@@ -71,7 +71,7 @@ function loadNewLoadUserlist() {
                 $('#mute').data('ip', user.ip);
                 $('#unmute').data('ip', user.ip)
                 //show or hide mute/unmute buttons
-                if (isMuted(user.ip)) {
+                if (unsafeWindow.isMuted(user.ip)) {
                     $("#unmute").show();
                     $("#mute").hide();
                 } else {
@@ -82,7 +82,7 @@ function loadNewLoadUserlist() {
         }, function () {
             clearTimeout($(this).data('hover'));
             setTimeout(function () {
-                if (!mouseOverBio) {
+                if (!unsafeWindow.mouseOverBio) {
                     $('#bio').hide();
                 }
             }, 50);
