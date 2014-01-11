@@ -40,14 +40,14 @@ function loadOnClickKickBan() {
                             isCtrlKeyDown = true;
                             currentElement.css('cursor', 'pointer');
                         }
-                    },
+                },
                 keyUp =
                     function (event) {
                         if (isCtrlKeyDown && !event.ctrlKey) {
                             isCtrlKeyDown = false;
                             currentElement.css('cursor', 'default');
                         }
-                    };
+                };
             //add the events to the latest username in the chat list
             $('#chat_list > span:last-of-type').prev()
                 .on('click', function (event) {
@@ -57,7 +57,7 @@ function loadOnClickKickBan() {
                             isMod = false,
                             userId,
                             i;
-                        user = user.match(/([^ ]* - )?([\w\-]*):/)[2];
+                        user = user.match(/(\d\d:\d\d - )?([\w\-]+)/)[2];
                         for (i = 0; i < unsafeWindow.users.length; i += 1) {
                             if (unsafeWindow.users[i].username === user) {
                                 if (unsafeWindow.users[i].permissions > 0) {
@@ -113,9 +113,10 @@ function loadOnClickKickBan() {
                         $(document).unbind('keydown', keyDown);
                         $(document).unbind('keyup', keyUp);
                     }
-                );
+            );
         }
     };
+
     function chatKeyDown(event) {
         if (!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
             unsafeWindow.autoscroll = false;
@@ -123,6 +124,7 @@ function loadOnClickKickBan() {
             chatCtrlDown = true;
         }
     }
+
     function chatKeyUp(event) {
         if (chatCtrlDown && !event.ctrlKey) {
             unsafeWindow.autoscroll = true;

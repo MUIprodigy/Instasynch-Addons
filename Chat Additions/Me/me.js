@@ -26,7 +26,7 @@ function loadMe() {
     autoCompleteData = autoCompleteData.concat(['/me ']);
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
         if (message.indexOf('/me') === 0 && message.length > 4) {
-            message = String.format('<span style="color:silver;">{0} {1}</span>', username, message.substring(3));
+            message = String.format('<span style="color:grey;">{0} {1}</span>', username.match(/(\d\d:\d\d - )?([\w\-]+)/)[2], message.substring(3));
             unsafeWindow.addMessage('', message, '', '');
         } else {
             oldAddMessage(username, message, userstyle, textstyle);
