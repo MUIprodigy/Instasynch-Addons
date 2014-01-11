@@ -56,11 +56,7 @@ function loadMessageFilter() {
     };
     //overwrite InstaSynch's addMessage function
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
-        var isChatMessage = true;
-        if (username === '') {
-            isChatMessage = false;
-        }
-        oldAddMessage(username, parseMessage(message, isChatMessage), userstyle, textstyle);
+        oldAddMessage(username, parseMessage(message, true), userstyle, textstyle);
         //continue with InstaSynch's addMessage function
     };
     unsafeWindow.createPoll = function (poll) {
