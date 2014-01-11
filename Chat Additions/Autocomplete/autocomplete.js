@@ -55,14 +55,14 @@ function loadAutoComplete() {
     for (i = 0; i < tagKeys.length; i += 1) {
         tagKeys[i] = tagKeys[i].replace(/\\/g, '');
     }
-    autocompleteData = autocompleteData.concat(emotes);
-    autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
-    autocompleteData = autocompleteData.concat(tagKeys);
+    autoCompleteData = autoCompleteData.concat(emotes);
+    autoCompleteData = autoCompleteData.concat(commands.get('regularCommands'));
+    autoCompleteData = autoCompleteData.concat(tagKeys);
     if (isUserMod()) {
-        autocompleteData = autocompleteData.concat(commands.get('modCommands'));
+        autoCompleteData = autoCompleteData.concat(commands.get('modCommands'));
     }
-    autocompleteData.sort();
-    autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
+    autoCompleteData.sort();
+    autoCompleteData = autoCompleteData.concat(commands.get('addOnSettings').sort());
 
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")
@@ -88,22 +88,34 @@ function loadAutoComplete() {
                 if (partToComplete.length > 0) {
                     switch (partToComplete[0]) {
                     case '/':
-                        if (!emotesAutoComplete || (lastIndex !== 0 && (!message[lastIndex - 1].match(/\s/) && !message[lastIndex - 1].match(/\]/)))) { return; }
+                        if (!emotesAutoComplete || (lastIndex !== 0 && (!message[lastIndex - 1].match(/\s/) && !message[lastIndex - 1].match(/\]/)))) {
+                            return;
+                        }
                         break;
                     case '\'':
-                        if (!commandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        if (!commandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                            return;
+                        }
                         break;
                     case '[':
-                        if (!tagsAutoComplete) { return; }
+                        if (!tagsAutoComplete) {
+                            return;
+                        }
                         break;
                     case '~':
-                        if (!addOnSettingsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        if (!addOnSettingsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                            return;
+                        }
                         break;
                     case '@':
-                        if (!namesAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        if (!namesAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                            return;
+                        }
                         break;
                     case '$':
-                        if (!botCommandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) { return; }
+                        if (!botCommandsAutoComplete || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                            return;
+                        }
                         break;
                     }
                     if (partToComplete[0] === '@') {
@@ -114,7 +126,7 @@ function loadAutoComplete() {
                             }
                         });
                     } else {
-                        matches = $.map(autocompleteData, function (item) {
+                        matches = $.map(autoCompleteData, function (item) {
                             if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
                                 return item;
                             }
@@ -126,7 +138,7 @@ function loadAutoComplete() {
             },
             autoFocus: true,
             focus: function () {
-                return false;// prevent value inserted on focus
+                return false; // prevent value inserted on focus
             },
             select: function (event, ui) {
                 var message = this.value,
@@ -141,19 +153,23 @@ function loadAutoComplete() {
                 this.value = message.substring(0, lastIndex) + ui.item.value + message.substring(caretPosition, message.length);
                 doSetCaretPosition(unsafeWindow.cin, lastIndex + ui.item.value.length);
                 //if the selected item is a emote trigger a fake enter event
-                if (lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\'' || ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length - 1] !== ' '))) {
-                    $(this).trigger($.Event('keypress', { which: 13, keyCode : 13 }));
+                if (lastIndex === 0 && ((ui.item.value[0] === '/' || ui.item.value[0] === '\'' || ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length - 1] !== ' ')) {
+                    $(this).trigger($.Event('keypress', {
+                        which: 13,
+                        keyCode: 13
+                    }));
                 }
                 return false;
             },
-            close : function () {
+            close: function () {
                 isAutocompleteMenuActive = false;
             },
-            open : function () {
+            open: function () {
                 isAutocompleteMenuActive = true;
             }
         });
 }
+
 function lastIndexOfSet(input, set) {
     var index = -1,
         i;
@@ -175,27 +191,33 @@ var isAutocompleteMenuActive = false,
     addOnSettingsAutoComplete = true,
     namesAutoComplete = true,
     botCommandsAutoComplete = true,
-    autocompleteData = [];
+    autoCompleteData = [];
+
 function toggleBotCommandsAutocomplete() {
     botCommandsAutoComplete = !botCommandsAutoComplete;
     settings.set("BotCommandsAutoComplete", botCommandsAutoComplete);
 }
+
 function toggleTagsAutocomplete() {
     tagsAutoComplete = !tagsAutoComplete;
     settings.set("TagsAutoComplete", tagsAutoComplete);
 }
+
 function toggleEmotesAutocomplete() {
     emotesAutoComplete = !emotesAutoComplete;
     settings.set("EmotesAutoComplete", emotesAutoComplete);
 }
+
 function toggleCommandsAutocomplete() {
     commandsAutoComplete = !commandsAutoComplete;
     settings.set("CommandsAutoComplete", commandsAutoComplete);
 }
+
 function toggleAddonSettingsAutocomplete() {
     addOnSettingsAutoComplete = !addOnSettingsAutoComplete;
     settings.set("AddOnSettingsAutoComplete", addOnSettingsAutoComplete);
 }
+
 function toggleNamesAutocomplete() {
     namesAutoComplete = !namesAutoComplete;
     settings.set("NamesAutoComplete", namesAutoComplete);

@@ -24,6 +24,7 @@ function loadBotCommands() {
     var emptyFunc = function () {};
 
     commands.set('modCommands', "$autoclean", emptyFunc);
+    commands.set('modCommands', "$mute", emptyFunc);
     commands.set('modCommands', "$addRandom ", emptyFunc);
     commands.set('modCommands', "$addToUserBlacklist ", emptyFunc);
     commands.set('modCommands', "$addToVideoBlacklist ", emptyFunc);

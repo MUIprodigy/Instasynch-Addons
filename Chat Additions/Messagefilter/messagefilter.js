@@ -105,9 +105,11 @@ function parseMessage(message, isChatMessage) {
         words;
     //if the text matches [tag]/emote[/tag] or /emote
     if (match && isChatMessage) {
-        emoteFound = true;
-        emote = (unsafeWindow.$codes.hasOwnProperty(match[3].toLowerCase())) ? unsafeWindow.$codes[match[3].toLowerCase()] : "/" + match[3];
-        message = String.format("<span class='cm'>{0}{1}{2}</span>", match[1], emote, match[4]);
+        if (unsafeWindow.$codes.hasOwnProperty(match[3].toLowerCase())) {
+            emoteFound = true;
+            emote = unsafeWindow.$codes[match[3].toLowerCase()];
+            message = String.format("<span class='cm'>{0}{1}{2}</span>", match[1], emote, match[4]);
+        }
     } else {
         greentext = false;
         //if the text matches [tag]>* or >*
