@@ -216,8 +216,19 @@ function parseEmotes(message) {
             }
             if (exactMatches.length !== 0) {
                 code = unsafeWindow.$codes[exactMatches[exactMatches.length - 1]];
-                message = message.substring(0, emoteStart) + code + message.substring(emoteStart + exactMatches[exactMatches.length - 1].length + 1);
-                i = emoteStart + code.length;
+                if (emoteStart !== 0) {
+                    if (message[emoteStart - 1] == '\\') {
+                        message = message.substring(0, emoteStart - 1) + message.substring(emoteStart);
+                        i = emoteStart + exactMatches[exactMatches.length - 1].length;
+                    } else {
+                        message = message.substring(0, emoteStart) + code + message.substring(emoteStart + exactMatches[exactMatches.length - 1].length + 1);
+                        i = emoteStart + code.length;
+                    }
+                } else {
+                    message = message.substring(0, emoteStart) + code + message.substring(emoteStart + exactMatches[exactMatches.length - 1].length + 1);
+                    i = emoteStart + code.length;
+                }
+
             }
             emoteStart = i - 1;
         }
