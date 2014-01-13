@@ -24,7 +24,6 @@ function loadBotCommands() {
     var emptyFunc = function () {};
 
     commands.set('modCommands', "$autoclean", emptyFunc);
-    commands.set('modCommands', "$mute", emptyFunc);
     commands.set('modCommands', "$addRandom ", emptyFunc);
     commands.set('modCommands', "$addToUserBlacklist ", emptyFunc);
     commands.set('modCommands', "$addToVideoBlacklist ", emptyFunc);
@@ -34,6 +33,8 @@ function loadBotCommands() {
     commands.set('modCommands', "$shuffle ", emptyFunc);
     commands.set('modCommands', "$exportUserBlacklist", emptyFunc);
     commands.set('modCommands', "$poll ", emptyFunc);
+    commands.set('modCommands', "$mute", emptyFunc);
+    commands.set('modCommands', "$bump ", emptyFunc);
 
     commands.set('regularCommands', "$translateTitle", emptyFunc);
     commands.set('regularCommands', "$greet", emptyFunc);
