@@ -54,10 +54,9 @@ function loadTogglePlayer() {
     };
 }
 
-
 function togglePlayer() {
     if (playerActive) {
-        video.destroyPlayer();
+        unsafeWindow.video.destroyPlayer();
     } else {
         unsafeWindow.sendcmd('reload', null);
     }
