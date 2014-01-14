@@ -33,54 +33,38 @@ var resultsPerPage = 9,
     divmore,
     nextDisabled,
     prevDisabled,
-    divpolls,
-    divpollparent;
+    nextButton,
+    prevButton;
 
 function loadYoutubeSearch() {
     // Search results container
-    divresults = document.createElement('div');
-    divresults.id = 'searchResults';
-    divresults.style.cssFloat = 'right'; // All but IE
-    divresults.style.styleFloat = 'right'; //IE
-    divresults.style.width = '380px';
-    divresults.style.marginTop = '10px';
-    divresults.style.backgroundColor = '#DFDFDF';
-    divresults.style.opacity = '0.9';
-    divresults.style.padding = '5px';
-    divresults.style.display = 'none';
-    divresults.style.position = 'relative';
-
+    divresults = $('<div id="searchResults" />')
+        .css('cssFloat', 'right').css('styleFloat', 'right')
+        .css('width', '380px').css('marginTop', '10px')
+        .css('backgroundColor', '#DFDFDF').css('opacity', '0.9')
+        .css('padding', '5px').css('display', 'none')
+        .css('position', 'relative');
     // Close button container
-    divremove = document.createElement('div');
-    divremove.id = 'divclosesearch';
-    divremove.innerHTML = '<img src="http://www.instasynch.com/images/close.png">';
-    divremove.style.cssFloat = 'right'; // All but IE
-    divremove.style.styleFloat = 'right'; //IE
-    divremove.style.cursor = 'pointer';
-    divremove.style.display = 'none';
-    divremove.style.position = 'absolute';
-    divremove.style.right = '0px';
-    divremove.style.top = '0px';
+    divremove = $('<div id="divclosesearch" />').addClass('x')
+        .css('right', '0px').css('left', '')
+        .css('top', '0px').css('position', 'absolute')
+        .css('z-index', '2');
 
-    // 'Moar' link container
-    divmore = document.createElement('div');
-    divmore.id = 'divmore';
     nextDisabled = false;
     prevDisabled = false;
+    // 'Moar' link container
+    prevButton = $('<input id="prevButton" />').prop('disabled', true).prop('type', 'button').val('<< Prev').css('cursor', 'pointer');
+    nextButton = $('<input id="nextButton" />').prop('disabled', true).prop('type', 'button').val('Next >>').css('cursor', 'pointer');
+    divmore = $('<div id="divmore" />').append(
+        prevButton
+    ).append(
+        nextButton
+    ).css('textAlign', 'center').css('height', 'auto')
+        .css('width', '380px').css('position', 'relative')
+        .css('zIndex', '1');
 
-    divmore.innerHTML = '<input id="prevButton" disabled type="button" style="cursor:pointer" value="&lt&lt Prev"/> </span>';
-    divmore.innerHTML += '<input id="nextButton" disabled type="button" style="cursor:pointer" value="Next &gt&gt"/>';
-
-    divmore.style.textAlign = 'center';
-    divmore.style.height = '300px';
-    divmore.style.width = '380px';
-    divmore.style.position = 'relative';
-    divmore.style.zIndex = '1';
-
-    // Getting poll container's parent to insert search result container
-    divpolls = document.getElementsByClassName('poll-container')[0];
-    divpollparent = divpolls.parentNode;
-    divpollparent.insertBefore(divresults, divpolls);
+    //insert search result container
+    $('.poll-container').before(divresults);
 
     // Setting events on the URL input
     $("#URLinput").bind("keydown", function (event) {
@@ -123,6 +107,7 @@ function search() {
             buildMoreEntries = false;
         }
     }
+
     function error() {
         buildMoreEntries = false;
     }
@@ -163,8 +148,7 @@ function search() {
 // Parse data and display it
 function showResults(entries, index) {
     indexOfSearch = index;
-    var html = [],
-        i,
+    var i,
         entry,
         date,
         durationSeconds,
@@ -178,7 +162,7 @@ function showResults(entries, index) {
         feedURL,
         infoURL;
 
-    $("#searchResults").empty();
+    divresults.empty();
     if (entries.length === 0) {
         return;
     }
@@ -222,7 +206,7 @@ function showResults(entries, index) {
 
             link += id;
 
-            $("#searchResults").append(
+            divresults.append(
                 $('<div>')
             ).append(
                 $('<div>').append(
@@ -242,21 +226,30 @@ function showResults(entries, index) {
                 ).css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px').css('cursor', 'pointer').css('z-index', '2').click(addLinkToPl).hover(showTitle, hideTitle)
             );
         } else {
-            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
+            divresults.append(
+                $('<div>').text('Video Remove By Youtube').css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px')
+            );
         }
     }
-    $(html.join('')).appendTo("#searchResults");
+    //fill empty spaces with empty divs 
+    if (Math.min(indexOfSearch + resultsPerPage, entries.length) % 3 !== 0) {
+        for (i = 0; i < 3 - Math.min(indexOfSearch + resultsPerPage, entries.length) % 3; i += 1) {
+            divresults.append(
+                $('<div>').css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px')
+            );
+        }
+    }
+    divresults.append(divremove);
+    divresults.append(divmore);
+    divresults.css('display', 'block');
+    divremove.click(closeResults);
 
-    divresults.insertBefore(divremove, divresults.firstChild); // Somehow adding it before won't work
-    divresults.appendChild(divmore);
-    $('#searchResults').css('display', 'block');
-    $('#divclosesearch').css('display', 'block').click(closeResults);
     // update buttons
     prevDisabled = (indexOfSearch > 0) ? false : true;
     nextDisabled = (indexOfSearch < entries.length - resultsPerPage) ? false : true;
 
-    $('#nextButton').attr('disabled', nextDisabled).click(getNextResultPage);
-    $('#prevButton').attr('disabled', prevDisabled).click(getPreviousResultPage);
+    nextButton.attr('disabled', nextDisabled).click(getNextResultPage);
+    prevButton.attr('disabled', prevDisabled).click(getPreviousResultPage);
 }
 
 function getNextResultPage() {
@@ -288,11 +281,10 @@ function addLinkToPl(e) {
 
 // closes the results and empties it
 function closeResults() {
-    $("#searchResults").empty();
+    divresults.empty();
     entries = [];
     partialEntries = [];
-    divresults.style.display = "none";
-    divremove.style.display = "none";
+    divresults.css('display', 'none');
 }
 
 preConnectFunctions.push(loadYoutubeSearch);

@@ -53,18 +53,6 @@ function printHistory() {
             break;
         }
 
-        //thumbnail = "<img style='height:90px;width:120px' src='" + history[i][0].thumbnail + "'>";
-
-        // html.push(
-        //     "<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'>
-        //         <div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='openInNewTab(\""+link+"\","+ {active:true,insert:true}+")'>" 
-        //             + thumbnail + "
-        //             <p  style='position:absolute;top:10px;visibility:hidden'>
-        //             <span style='background:rgba(0, 0, 0, 0.7);color:white'>" + 
-        //                 history[i][1] +  "
-        //             </span>
-        //         </div>
-        //     </div>");      
         if (link !== '') {
             date.setSeconds(history[i].duration);
             if (date.getUTCHours() !== 0) {
@@ -76,7 +64,7 @@ function printHistory() {
             if ((date.getUTCSeconds() !== 0) || duration) {
                 duration += date.getUTCSeconds() + 's';
             }
-            $("#searchResults").append(
+            divresults.append(
                 $('<div>')
             ).append(
                 $('<a>', {
@@ -97,25 +85,14 @@ function printHistory() {
                         $('<span>').text(duration).css('background', 'rgba(0, 0, 0, 0.7').css('color', 'white')
                     ).css('position', 'absolute').css('bottom', '0px').css('right', '0px')
                 ).css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px')
-                    .css('width', '120px').css('margin', '1px').css('cursor', 'pointer').css('z-index', '2')
-                    .hover(showTitle, hideTitle)
+                .css('width', '120px').css('margin', '1px').css('cursor', 'pointer').css('z-index', '2').hover(showTitle, hideTitle)
             );
         }
     }
-    // $(html.join('')).appendTo("#searchResults");
-
-    divresults.insertBefore(divremove, divresults.firstChild); // Somehow adding it before won't work
-    divresults.style.display = "block";
-    divremove.style.display = "block";
-    $('#divclosesearch').css('display', 'block').click(closeResults);
+    divresults.append(divremove);
+    divresults.css('display', 'block');
+    divremove.click(closeResults);
 }
-
-// closes the results and empties it
-// function closeResults(){
-//     $("#searchResults").empty();
-//     divresults.style.display = "none";
-//     divremove.style.display = "none";
-// }
 
 var history = [];
 preConnectFunctions.push(loadHistory);
