@@ -21,7 +21,6 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-var previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
 
 function loadMouseWheelVolumecontrol() {
 
@@ -60,31 +59,28 @@ function loadMouseWheelVolumecontrol() {
         }
     );
 
-    // var oldLoadYoutubePlayer = loadYoutubePlayer,
-    //     oldLoadVimeoVideo = loadVimeoVideo;
-
-    //  //overwrite InstaSynch's loadYoutubePlayer
-    // loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
-    //     oldLoadYoutubePlayer(id, time, playing);
-    //     //set the globalVolume to the player after it has been loaded
-
-    // };    
-
-
-    // //overwrite InstaSynch's loadVimeoPlayer
-    // loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
-    //     oldLoadVimeoVideo(id, time, playing);
-
-    //     //set the globalVolume to the player after it has been loaded
-    // };
-
     var oldPlayVideo = unsafeWindow.playVideo,
         newPlayer = false;
+    //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
+    //listen to volume change on the youtube player
+    unsafeWindow.addEventListener("message",
+        function (event) {
+            try {
+                var parsed = JSON.parse(event.data);
+                if (parsed.event && parsed.event === 'infoDelivery' && parsed.info && parsed.info.volume) {
+                    globalVolume = parsed.info.volume;
+                }
+            } catch (ignore) {}
+        }, false);
 
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
         oldPlayVideo(vidinfo, time, playing);
         if (oldProvider !== vidinfo.provider) {
             newPlayer = true;
+            if (vimeoVolumePollingIntervalId) {
+                clearInterval(vimeoVolumePollingIntervalId);
+                vimeoVolumePollingIntervalId = undefined;
+            }
             oldProvider = vidinfo.provider;
         }
         if (newPlayer) {
@@ -92,24 +88,32 @@ function loadMouseWheelVolumecontrol() {
             switch (oldProvider) {
             case 'youtube':
                 var oldAfterReady = $.tubeplayer.defaults.afterReady;
-                $.tubeplayer.defaults.afterReady = function afterReady(k3) {
+                $.tubeplayer.defaults.afterReady = function (k3) {
                     initGlobalVolume();
                     oldAfterReady(k3);
                 };
                 break;
             case 'vimeo':
                 $f($('#vimeo')[0]).addEvent('ready', initGlobalVolume);
+                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+                vimeoVolumePollingIntervalId = setInterval(function () {
+                    $f($('#vimeo')[0]).api('getVolume', function (vol) {
+                        globalVolume = (vol * 100.0);
+                    });
+                }, 1000);
                 break;
             }
         }
     };
 }
 
-var isPlayerRead = false,
+var isPlayerReady = false,
     globalVolume = 50,
     mouserOverPlayer = false,
-    oldProvider = 'youtube',
-    mouseWheelVolumecontrol = true;
+    oldProvider = '',
+    mouseWheelVolumecontrol = true,
+    vimeoVolumePollingIntervalId = undefined,
+    previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
 
 function toggleMouseWheelVolumecontrol() {
     mouseWheelVolumecontrol = !mouseWheelVolumecontrol;
@@ -117,7 +121,7 @@ function toggleMouseWheelVolumecontrol() {
 }
 
 function initGlobalVolume() {
-    if (isPlayerRead) {
+    if (isPlayerReady) {
         setVol(globalVolume);
     } else {
         if (oldProvider === 'youtube') {
@@ -127,7 +131,7 @@ function initGlobalVolume() {
                 setVol(vol * 100.0);
             });
         }
-        isPlayerRead = true;
+        isPlayerReady = true;
     }
 }
 
