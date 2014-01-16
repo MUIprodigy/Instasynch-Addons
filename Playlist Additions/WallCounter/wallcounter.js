@@ -108,8 +108,16 @@ function printWallCounter() {
 
 function printMyWallCounter() {
     resetWallCounter();
-    var output = "";
-    output = String.format('[{0}: {1}]', thisUsername, unsafeWindow.secondsToTime(wallCounter[thisUsername] || 0));
+    var output = "",
+        timeToWall = 0;
+    for (i = getActiveVideoIndex(); i < unsafeWindow.playlist.length; i += 1) {
+        if (unsafeWindow.playlist[i].addedby.toLowerCase() === thisUsername.toLowerCase()) {
+            break;
+        } else {
+            timeToWall += unsafeWindow.playlist[i].duration;
+        }
+    }
+    output = String.format('[{0}: {1}], {2} till your videos play.', thisUsername, unsafeWindow.secondsToTime(wallCounter[thisUsername] || 0), unsafeWindow.secondsToTime(timeToWall));
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 

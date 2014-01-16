@@ -24,7 +24,7 @@ function loadGeneralStuff() {
     //get Username
     thisUsername = $.cookie('username');
     unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>' +
-        '&bull; \'help prints all the commands or more info on a single one (use http://instasynch.com/commands.txt for commands from the site). ' +
+        '&bull; \'help prints all the commands or more info on a single one (use http://instasynch.com/commands.txt for commands from the site). <br>' +
         '&bull; \'exportPlaylist will export to the clipboard. Use parameters: title, duration, addedby, thumbnail, all, xml to specify the data<br>' +
         '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>' +
         '&bull; \'Shuffle: shuffles a wall or the playlist <br>' +
