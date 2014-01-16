@@ -38,8 +38,11 @@ Command List
 ~ModSpy
 ~LogInOffMessages
 ~Timestamp
+~MouseWheelVolumecontrol
 ~BigPlaylist
-~PlayMessages</code>
+~PlayMessages
+~NNDMode
+~NNDModelimit [messageLimit]</code>
 </pre>
 
 
@@ -54,6 +57,7 @@ Then go to http://userscripts.org/scripts/show/181142 and install the script.
 Changes
 ------------
 <pre>
+• Added <a href="#nnd-mode">NND-Mode</a>
 • Added <a href="#help">Help</a>
 • Added <a href="#playmessages">PlayMessages</a>
 • Added <a href="#bigplaylist">BigPlaylist</a>
@@ -185,6 +189,7 @@ Mousewheel Volumecontrol
 ------------------------
 
 The volume of the Youtube and Vimeo can be controlled by hovering over it with the mouse and scrolling up and down with the mousewheel.
+To turn it off use <code>~MouseWheelVolumecontrol</code>
 
 Click <a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >here</a> for the example.
 
@@ -227,6 +232,12 @@ A user will now recieve a notification via the favicon of the browser tab if the
 The chat will stop scrolling at this position so the messages does not need to be searched afterwards.
 
 Click <a href="Chat Additions/Name Notification/namenotificationexample.gif" >here</a> for the example.
+
+NND-Mode
+-------------------
+
+NicoNicoDouga-Mode will scroll the messages in the chat over the player. To toggle it use <code>~NNDMode</code>.
+It can get laggy on some computers. Use <code>~NNDModelimit [messageLimit]</code> to limit the messages and thus reduce lag.
 
 Login-Off Messages
 ------------------
