@@ -78,14 +78,14 @@ function toggleNSFWEmotes() {
     if (!NSFWEmotes) {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-        autocompleteData.push('/boobies');
-        autocompleteData.push('/meatspin');
-        autocompleteData.sort();
+        autoCompleteData.push('/boobies');
+        autoCompleteData.push('/meatspin');
+        autoCompleteData.sort();
     } else {
         delete unsafeWindow.$codes.boobies;
         delete unsafeWindow.$codes.meatspin;
-        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
-        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
+        autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
+        autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
     }
     NSFWEmotes = !NSFWEmotes;
     settings.set('NSFWEmotes', NSFWEmotes);
@@ -235,20 +235,25 @@ function parseEmotes(message) {
 }
 
 function toggleNSFWEmotes() {
-    if (!NSFWEmotes) {
-        unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-        autocompleteData.push('/boobies');
-        autocompleteData.push('/meatspin');
-        autocompleteData.sort();
-    } else {
-        delete unsafeWindow.$codes.boobies;
-        delete unsafeWindow.$codes.meatspin;
-        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
-        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
+    try {
+
+        if (!NSFWEmotes) {
+            unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+            unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+            autoCompleteData.push('/boobies');
+            autoCompleteData.push('/meatspin');
+            autoCompleteData.sort();
+        } else {
+            delete unsafeWindow.$codes.boobies;
+            delete unsafeWindow.$codes.meatspin;
+            autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
+            autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
+        }
+        NSFWEmotes = !NSFWEmotes;
+        settings.set('NSFWEmotes', NSFWEmotes);
+    } catch (err) {
+        unsafeWindow.console.log(err);
     }
-    NSFWEmotes = !NSFWEmotes;
-    settings.set('NSFWEmotes', NSFWEmotes);
 }
 
 

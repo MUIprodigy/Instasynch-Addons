@@ -42,7 +42,8 @@ Command List
 ~BigPlaylist
 ~PlayMessages
 ~NNDMode
-~NNDModelimit [messageLimit]</code>
+~NNDModelimit [messageLimit]
+~NNDModeEmotes</code>
 </pre>
 
 
@@ -238,6 +239,7 @@ NND-Mode
 
 NicoNicoDouga-Mode will scroll the messages in the chat over the player. To toggle it use <code>~NNDMode</code>.
 It can get laggy on some computers. Use <code>~NNDModelimit [messageLimit]</code> to limit the messages and thus reduce lag.
+Use <code>~NNDModeEmotes</code> to toggle emotes.
 
 Login-Off Messages
 ------------------

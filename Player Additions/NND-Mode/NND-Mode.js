@@ -22,10 +22,12 @@
 */
 
 function loadNNDMode() {
-    nndMode = settings.get('NNDMode', true);
-    nndLimit = settings.get('NNDModeLimit', -1);
+    nndMode = settings.get('NNDMode', nndMode);
+    nndModeEmotes = settings.get('NNDModeEmotes', nndModeEmotes);
+    nndLimit = settings.get('NNDModeLimit', nndLimit);
     commands.set('addOnSettings', "NNDMode", toggleNNDMode, 'Toggles NND-Mode.');
     commands.set('addOnSettings', "NNDModelimit ", NNDModelimit, 'Limits how many messages can be displayed on the screen. Parameters: the number of messages.');
+    commands.set('addOnSettings', "NNDModeEmotes", toggleNNDModeEmotes, 'Togges emotes for NND-Mode.');
     $('#media').css('position', 'relative');
     var oldAddMessage = unsafeWindow.addMessage;
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
@@ -41,6 +43,7 @@ function loadNNDMode() {
 }
 
 var nndMode = true,
+    nndModeEmotes = true,
     marqueeMessages = [],
     marqueeIntervalId = undefined,
     playerHeight,
@@ -62,6 +65,11 @@ function toggleNNDMode() {
     settings.set('NNDMode', nndMode);
 }
 
+function toggleNNDModeEmotes() {
+    nndModeEmotes = !nndModeEmotes;
+    settings.set('NNDModeEmotes', nndModeEmotes);
+}
+
 function addMarqueeMessage(message) {
     var i,
         jqueryMessage,
@@ -70,10 +78,10 @@ function addMarqueeMessage(message) {
     message = parseMessageForNND(message);
     jqueryMessage = $('<div>').append(
         $('<marquee direction="left" />').append(
-            $('<div/>').html(message).css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black').css('opacity', 0.8)
+            $('<div/>').html(message).css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black').css('opacity', 0.65)
         )
     ).css('color', 'white').css('position', 'absolute').css('width', playerWidth);
-    top = (Math.random() * (playerHeight - 13));
+    top = (Math.random() * (playerHeight - 60));
     jqueryMessage.css('top', top + 'px');
     $('#media').append(jqueryMessage);
     marqueeMessages.push({
@@ -102,6 +110,11 @@ function addMarqueeMessage(message) {
 function parseMessageForNND(message) {
     var match = message.match(/^((\[[^\]]*\])*)\/([^\[ ]+)((\[.*?\])*)/i),
         word,
+        emoteFound = false,
+        greentext,
+        emote,
+        words,
+        i,
         excludeTags = {
             '\\[rmarquee\\]': '<marquee>', //move text to right
             '\\[/rmarquee\\]': '</marquee>',
@@ -120,8 +133,29 @@ function parseMessageForNND(message) {
         if (unsafeWindow.$codes.hasOwnProperty(match[3].toLowerCase())) {
             emoteFound = true;
             emote = unsafeWindow.$codes[match[3].toLowerCase()];
-            message = String.format("{0}/{1}{2}", match[1], match[3], match[4]);
+            if (nndModeEmotes) {
+                message = String.format("{0}{1}{2}", match[1], emote, match[4]);
+            } else {
+                message = String.format("{0}/{1}{2}", match[1], match[3].toLowerCase(), match[4]);
+            }
         }
+    } else {
+        greentext = false;
+        //if the text matches [tag]>* or >*
+        if (message.match(/^((\[[^\]]*\])*)((&gt;)|>)/)) {
+            greentext = true;
+        } else {
+            //split up the message and add hashtag colors #SWAG #YOLO
+            words = message.split(" ");
+            for (i = 0; i < words.length; i += 1) {
+                if (words[i][0] === "#") {
+                    words[i] = String.format("<span class='cm hashtext'>{0}</span>", words[i]);
+                }
+            }
+            //join the message back together
+            message = words.join(" ");
+        }
+        message = String.format("<span class='cm{0}'>{1}</span>", greentext ? ' greentext' : '', message);
     }
     for (word in filteredwords) {
         if (filteredwords.hasOwnProperty(word)) {
@@ -160,7 +194,8 @@ function parseMessageForNND(message) {
             message = message.replace(new RegExp(word, 'gi'), '');
         }
     }
-    message = message.replace(/\[spoiler\].*?(?=\[\/spoiler\])\[\/spoiler\]/gi, '[spoiler]');
+    //text in spoilers will be black
+    message = message.replace(/\[spoiler\]/gi, "<span style=\"background-color: #000;color:black;\" onmouseover=\"this.style.backgroundColor='#FFF';\" onmouseout=\"this.style.backgroundColor='#000';\">");
 
     function parseTags() {
         return filterTags ? tags[word] : '';
@@ -170,6 +205,9 @@ function parseMessageForNND(message) {
         if (tags.hasOwnProperty(word) && word !== '\\[spoiler\\]') {
             message = message.replace(new RegExp(word, 'gi'), parseTags);
         }
+    }
+    if (emoteFound) {
+        message = message.replace(/\[[^\]]*\]/, '');
     }
     return message;
 }
