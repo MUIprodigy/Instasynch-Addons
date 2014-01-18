@@ -80,7 +80,8 @@ function addMarqueeMessage(message) {
         $('<marquee direction="left" />').append(
             $('<div/>').html(message).css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black').css('opacity', 0.65)
         )
-    ).css('color', 'white').css('position', 'absolute').css('width', playerWidth);
+    ).css('color', 'white').css('position', 'absolute').css('width', playerWidth).css('pointer-events', 'none');
+
     top = (Math.random() * (playerHeight - 60));
     jqueryMessage.css('top', top + 'px');
     $('#media').append(jqueryMessage);
