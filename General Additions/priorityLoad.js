@@ -21,8 +21,21 @@
     http://opensource.org/licenses/GPL-3.0
 */
 //Scripts that need to be loaded first
-function loadPriorityScripts() {
-    executeFunctions([loadGeneralStuff, loadCommandLoader, loadSettingsLoader, loadBigPlaylist, loadNewLoadUserlist]);
+function loadPrePriorityScripts() {
+    executeFunctions([loadGeneralStuff,
+        loadCommandLoader,
+        loadSettingsLoader,
+        loadBigPlaylist,
+        loadNewLoadUserlist
+    ]);
 }
 
-preConnectFunctions.splice(0, 0, loadPriorityScripts);
+function loadPostPriorityScripts() {
+    if (postConnectFunctions.lastIndexOf(loadPostPriorityScripts) !== postConnectFunctions.length - 1) {
+        postConnectFunctions.push(loadPostPriorityScripts);
+        return;
+    }
+    executeFunctions([loadAutoComplete]);
+}
+preConnectFunctions.splice(0, 0, loadPrePriorityScripts);
+postConnectFunctions.push(loadPostPriorityScripts);

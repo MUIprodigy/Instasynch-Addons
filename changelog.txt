@@ -1,0 +1,17 @@
+1.33 
+ • Tags are in a seperate file now
+ • Using the API GM_addStyle to load styles now
+ • Using the API GM_getResourceURL and @resource to load resources
+ • Added an icon to the script
+ • Replaced settingsLoader with GM_config for the GUI
+ • Added Author and Contributors in the metadata block of the script
+ • Added NND font-size and speed settings
+ 
+1.32.8.6
+ • NND-Mode won't block mouse events to the player anymore
+
+1.32.8.5
+ • Spoilered text in NND will always be black now
+ • Added hashtags and greentext in NND
+ • Added the option to enable emotes in NND, some emotes still need to be edited to have an transparent background ~NNDModeEmotes to turn off
+ • Fixed ~NSFWEmotes not working properly

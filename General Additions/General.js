@@ -21,15 +21,6 @@
     http://opensource.org/licenses/GPL-3.0
 */
 function loadGeneralStuff() {
-    //get Username
-    thisUsername = $.cookie('username');
-    unsafeWindow.addMessage('', '<strong>Scripts @VERSION loaded. Recent changes:<br>' +
-        '&bull; \'help prints all the commands or more info on a single one (use http://instasynch.com/commands.txt for commands from the site). <br>' +
-        '&bull; \'exportPlaylist will export to the clipboard. Use parameters: title, duration, addedby, thumbnail, all, xml to specify the data<br>' +
-        '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>' +
-        '&bull; \'Shuffle: shuffles a wall or the playlist <br>' +
-        '&bull; \'History: shows the last 9 videos <br>' +
-        '&bull; YouTube Search: type the search term into the add video field', '', 'hashtext');
 
     //http://joquery.com/2012/string-format-for-javascript
     String.format = function () {
@@ -49,7 +40,8 @@ function loadGeneralStuff() {
         return theString;
     };
 
-
+    thisUsername = $.cookie('username');
+    unsafeWindow.addMessage('', String.format('<strong>Script {0} loaded.<br>Changelog: {1}</strong>', GM_info.script.version, 'https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt'), '', 'hashtext');
 
 
     // unsafeWindow.addEventListener("message", 

@@ -20,12 +20,14 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
+settingsFields['Chat Additions'].LogInOffMessages = {
+    'label': 'Login/off Messages',
+    'type': 'checkbox',
+    'default': false
+};
 
 function loadLogInOffMessages() {
-    //load settings
-    logInOffMessages = settings.get('LogInOffMessages', false);
-    //add the command
-    commands.set('addOnSettings', "LogInOffMessages", toggleLogInOffMessages, 'Toggles the log in/off messages.');
     // Overwriting Adduser
     var oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
@@ -33,7 +35,7 @@ function loadLogInOffMessages() {
 
     unsafeWindow.addUser = function (user, css, sort) {
         // Only if blackname or mod
-        if (user.loggedin && logInOffMessages) {
+        if (user.loggedin && GM_config.get('LogInOffMessages')) {
             unsafeWindow.addMessage('', user.username + ' logged on.', '', 'hashtext');
             if (user.username === 'JustPassingBy') {
                 unsafeWindow.addMessage('', 'Wish him a happy birthday !', '', 'hastext');
@@ -44,18 +46,11 @@ function loadLogInOffMessages() {
     // Overwriting removeUser
     unsafeWindow.removeUser = function (id) {
         user = unsafeWindow.users[getIndexOfUser(id)];
-        if (user.loggedin && logInOffMessages) {
+        if (user.loggedin && GM_config.get('LogInOffMessages')) {
             unsafeWindow.addMessage('', user.username + ' logged off.', '', 'hashtext');
         }
         oldRemoveUser(id);
     };
-}
-
-var logInOffMessages = false;
-
-function toggleLogInOffMessages() {
-    logInOffMessages = !logInOffMessages;
-    settings.set('LogInOffMessages', logInOffMessages);
 }
 
 postConnectFunctions.push(loadLogInOffMessages);

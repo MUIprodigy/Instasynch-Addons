@@ -20,21 +20,29 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadMirrorPlayer() {
-    //load settings
-    automaticPlayerMirror = settings.get('AutomaticPlayerMirror', true);
+settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
+settingsFields['Player Additions'].AutomaticPlayerMirror = {
+    'label': 'Automatic player mirror',
+    'title': 'Mirros the player when the title contains something like [Mirrored]',
+    'type': 'checkbox',
+    'default': true
+};
 
-    //add the command
-    commands.set('addOnSettings', "AutomaticPlayerMirror", toggleAutomaticMirrorPlayer, 'Toggles the automatic mirroring of the embedded player, which is determined by checking the title for keywords like MIRRORED.');
+function loadMirrorPlayer() {
     commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
-    var mirrorClass = ".mirror { -moz-transform: scaleX(-1); /* Gecko */ -o-transform: scaleX(-1); /* Operah */ -webkit-transform: scaleX(-1); /* webkit */ transform: scaleX(-1); /* standard */ filter: FlipH; /* IE 6/7/8 */}",
-        oldPlayVideo = unsafeWindow.playVideo,
+    var oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
         title;
-    $('<style>' + mirrorClass + '</style>').appendTo('body');
+    GM_addStyle('.mirror { ' +
+        '-moz-transform: scaleX(-1); /* Gecko */ ' +
+        '-o-transform: scaleX(-1); /* Operah */ ' +
+        '-webkit-transform: scaleX(-1); /* webkit */ ' +
+        'transform: scaleX(-1); /* standard */ ' +
+        'filter: FlipH; /* IE 6/7/8 */' +
+        '}');
 
 
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
@@ -61,7 +69,7 @@ function loadMirrorPlayer() {
 }
 
 function containsMirrored(title) {
-    if (!automaticPlayerMirror) {
+    if (!GM_config.get('AutomaticPlayerMirror')) {
         return false;
     }
     var found = false,
@@ -79,13 +87,8 @@ function containsMirrored(title) {
     return found;
 }
 
-var automaticPlayerMirror = true,
-    isPlayerMirrored = false;
+var isPlayerMirrored = false;
 
-function toggleAutomaticMirrorPlayer() {
-    automaticPlayerMirror = !automaticPlayerMirror;
-    settings.set('AutomaticPlayerMirror', automaticPlayerMirror);
-}
 
 function toggleMirrorPlayer() {
     $('#media').toggleClass('mirror');

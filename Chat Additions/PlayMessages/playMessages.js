@@ -16,11 +16,14 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
+settingsFields['Chat Additions'].PlayMessages = {
+    'label': 'PlayMessages',
+    'type': 'checkbox',
+    'default': true
+};
+
 function loadPlayMessages() {
-    //load settings
-    playMessages = settings.get('PlayMessages', true);
-    //add the command
-    commands.set('addOnSettings', "PlayMessages", togglePlayMessages, 'Toggles PlayMessages, which shows the video title in the chat.');
     // Overwriting Adduser
     var oldPlayVideo = unsafeWindow.playVideo,
         indexOfVid,
@@ -28,20 +31,13 @@ function loadPlayMessages() {
 
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
         // Only if blackname or mod
-        if (playMessages) {
+        if (GM_config.get('PlayMessages')) {
             indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             title = ((unsafeWindow.playlist[indexOfVid].title.length > 240) ? unsafeWindow.playlist[indexOfVid].title.substring(0, 240) + "..." : unsafeWindow.playlist[indexOfVid].title);
             unsafeWindow.addMessage('', 'Now playing: ' + title, '', 'hashtext');
         }
         oldPlayVideo(vidinfo, time, playing);
     };
-}
-
-var playMessages = true;
-
-function togglePlayMessages() {
-    playMessages = !playMessages;
-    settings.set('PlayMessages', playMessages);
 }
 
 postConnectFunctions.push(loadPlayMessages);

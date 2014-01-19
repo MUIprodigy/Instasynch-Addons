@@ -20,17 +20,32 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadMessageFilter() {
-    //load settings
-    filterTags = settings.get('Tags', true);
-    NSFWEmotes = settings.get('NSFWEmotes', false);
+settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
+settingsFields['Chat Additions'].Tags = {
+    'label': 'Parse <a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">tags</a> in the chat',
+    'type': 'checkbox',
+    'default': true
+};
+settingsFields['Chat Additions'].NSFWEmotes = {
+    'label': 'NSFW Emotes',
+    'type': 'checkbox',
+    'default': false
+};
 
-    //add the commands
-    commands.set('addOnSettings', "Tags", toggleTags, 'Toggles the tags. Tags will just be removed when turned off. All the tags: https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js');
-    commands.set('addOnSettings', "NSFWEmotes", toggleNSFWEmotes, 'Toggles the NSFW emotes (/boobies, /meatspin).');
+function loadMessageFilter() {
+    onSettingsOpen.push(function () {
+        oldNSFWEmotes = GM_config.get('NSFWEmotes');
+    });
+
+    onSettingsSave.push(function () {
+        if (oldNSFWEmotes !== GM_config.get('NSFWEmotes')) {
+            toggleNSFWEmotes();
+            oldNSFWEmotes = GM_config.get('NSFWEmotes');
+        }
+    });
 
     //init
-    if (NSFWEmotes) {
+    if (GM_config.get('NSFWEmotes')) {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
@@ -69,13 +84,8 @@ function loadMessageFilter() {
     };
 }
 
-function toggleTags() {
-    filterTags = !filterTags;
-    settings.set('Tags', filterTags);
-}
-
 function toggleNSFWEmotes() {
-    if (!NSFWEmotes) {
+    if (GM_config.get('NSFWEmotes')) {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autoCompleteData.push('/boobies');
@@ -87,8 +97,6 @@ function toggleNSFWEmotes() {
         autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
         autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
     }
-    NSFWEmotes = !NSFWEmotes;
-    settings.set('NSFWEmotes', NSFWEmotes);
 }
 
 function parseMessage(message, isChatMessage) {
@@ -154,7 +162,7 @@ function parseMessage(message, isChatMessage) {
             break;
         }
         ret = String.format(format, $0, $1);
-        return filterTags ? ret : '';
+        return GM_config.get('Tags') ? ret : '';
     }
     //filter advancedTags    
     for (word in advancedTags) {
@@ -164,7 +172,7 @@ function parseMessage(message, isChatMessage) {
     }
 
     function parseTags() {
-        return filterTags ? tags[word] : '';
+        return GM_config.get('Tags') ? tags[word] : '';
     }
     //filter tags
     for (word in tags) {
@@ -234,8 +242,7 @@ function parseEmotes(message) {
     return message;
 }
 
-var filterTags = true,
-    NSFWEmotes = false,
+var oldNSFWEmotes,
     filteredwords = {
         "skip": "upvote",
         "SKIP": "UPVOTE",

@@ -21,16 +21,19 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
+settingsFields['Player Additions'].MouseWheelVolumecontrol = {
+    'label': 'Mousewheel volume control of the player (no ff atm)',
+    'type': 'checkbox',
+    'default': true
+};
 
 function loadMouseWheelVolumecontrol() {
-
-    mouseWheelVolumecontrol = settings.get('MouseWheelVolumecontrol', true);
-    commands.set('addOnSettings', "MouseWheelVolumecontrol", toggleMouseWheelVolumecontrol, 'Toggles the mouse wheel volume control for the player.');
     //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
 
     //prevent the site from scrolling while over the player
     function preventScroll(event) {
-        if (mouseWheelVolumecontrol && mouserOverPlayer) {
+        if (GM_config.get('MouseWheelVolumecontrol') && mouserOverPlayer) {
             event.preventDefault();
             event.returnValue = !mouserOverPlayer;
 
@@ -111,14 +114,9 @@ var isPlayerReady = false,
     globalVolume = 50,
     mouserOverPlayer = false,
     oldProvider = '',
-    mouseWheelVolumecontrol = true,
     vimeoVolumePollingIntervalId = undefined,
     previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
 
-function toggleMouseWheelVolumecontrol() {
-    mouseWheelVolumecontrol = !mouseWheelVolumecontrol;
-    settings.set('MouseWheelVolumecontrol', mouseWheelVolumecontrol);
-}
 
 function initGlobalVolume() {
     if (isPlayerReady) {

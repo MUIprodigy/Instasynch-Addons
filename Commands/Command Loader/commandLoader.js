@@ -58,7 +58,6 @@ function loadCommandLoader() {
         //"'description ",
         "'next"
     ];
-    items.addOnSettings = [];
     items.commandFunctionMap = {};
     items.descriptionMap = {};
     //listen to the sites message events
@@ -76,11 +75,7 @@ function loadCommandLoader() {
     commands = {
         set: function (arrayName, funcName, func, description) {
             if (funcName[0] !== '$') {
-                if (arrayName === 'addOnSettings') {
-                    funcName = "~" + funcName;
-                } else {
-                    funcName = "'" + funcName;
-                }
+                funcName = "'" + funcName;
             }
             items[arrayName].push(funcName);
             items.commandFunctionMap[funcName.toLowerCase()] = func;

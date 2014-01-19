@@ -18,10 +18,16 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+
+settingsFields['Playlist Additions'] = settingsFields['Playlist Additions'] || {};
+settingsFields['Playlist Additions'].BigPlaylist = {
+    'label': 'Big playlist with thumbnails (needs f5)',
+    'type': 'checkbox',
+    'default': true
+};
+
 function loadBigPlaylist() {
-    bigPlaylist = settings.get('BigPlaylist', true);
-    commands.set('addOnSettings', 'BigPlaylist', toggleBigPlaylist, 'Toggles the BigPlaylist.');
-    if (bigPlaylist) {
+    if (GM_config.get('BigPlaylist')) {
         // change unsafeWindow.playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
         $('#ulPlay').replaceWith($('<table>', {
@@ -213,17 +219,9 @@ function loadBigPlaylist() {
     }
 }
 
-var bigPlaylist = true;
-
 function trimTitle(title, length) {
     if (title.length > length) {
         title = title.substring(0, length) + "...";
     }
     return title;
-}
-
-function toggleBigPlaylist() {
-    bigPlaylist = !bigPlaylist;
-    settings.set('BigPlaylist', bigPlaylist);
-    unsafeWindow.addMessage('', 'This setting requires a reload of the Page.', '', 'hashtext');
 }

@@ -20,20 +20,52 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'] = settingsFields['Player Additions']['NicoNicoDouga-Mode'] || {};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDMode = {
+    'label': 'NicoNicoDouga-Mode(scrolling text)',
+    'type': 'checkbox',
+    'default': false
+};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeEmotes = {
+    'label': 'Emotes',
+    'type': 'checkbox',
+    'default': true
+};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeLimit = {
+    'label': 'Message Limit',
+    'title': '-1 unlimited',
+    'type': 'int',
+    'min': -1,
+    'default': -1,
+    'size': 1
+};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeSpeed = {
+    'label': 'Speed',
+    'title': '10 - 50',
+    'type': 'int',
+    'min': 10,
+    'max': 50,
+    'default': 25,
+    'size': 1
+};
+settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeFontSize = {
+    'label': 'Font-Size',
+    'title': '10 - 50',
+    'type': 'int',
+    'min': 10,
+    'max': 50,
+    'default': 13,
+    'size': 1
+};
 
 function loadNNDMode() {
-    nndMode = settings.get('NNDMode', nndMode);
-    nndModeEmotes = settings.get('NNDModeEmotes', nndModeEmotes);
-    nndLimit = settings.get('NNDModeLimit', nndLimit);
-    commands.set('addOnSettings', "NNDMode", toggleNNDMode, 'Toggles NND-Mode.');
-    commands.set('addOnSettings', "NNDModelimit ", NNDModelimit, 'Limits how many messages can be displayed on the screen. Parameters: the number of messages.');
-    commands.set('addOnSettings', "NNDModeEmotes", toggleNNDModeEmotes, 'Togges emotes for NND-Mode.');
     $('#media').css('position', 'relative');
     var oldAddMessage = unsafeWindow.addMessage;
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
         oldAddMessage(username, message, userstyle, textstyle);
-        if (nndMode && username !== '' && message[0] !== '$') {
-            if (nndLimit === -1 || marqueeMessages.length < nndLimit) {
+        if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$') {
+            if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
                 addMarqueeMessage(message);
             }
         }
@@ -42,33 +74,11 @@ function loadNNDMode() {
     playerHeight = $('#media').height();
 }
 
-var nndMode = true,
-    nndModeEmotes = true,
-    marqueeMessages = [],
+var marqueeMessages = [],
     marqueeIntervalId = undefined,
     playerHeight,
-    playerWidth,
-    nndLimit = -1;
+    playerWidth;
 
-function NNDModelimit(params) {
-    if (params[1]) {
-        nndLimit = parseInt(params[1], 10);
-        if (nndLimit <= 0) {
-            nndLimit = -1;
-        }
-        settings.set('NNDModeLimit', nndLimit);
-    }
-}
-
-function toggleNNDMode() {
-    nndMode = !nndMode;
-    settings.set('NNDMode', nndMode);
-}
-
-function toggleNNDModeEmotes() {
-    nndModeEmotes = !nndModeEmotes;
-    settings.set('NNDModeEmotes', nndModeEmotes);
-}
 
 function addMarqueeMessage(message) {
     var i,
@@ -78,8 +88,8 @@ function addMarqueeMessage(message) {
     message = parseMessageForNND(message);
     jqueryMessage = $('<div>').append(
         $('<marquee direction="left" />').append(
-            $('<div/>').html(message).css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black').css('opacity', 0.65)
-        )
+            $('<div/>').html(message).css('font-size', GM_config.get('NNDModeFontSize')).css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black').css('opacity', 0.65)
+        ).attr('scrollamount', GM_config.get('NNDModeSpeed'))
     ).css('color', 'white').css('position', 'absolute').css('width', playerWidth).css('pointer-events', 'none');
 
     top = (Math.random() * (playerHeight - 60));
@@ -134,7 +144,7 @@ function parseMessageForNND(message) {
         if (unsafeWindow.$codes.hasOwnProperty(match[3].toLowerCase())) {
             emoteFound = true;
             emote = unsafeWindow.$codes[match[3].toLowerCase()];
-            if (nndModeEmotes) {
+            if (GM_config.get('NNDModeEmotes')) {
                 message = String.format("{0}{1}{2}", match[1], emote, match[4]);
             } else {
                 message = String.format("{0}/{1}{2}", match[1], match[3].toLowerCase(), match[4]);
@@ -179,7 +189,7 @@ function parseMessageForNND(message) {
             break;
         }
         ret = String.format(format, $0, $1);
-        return filterTags ? ret : '';
+        return GM_config.get('Tags') ? ret : '';
     }
 
     //filter advancedTags    
@@ -199,7 +209,7 @@ function parseMessageForNND(message) {
     message = message.replace(/\[spoiler\]/gi, "<span style=\"background-color: #000;color:black;\" onmouseover=\"this.style.backgroundColor='#FFF';\" onmouseout=\"this.style.backgroundColor='#000';\">");
 
     function parseTags() {
-        return filterTags ? tags[word] : '';
+        return GM_config.get('Tags') ? tags[word] : '';
     }
     //filter tags
     for (word in tags) {

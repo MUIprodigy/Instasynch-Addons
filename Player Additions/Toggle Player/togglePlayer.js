@@ -20,23 +20,39 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
+settingsFields['Player Additions'].PlayerActive = {
+    'label': 'Videoplayer active',
+    'title': '\'togglePlayer command',
+    'type': 'checkbox',
+    'default': true
+};
+
 function loadTogglePlayer() {
-    //load settings
-    playerActive = settings.get('PlayerActive', true);
-
     //add the command
-    commands.set('regularCommands', "togglePlayer", togglePlayer, 'Turns the embedded player on and off.');
+    commands.set('regularCommands', "togglePlayer", function () {
+        togglePlayer();
+        toggleSetting();
+    }, 'Turns the embedded player on and off.');
 
+    onSettingsOpen.push(function () {
+        oldPlayerActive = GM_config.get('PlayerActive');
+    });
+
+    onSettingsSave.push(function () {
+        if (oldPlayerActive !== GM_config.get('PlayerActive')) {
+            togglePlayer();
+            oldPlayerActive = GM_config.get('PlayerActive');
+        }
+    });
     //toggle the player once if the stored setting was false
-    if (!playerActive) {
-        playerActive = true;
-        //adding a little delay because it won't reload when destroying it immediately
-        setTimeout(togglePlayer, 1500);
+    if (!GM_config.get('PlayerActive')) {
+        setTimeout(unsafeWindow.video.destroyPlayer, 1500);
     }
 
     var oldPlayVideo = unsafeWindow.playVideo;
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
-        if (playerActive) {
+        if (GM_config.get('PlayerActive')) {
             oldPlayVideo(vidinfo, time, playing);
         } else {
             //copied from InstaSynch's playVideo
@@ -53,15 +69,19 @@ function loadTogglePlayer() {
         }
     };
 }
+var oldPlayerActive;
 
 function togglePlayer() {
-    if (playerActive) {
+    if (!GM_config.get('PlayerActive')) {
         unsafeWindow.video.destroyPlayer();
     } else {
         unsafeWindow.sendcmd('reload', null);
     }
-    playerActive = !playerActive;
-    settings.set('PlayerActive', playerActive);
+}
+
+function toggleSetting() {
+    GM_config.set('PlayerActive', !GM_config.get('PlayerActive'));
+    GM_config.save();
 }
 
 var playerActive = true;

@@ -20,12 +20,14 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
+settingsFields['Chat Additions'].ModSpy = {
+    'label': 'ModSpy (mod actions will be shown in the chat)',
+    'type': 'checkbox',
+    'default': true
+};
 
 function loadModSpy() {
-    //load settings
-    modSpy = settings.get('ModSpy', false);
-    //add command
-    commands.set('addOnSettings', "ModSpy", toggleModSpy, 'Toggles ModSpy, which prints logs from the console into the chat.');
     // Overwriting console.log
     var oldLog = unsafeWindow.console.log,
         oldMoveVideo = unsafeWindow.moveVideo,
@@ -39,7 +41,7 @@ function loadModSpy() {
         oldPosition;
     unsafeWindow.console.log = function (message) {
         // We don't want the cleaning messages in the chat (Ok in the console) .
-        if (modSpy && message && message.match) {
+        if (GM_config.get('ModSpy') && message && message.match) {
             filter = false;
             for (i = 0; i < filterList.length; i += 1) {
                 if (message.match(filterList[i])) {
@@ -61,16 +63,11 @@ function loadModSpy() {
     unsafeWindow.moveVideo = function (vidinfo, position) {
         oldPosition = unsafeWindow.getVideoIndex(vidinfo);
         oldMoveVideo(vidinfo, position);
-        if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) {// "It's a bump ! " - Amiral Ackbar
+        if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
             bumpCheck = true;
         }
     };
 }
-function toggleModSpy() {
-    modSpy = !modSpy;
-    settings.set('ModSpy', modSpy);
-}
-var modSpy = false,
-    bumpCheck = false;
+var bumpCheck = false;
 
 preConnectFunctions.push(loadModSpy);

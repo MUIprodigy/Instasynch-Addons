@@ -24,26 +24,7 @@ Command List
 'trimWall [user] [maxMinutes]?
 'purgeTooLong [maxMinutes]?
 'votePurge [user]
-'shuffle [user]?
-
-//Settings
-~TagsAutocomplete
-~EmotesAutocomplete
-~CommandsAutocomplete
-~AddOnSettingsAutocomplete
-~NamesAutocomplete
-~AutomaticPlayerMirror
-~Tags
-~NSFWEmotes
-~ModSpy
-~LogInOffMessages
-~Timestamp
-~MouseWheelVolumecontrol
-~BigPlaylist
-~PlayMessages
-~NNDMode
-~NNDModelimit [messageLimit]
-~NNDModeEmotes</code>
+'shuffle [user]?</code>
 </pre>
 
 
@@ -103,10 +84,6 @@ Message Filter
 
 The message filter brings back the old tags from synchtube, wordfilters and NSFWEmotes.
 
-The command <code>~Tags</code> can be used to turn the tags on and off to reduce spam in the chat.
-
-<code>~NSFWEmotes</code> can be used to turn the NSFWEmotes on and off.
-
 Click <a href="/Chat Additions/Messagefilter/messagefilterexample.gif">here</a> for the example.
 
 
@@ -116,15 +93,6 @@ Autocomplete
 Autocomplete will assist the user in typing out commands, emotes, settings, names and tags.
 By hitting tab or enter the selected item will be added to the input field. 
 If it is an emote or a command that does not need additional input it will be automatically sent to the chat.
-
-Each of those can be turned on and off.
-<pre>
-<code>~TagsAutocomplete
-~EmotesAutocomplete
-~CommandsAutocomplete
-~AddOnSettingsAutocomplete
-~NamesAutocomplete</code>
-</pre>
 
 Click <a href="Chat Additions/Autocomplete/autocompleteexample.gif">here</a> for the example.
 
@@ -165,8 +133,7 @@ To turn automatic scrolling back on simply scroll down completely.
 Mod Spy
 -------
 
-The logs in the console can be redirected to the chat window. Clean commands will be filtered out
-To turn it on and off use <code>~ModSpy</code>
+The logs in the console can be redirected to the chat window. Clean commands will be filtered out.
 
 Click <a href="Chat Additions/ModSpy/modspyexample.gif">here</a> for the example.
 
@@ -183,14 +150,12 @@ Mirror Player
 
 The player can be mirrored by using the command <code>'mirrorPlayer</code>.
 Videos containing words like 'Mirrored' or 'Mirror' in the title will be automatically mirrored.
-This can be turned off using <code>~AutomaticPlayerMirror</code>
 
 
 Mousewheel Volumecontrol
 ------------------------
 
 The volume of the Youtube and Vimeo can be controlled by hovering over it with the mouse and scrolling up and down with the mousewheel.
-To turn it off use <code>~MouseWheelVolumecontrol</code>
 
 Click <a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >here</a> for the example.
 
@@ -237,19 +202,17 @@ Click <a href="Chat Additions/Name Notification/namenotificationexample.gif" >he
 NND-Mode
 -------------------
 
-NicoNicoDouga-Mode will scroll the messages in the chat over the player. To toggle it use <code>~NNDMode</code>.
-It can get laggy on some computers. Use <code>~NNDModelimit [messageLimit]</code> to limit the messages and thus reduce lag.
-Use <code>~NNDModeEmotes</code> to toggle emotes.
+NicoNicoDouga-Mode will scroll the messages in the chat over the player. It can get laggy on some computers and firefox.
 
 Login-Off Messages
 ------------------
 
-Messages can be recieved when a user logs in or off. To toggle the option use <code>~LogInOffMessages</code>
+Messages can be recieved when a user logs in or off. 
 
 Timestamp
 ------------------
 
-Timestamp added to each message. To turn off use <code>~LogInOffMessages</code>
+Timestamp added to each message. 
 
 Command Flood Protect
 ---------------------

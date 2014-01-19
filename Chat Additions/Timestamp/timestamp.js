@@ -20,13 +20,14 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
+settingsFields['Chat Additions'].Timestamp = {
+    'label': 'Timestamp (in front of messages)',
+    'type': 'checkbox',
+    'default': false
+};
+
 function loadTimestamp() {
-    //load settings
-    timestamp = settings.get('Timestamp', true);
-
-    //add the commands
-    commands.set('addOnSettings', "Timestamp", toggleTimestamp, 'Toggles the timestamp in front of each message.');
-
     var oldAddMessage = unsafeWindow.addMessage,
         date,
         hours,
@@ -34,7 +35,7 @@ function loadTimestamp() {
 
     //overwrite InstaSynch's addMessage function
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
-        if (timestamp) {
+        if (GM_config.get('Timestamp')) {
             date = new Date();
             minutes = date.getMinutes();
             if (minutes < 10) {
@@ -50,11 +51,5 @@ function loadTimestamp() {
         //continue with InstaSynch's addMessage function
     };
 }
-
-function toggleTimestamp() {
-    timestamp = !timestamp;
-    settings.set('Timestamp', timestamp);
-}
-var timestamp = true;
 
 preConnectFunctions.push(loadTimestamp);
