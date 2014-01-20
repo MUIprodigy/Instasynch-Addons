@@ -1,3 +1,6 @@
+1.33.0.1
+ • Fixed a bug in help.js since the commands for addon settings got removed
+
 1.33 
  • Tags are in a seperate file now
  • Using the API GM_addStyle to load styles now
@@ -6,7 +9,7 @@
  • Replaced settingsLoader with GM_config for the GUI
  • Added Author and Contributors in the metadata block of the script
  • Added NND font-size and speed settings
- 
+
 1.32.8.6
  • NND-Mode won't block mouse events to the player anymore
 
