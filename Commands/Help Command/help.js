@@ -37,7 +37,6 @@ function help(params) {
     } else {
         output += commands.get('modCommands').join(' ') + ' ';
         output += commands.get('regularCommands').join(' ') + ' ';
-        output += commands.get('addOnSettings').join(' ');
         output = output.replace(/\$[\w]+ /g, '');
     }
     unsafeWindow.addMessage('', output, '', 'hashtext');
