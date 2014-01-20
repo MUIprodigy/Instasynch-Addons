@@ -109,7 +109,8 @@ function printWallCounter() {
 function printMyWallCounter() {
     resetWallCounter();
     var output = "",
-        timeToWall = 0;
+        timeToWall = 0,
+        i;
     for (i = getActiveVideoIndex(); i < unsafeWindow.playlist.length; i += 1) {
         if (unsafeWindow.playlist[i].addedby.toLowerCase() === thisUsername.toLowerCase()) {
             break;

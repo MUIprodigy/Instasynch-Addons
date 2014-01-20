@@ -44,7 +44,7 @@ settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeSpeed = {
     'label': 'Speed',
     'title': '10 - 50',
     'type': 'int',
-    'min': 10,
+    'min': 3,
     'max': 50,
     'default': 25,
     'size': 1

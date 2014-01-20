@@ -28,6 +28,17 @@ settingsFields['Playlist Additions'].BigPlaylist = {
 
 function loadBigPlaylist() {
     if (GM_config.get('BigPlaylist')) {
+        var oldMakeLeader = unsafeWindow.makeLeader,
+            oldIsLeader,
+            $originals,
+            $helper,
+            activeIndex = -1,
+            temp,
+            i;
+        //script loading was too slow
+        if (unsafeWindow.playlist.length !== 0) {
+            activeIndex = getActiveVideoIndex();
+        }
         // change unsafeWindow.playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
         $('#ulPlay').replaceWith($('<table>', {
@@ -42,10 +53,6 @@ function loadBigPlaylist() {
         );
         $('#playlist_items').css('width', '97.5%');
 
-        var oldMakeLeader = unsafeWindow.makeLeader,
-            oldIsLeader,
-            $originals,
-            $helper;
         unsafeWindow.makeLeader = function (userId) {
             oldIsLeader = unsafeWindow.isLeader;
             oldMakeLeader(userId);
@@ -216,6 +223,16 @@ function loadBigPlaylist() {
                 $('#sliderDuration').html('/' + unsafeWindow.secondsToTime(unsafeWindow.playlist[indexOfVid].duration));
             }
         };
+
+        if (activeIndex !== -1) {
+            temp = unsafeWindow.playlist;
+            unsafeWindow.playlist = [];
+            for (i = 0; i < temp.length; i += 1) {
+                unsafeWindow.addVideo(temp[i]);
+            }
+            unsafeWindow.playVideo(temp[activeIndex].info, 0, true);
+            unsafeWindow.sendcmd('resynch', null);
+        }
     }
 }
 

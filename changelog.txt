@@ -1,3 +1,8 @@
+1.33.0.2
+ • Fixed 'printMyWallCounter not working in Firefox, missed declaring a variable
+ • Lowered speed minimum for NND a bit
+ • Loading issues with bigPlaylist caused by slow script loading fixed
+
 1.33.0.1
  • Fixed a bug in help.js since the commands for addon settings got removed
 
