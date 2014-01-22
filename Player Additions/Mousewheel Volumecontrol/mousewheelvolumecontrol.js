@@ -21,12 +21,16 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
-settingsFields['Player Additions'].MouseWheelVolumecontrol = {
-    'label': 'Mousewheel volume control of the player (no ff atm)',
-    'type': 'checkbox',
-    'default': true
-};
+
+setField({
+    'name': 'MouseWheelVolumecontrol',
+    'data': {
+        'label': 'Mousewheel volume control of the player (no ff atm)',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Player Additions'
+});
 
 function loadMouseWheelVolumecontrol() {
     //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
@@ -62,8 +66,7 @@ function loadMouseWheelVolumecontrol() {
         }
     );
 
-    var oldPlayVideo = unsafeWindow.playVideo,
-        newPlayer = false;
+    var oldPlayVideo = unsafeWindow.playVideo;
     //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
     //listen to volume change on the youtube player
     unsafeWindow.addEventListener("message",
@@ -75,45 +78,35 @@ function loadMouseWheelVolumecontrol() {
                 }
             } catch (ignore) {}
         }, false);
-
-    unsafeWindow.playVideo = function (vidinfo, time, playing) {
-        oldPlayVideo(vidinfo, time, playing);
-        if (oldProvider !== vidinfo.provider) {
-            newPlayer = true;
-            if (vimeoVolumePollingIntervalId) {
-                clearInterval(vimeoVolumePollingIntervalId);
-                vimeoVolumePollingIntervalId = undefined;
-            }
-            oldProvider = vidinfo.provider;
+    onPlayerChange.push(function (oldPlayer, newPlayer) {
+        if (vimeoVolumePollingIntervalId) {
+            clearInterval(vimeoVolumePollingIntervalId);
+            vimeoVolumePollingIntervalId = undefined;
         }
-        if (newPlayer) {
-            newPlayer = false;
-            switch (oldProvider) {
-            case 'youtube':
-                var oldAfterReady = $.tubeplayer.defaults.afterReady;
-                $.tubeplayer.defaults.afterReady = function (k3) {
-                    initGlobalVolume();
-                    oldAfterReady(k3);
-                };
-                break;
-            case 'vimeo':
-                $f($('#vimeo')[0]).addEvent('ready', initGlobalVolume);
-                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
-                vimeoVolumePollingIntervalId = setInterval(function () {
-                    $f($('#vimeo')[0]).api('getVolume', function (vol) {
-                        globalVolume = (vol * 100.0);
-                    });
-                }, 1000);
-                break;
-            }
+        switch (newPlayer) {
+        case 'youtube':
+            var oldAfterReady = $.tubeplayer.defaults.afterReady;
+            $.tubeplayer.defaults.afterReady = function (k3) {
+                initGlobalVolume();
+                oldAfterReady(k3);
+            };
+            break;
+        case 'vimeo':
+            $f($('#vimeo')[0]).addEvent('ready', initGlobalVolume);
+            //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+            vimeoVolumePollingIntervalId = setInterval(function () {
+                $f($('#vimeo')[0]).api('getVolume', function (vol) {
+                    globalVolume = (vol * 100.0);
+                });
+            }, 1000);
+            break;
         }
-    };
+    });
 }
 
 var isPlayerReady = false,
     globalVolume = 50,
     mouserOverPlayer = false,
-    oldProvider = '',
     vimeoVolumePollingIntervalId = undefined,
     previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
 
@@ -122,9 +115,9 @@ function initGlobalVolume() {
     if (isPlayerReady) {
         setVol(globalVolume);
     } else {
-        if (oldProvider === 'youtube') {
+        if (currentPlayer === 'youtube') {
             setVol($('#media').tubeplayer('volume'));
-        } else if (oldProvider === 'vimeo') {
+        } else if (currentPlayer === 'vimeo') {
             $f($('#vimeo')[0]).api('getVolume', function (vol) {
                 setVol(vol * 100.0);
             });
@@ -144,9 +137,9 @@ function setVol(volume) {
     volume = Math.max(0, volume);
     volume = Math.min(100, volume);
     globalVolume = volume;
-    if (oldProvider === 'youtube') {
+    if (currentPlayer === 'youtube') {
         $('#media').tubeplayer('volume', Math.round(volume));
-    } else if (oldProvider === 'vimeo') {
+    } else if (currentPlayer === 'vimeo') {
         $f($('#vimeo')[0]).api('setVolume', volume / 100.0);
     }
 }

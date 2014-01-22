@@ -1,3 +1,11 @@
+1.33.0.3
+ • BigPlaylist can be turned on and off without reloading now
+ • Added NSFW the Emotes as tooltip on the setting
+ • Fixed Drag&Drop of bigPlaylist, this might cause other minor layout bugs
+ • Settings GUI is a bit wider (fixing checkboxes getting squashed on low res)
+ • 'mirrorPlayer won't block NND-Mode anymore
+ • Changed some internal stuff to add settings more easily
+
 1.33.0.2
  • Fixed 'printMyWallCounter not working in Firefox, missed declaring a variable
  • Lowered speed minimum for NND a bit

@@ -20,13 +20,16 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
-settingsFields['Player Additions'].AutomaticPlayerMirror = {
-    'label': 'Automatic player mirror',
-    'title': 'Mirros the player when the title contains something like [Mirrored]',
-    'type': 'checkbox',
-    'default': true
-};
+setField({
+    'name': 'AutomaticPlayerMirror',
+    'data': {
+        'label': 'Automatic player mirror',
+        'title': 'Mirros the player when the title contains something like [Mirrored]',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Player Additions'
+});
 
 function loadMirrorPlayer() {
     commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
@@ -91,7 +94,7 @@ var isPlayerMirrored = false;
 
 
 function toggleMirrorPlayer() {
-    $('#media').toggleClass('mirror');
+    $('#media > :first-child').toggleClass('mirror');
     isPlayerMirrored = !isPlayerMirrored;
 }
 

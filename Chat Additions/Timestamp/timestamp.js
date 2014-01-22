@@ -20,12 +20,16 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions'].Timestamp = {
-    'label': 'Timestamp (in front of messages)',
-    'type': 'checkbox',
-    'default': false
-};
+
+setField({
+    'name': 'Timestamp',
+    'data': {
+        'label': 'Timestamp (in front of messages)',
+        'type': 'checkbox',
+        'default': false
+    },
+    'section': 'Chat Additions'
+});
 
 function loadTimestamp() {
     var oldAddMessage = unsafeWindow.addMessage,

@@ -19,43 +19,53 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-settingsFields['Playlist Additions'] = settingsFields['Playlist Additions'] || {};
-settingsFields['Playlist Additions'].BigPlaylist = {
-    'label': 'Big playlist with thumbnails (needs f5)',
-    'type': 'checkbox',
-    'default': true
-};
+setField({
+    'name': 'BigPlaylist',
+    'data': {
+        'label': 'Big playlist with thumbnails',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Playlist Additions'
+});
 
 function loadBigPlaylist() {
-    if (GM_config.get('BigPlaylist')) {
-        var oldMakeLeader = unsafeWindow.makeLeader,
-            oldIsLeader,
-            $originals,
-            $helper,
-            activeIndex = -1,
-            temp,
-            i;
-        //script loading was too slow
-        if (unsafeWindow.playlist.length !== 0) {
-            activeIndex = getActiveVideoIndex();
-        }
-        // change unsafeWindow.playlist to table based
-        $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
-        $('#ulPlay').replaceWith($('<table>', {
-            'id': 'tablePlaylist'
-        }));
-        $('#tablePlaylist').css('width', '100%').css('table-layout', 'fixed');
-        $('#tablePlaylist td').css('overflow', 'scroll');
-        $('#tablePlaylist').append(
-            $('<tbody>', {
-                'id': 'tablePlaylistBody'
-            })
-        );
-        $('#playlist_items').css('width', '97.5%');
+    var oldMakeLeader = unsafeWindow.makeLeader,
+        oldAddVideo = unsafeWindow.addVideo,
+        oldPlayVideo = unsafeWindow.playVideo,
+        oldRemoveVideo = unsafeWindow.removeVideo,
+        oldMoveVideo = unsafeWindow.mpveVideo,
+        oldPlaylist = $('#ulPlay').clone(true),
+        oldIsLeader,
+        oldBigPlaylistSetting = GM_config.get('BigPlaylist'),
+        $originals,
+        $helper,
+        activeIndex = -1,
+        i;
+    //script loading was too slow
+    if (unsafeWindow.playlist.length !== 0) {
+        activeIndex = getActiveVideoIndex();
+    }
+    onSettingsOpen.push(function () {
+        oldBigPlaylistSetting = GM_config.get('BigPlaylist');
+    });
 
-        unsafeWindow.makeLeader = function (userId) {
-            oldIsLeader = unsafeWindow.isLeader;
-            oldMakeLeader(userId);
+    onSettingsSave.push(function () {
+        if (oldBigPlaylistSetting !== GM_config.get('BigPlaylist')) {
+            activeIndex = getActiveVideoIndex();
+            reloadPlaylistHTML(oldPlaylist);
+            reloadPlaylist(activeIndex);
+            oldBigPlaylistSetting = GM_config.get('BigPlaylist');
+        }
+    });
+    if (GM_config.get('BigPlaylist')) {
+        reloadPlaylistHTML();
+    }
+
+    unsafeWindow.makeLeader = function (userId) {
+        oldIsLeader = unsafeWindow.isLeader;
+        oldMakeLeader(userId);
+        if (GM_config.get('BigPlaylist')) {
             //InstaSynch core.js, version 0.9.7
             if (userId === unsafeWindow.userInfo.id) {
                 $("#tablePlaylistBody").sortable({
@@ -87,12 +97,16 @@ function loadBigPlaylist() {
                     $("#tablePlaylistBody").sortable("disable");
                 }
             }
-        };
+        }
+    };
 
 
-        // override functions from InstaSynch's io.js, version 0.9.7
-        // overrides addVideo, removeVideo, moveVideo and playVideo
-        unsafeWindow.addVideo = function (vidinfo) {
+    // override functions from InstaSynch's io.js, version 0.9.7
+    // overrides addVideo, removeVideo, moveVideo and playVideo
+    unsafeWindow.addVideo = function (vidinfo) {
+        if (!GM_config.get('BigPlaylist')) {
+            oldAddVideo(vidinfo);
+        } else {
             unsafeWindow.playlist.push({
                 info: vidinfo.info,
                 title: vidinfo.title,
@@ -173,9 +187,13 @@ function loadBigPlaylist() {
             unsafeWindow.totalTime += vidinfo.duration;
             $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
             $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
-        };
+        }
+    };
 
-        unsafeWindow.removeVideo = function (vidinfo) {
+    unsafeWindow.removeVideo = function (vidinfo) {
+        if (!GM_config.get('BigPlaylist')) {
+            oldRemoveVideo(vidinfo);
+        } else {
             var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1 && indexOfVid < unsafeWindow.playlist.length) {
                 unsafeWindow.totalTime -= unsafeWindow.playlist[indexOfVid].duration;
@@ -184,9 +202,13 @@ function loadBigPlaylist() {
             }
             $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
             $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
-        };
+        }
+    };
 
-        unsafeWindow.moveVideo = function (vidinfo, position) {
+    unsafeWindow.moveVideo = function (vidinfo, position) {
+        if (!GM_config.get('BigPlaylist')) {
+            oldMoveVideo(vidinfo);
+        } else {
             var indexOfVid = unsafeWindow.getVideoIndex(vidinfo),
                 playlistElements,
                 k;
@@ -206,9 +228,13 @@ function loadBigPlaylist() {
                 $('#tablePlaylistBody').empty();
                 $('#tablePlaylistBody').html(playlistElements);
             }
-        };
+        }
+    };
 
-        unsafeWindow.playVideo = function (vidinfo, time, playing) {
+    unsafeWindow.playVideo = function (vidinfo, time, playing) {
+        if (!GM_config.get('BigPlaylist')) {
+            oldPlayVideo(vidinfo);
+        } else {
             var addedby = '',
                 title = '',
                 indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
@@ -222,18 +248,53 @@ function loadBigPlaylist() {
                 $('#slider').slider('option', 'max', unsafeWindow.playlist[indexOfVid].duration);
                 $('#sliderDuration').html('/' + unsafeWindow.secondsToTime(unsafeWindow.playlist[indexOfVid].duration));
             }
-        };
-
-        if (activeIndex !== -1) {
-            temp = unsafeWindow.playlist;
-            unsafeWindow.playlist = [];
-            for (i = 0; i < temp.length; i += 1) {
-                unsafeWindow.addVideo(temp[i]);
-            }
-            unsafeWindow.playVideo(temp[activeIndex].info, 0, true);
-            unsafeWindow.sendcmd('resynch', null);
         }
+    };
+
+    if (GM_config.get('BigPlaylist') && activeIndex !== -1) {
+        reloadPlaylist(activeIndex);
     }
+}
+
+function reloadPlaylistHTML(oldPlaylist) {
+    if (!GM_config.get('BigPlaylist')) {
+        $('#tablePlaylist').replaceWith(oldPlaylist);
+        $('#playlist_items').css('width', '');
+    } else {
+        // change unsafeWindow.playlist to table based
+        $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
+        $('#ulPlay').replaceWith($('<table>', {
+            'id': 'tablePlaylist'
+        }));
+        $('#tablePlaylist').css('width', '100%');
+        $('#tablePlaylist td').css('overflow', 'scroll');
+        $('#tablePlaylist').append(
+            $('<tbody>', {
+                'id': 'tablePlaylistBody'
+            })
+        );
+        $('#playlist_items').css('width', '97.5%');
+    }
+}
+
+function reloadPlaylist(activeIndex) {
+    var temp = unsafeWindow.playlist,
+        i;
+    unsafeWindow.playlist = [];
+    unsafeWindow.playlist.move = function (old_index, new_index) //Code is property of Reid from stackoverflow
+    {
+        if (new_index >= this.length) {
+            var k = new_index - this.length;
+            while ((k--) + 1) {
+                this.push(undefined);
+            }
+        }
+        this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    };
+    for (i = 0; i < temp.length; i += 1) {
+        unsafeWindow.addVideo(temp[i]);
+    }
+    unsafeWindow.sendcmd('reload', null)
 }
 
 function trimTitle(title, length) {

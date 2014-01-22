@@ -16,12 +16,16 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions'].PlayMessages = {
-    'label': 'PlayMessages',
-    'type': 'checkbox',
-    'default': true
-};
+
+setField({
+    'name': 'PlayMessages',
+    'data': {
+        'label': 'PlayMessages',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions'
+});
 
 function loadPlayMessages() {
     // Overwriting Adduser

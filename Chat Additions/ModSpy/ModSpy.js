@@ -20,12 +20,15 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions'].ModSpy = {
-    'label': 'ModSpy (mod actions will be shown in the chat)',
-    'type': 'checkbox',
-    'default': true
-};
+setField({
+    'name': 'ModSpy',
+    'data': {
+        'label': 'ModSpy (mod actions will be shown in the chat)',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions'
+});
 
 function loadModSpy() {
     // Overwriting console.log

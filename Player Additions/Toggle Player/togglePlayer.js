@@ -20,13 +20,17 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
-settingsFields['Player Additions'].PlayerActive = {
-    'label': 'Videoplayer active',
-    'title': '\'togglePlayer command',
-    'type': 'checkbox',
-    'default': true
-};
+
+setField({
+    'name': 'PlayerActive',
+    'data': {
+        'label': 'Videoplayer active',
+        'title': '\'togglePlayer command',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Player Additions'
+});
 
 function loadTogglePlayer() {
     //add the command

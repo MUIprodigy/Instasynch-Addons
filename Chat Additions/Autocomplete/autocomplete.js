@@ -20,30 +20,48 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions']['Autocomplete'] = settingsFields['Chat Additions']['Autocomplete'] || {};
-settingsFields['Chat Additions']['Autocomplete'].TagsAutoComplete = {
-    'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">Tags</a>',
-    'type': 'checkbox',
-    'default': true
-};
-settingsFields['Chat Additions']['Autocomplete'].EmotesAutoComplete = {
-    'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm"> Emotes</a>',
-    'type': 'checkbox',
-    'default': true
-};
-settingsFields['Chat Additions']['Autocomplete'].CommandsAutoComplete = {
-    'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch-Addons#command-list" target="_blank">Commands</a>',
-    'type': 'checkbox',
-    'default': true
-};
-settingsFields['Chat Additions']['Autocomplete'].BotCommandsAutoComplete = {
-    'label': 'Bot Commands',
-    'title': '$help for Bot Commands',
-    'type': 'checkbox',
-    'default': true
-};
 
+setField({
+    'name': 'TagsAutoComplete',
+    'data': {
+        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">Tags</a>',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions',
+    'subsection': 'Autocomplete'
+});
+setField({
+    'name': 'EmotesAutoComplete',
+    'data': {
+        'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm"> Emotes</a>',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions',
+    'subsection': 'Autocomplete'
+});
+setField({
+    'name': 'CommandsAutoComplete',
+    'data': {
+        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch-Addons#command-list" target="_blank">Commands</a>',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions',
+    'subsection': 'Autocomplete'
+});
+setField({
+    'name': 'BotCommandsAutoComplete',
+    'data': {
+        'label': 'Bot Commands',
+        'title': '$help for Bot Commands',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions',
+    'subsection': 'Autocomplete'
+});
 
 function loadAutoComplete() {
 

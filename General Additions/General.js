@@ -57,6 +57,11 @@ function loadGeneralStuff() {
     // function openInNewTab(url, options){
     //     GM_openInTab(url,options);
     // }
+
+}
+
+function logError(origin, err) {
+    unsafeWindow.console.log("Error in %s %o", origin, err);
 }
 
 function getUrlOfInfo(vidinfo) {

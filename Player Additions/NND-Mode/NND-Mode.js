@@ -20,44 +20,68 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Player Additions'] = settingsFields['Player Additions'] || {};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'] = settingsFields['Player Additions']['NicoNicoDouga-Mode'] || {};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDMode = {
-    'label': 'NicoNicoDouga-Mode(scrolling text)',
-    'type': 'checkbox',
-    'default': false
-};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeEmotes = {
-    'label': 'Emotes',
-    'type': 'checkbox',
-    'default': true
-};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeLimit = {
-    'label': 'Message Limit',
-    'title': '-1 unlimited',
-    'type': 'int',
-    'min': -1,
-    'default': -1,
-    'size': 1
-};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeSpeed = {
-    'label': 'Speed',
-    'title': '10 - 50',
-    'type': 'int',
-    'min': 3,
-    'max': 50,
-    'default': 25,
-    'size': 1
-};
-settingsFields['Player Additions']['NicoNicoDouga-Mode'].NNDModeFontSize = {
-    'label': 'Font-Size',
-    'title': '10 - 50',
-    'type': 'int',
-    'min': 10,
-    'max': 50,
-    'default': 13,
-    'size': 1
-};
+
+setField({
+    'name': 'NNDMode',
+    'data': {
+        'label': 'NicoNicoDouga-Mode(scrolling text)',
+        'type': 'checkbox',
+        'default': false
+    },
+    'section': 'Player Additions',
+    'subsection': 'NicoNicoDouga-Mode'
+});
+setField({
+    'name': 'NNDModeEmotes',
+    'data': {
+        'label': 'Emotes',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Player Additions',
+    'subsection': 'NicoNicoDouga-Mode'
+});
+setField({
+    'name': 'NNDModeLimit',
+    'data': {
+        'label': 'Message Limit',
+        'title': '-1 unlimited',
+        'type': 'int',
+        'min': -1,
+        'default': -1,
+        'size': 1
+    },
+    'section': 'Player Additions',
+    'subsection': 'NicoNicoDouga-Mode'
+});
+setField({
+    'name': 'NNDModeSpeed',
+    'data': {
+        'label': 'Speed',
+        'title': '10 - 50',
+        'type': 'int',
+        'min': 3,
+        'max': 50,
+        'default': 25,
+        'size': 1
+    },
+    'section': 'Player Additions',
+    'subsection': 'NicoNicoDouga-Mode'
+});
+setField({
+    'name': 'NNDModeFontSize',
+    'data': {
+        'label': 'Font-Size',
+        'title': '10 - 50',
+        'type': 'int',
+        'min': 10,
+        'max': 50,
+        'default': 13,
+        'size': 1
+    },
+    'section': 'Player Additions',
+    'subsection': 'NicoNicoDouga-Mode'
+});
 
 function loadNNDMode() {
     $('#media').css('position', 'relative');

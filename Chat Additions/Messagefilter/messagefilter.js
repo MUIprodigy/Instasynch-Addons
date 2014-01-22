@@ -20,17 +20,25 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions'].Tags = {
-    'label': 'Parse <a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">tags</a> in the chat',
-    'type': 'checkbox',
-    'default': true
-};
-settingsFields['Chat Additions'].NSFWEmotes = {
-    'label': 'NSFW Emotes',
-    'type': 'checkbox',
-    'default': false
-};
+setField({
+    'name': 'Tags',
+    'data': {
+        'label': 'Parse <a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">tags</a> in the chat',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions'
+});
+setField({
+    'name': 'NSFWEmotes',
+    'data': {
+        'label': 'NSFW Emotes',
+        'title': '/meatspin /boobies',
+        'type': 'checkbox',
+        'default': false
+    },
+    'section': 'Chat Additions'
+});
 
 function loadMessageFilter() {
     onSettingsOpen.push(function () {

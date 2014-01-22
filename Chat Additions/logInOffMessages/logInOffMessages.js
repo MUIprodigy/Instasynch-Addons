@@ -20,12 +20,17 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-settingsFields['Chat Additions'] = settingsFields['Chat Additions'] || {};
-settingsFields['Chat Additions'].LogInOffMessages = {
-    'label': 'Login/off Messages',
-    'type': 'checkbox',
-    'default': false
-};
+
+setField({
+    'name': 'LogInOffMessages',
+    'data': {
+        'label': 'Login/off Messages',
+        'type': 'checkbox',
+        'default': false
+    },
+    'section': 'Chat Additions'
+});
+
 
 function loadLogInOffMessages() {
     // Overwriting Adduser

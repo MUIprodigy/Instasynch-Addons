@@ -130,7 +130,7 @@ function loadSettingsLoader() {
             'input[type="text"] { text-align: right}',
         'events': {
             'open': function (args) {
-                $('#GM_config').css('height', '90%').css('top', '55px').css('left', '5px').css('width', '355px');
+                $('#GM_config').css('height', '90%').css('top', '55px').css('left', '5px').css('width', '375px');
                 //collapse all items in the section
                 $('#GM_config').each(function () {
                     $('#GM_config .section_header', this.contentWindow.document || this.contentDocument).click(function () {

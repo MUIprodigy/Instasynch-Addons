@@ -20,23 +20,25 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-//Scripts that need to be loaded first
-function loadPrePriorityScripts() {
-    executeFunctions([loadGeneralStuff,
-        loadCommandLoader,
-        loadSettingsLoader,
-        loadBigPlaylist,
-        loadNewLoadUserlist,
-        loadEvents
-    ]);
+
+function loadEvents() {
+    var oldPlayVideo = unsafeWindow.playVideo;
+    unsafeWindow.playVideo = function (vidinfo, time, playing) {
+        oldPlayVideo(vidinfo, time, playing);
+        if (currentPlayer !== vidinfo.provider) {
+            var i;
+            for (i = 0; i < onPlayerChange.length; i += 1) {
+                try {
+                    //oldPlayer, newPlayer
+                    onPlayerChange[i](currentPlayer, vidinfo.provider);
+                } catch (err) {
+                    logError(onPlayerChange[i].name, err);
+                }
+            }
+            currentPlayer = vidinfo.provider;
+        }
+    };
 }
 
-function loadPostPriorityScripts() {
-    if (postConnectFunctions.lastIndexOf(loadPostPriorityScripts) !== postConnectFunctions.length - 1) {
-        postConnectFunctions.push(loadPostPriorityScripts);
-        return;
-    }
-    executeFunctions([loadAutoComplete]);
-}
-preConnectFunctions.splice(0, 0, loadPrePriorityScripts);
-postConnectFunctions.push(loadPostPriorityScripts);
+var onPlayerChange = [],
+    currentPlayer = '';
