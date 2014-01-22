@@ -24,7 +24,7 @@
 setField({
     'name': 'TagsAutoComplete',
     'data': {
-        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">Tags</a>',
+        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Messagefilter/tags.js" target="_blank">Tags</a> ([)',
         'type': 'checkbox',
         'default': true
     },
@@ -34,7 +34,7 @@ setField({
 setField({
     'name': 'EmotesAutoComplete',
     'data': {
-        'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm"> Emotes</a>',
+        'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm"> Emotes</a> (/)',
         'type': 'checkbox',
         'default': true
     },
@@ -44,7 +44,7 @@ setField({
 setField({
     'name': 'CommandsAutoComplete',
     'data': {
-        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch-Addons#command-list" target="_blank">Commands</a>',
+        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch-Addons#command-list" target="_blank">Commands</a> (\')',
         'type': 'checkbox',
         'default': true
     },
@@ -54,7 +54,7 @@ setField({
 setField({
     'name': 'BotCommandsAutoComplete',
     'data': {
-        'label': 'Bot Commands',
+        'label': 'Bot Commands ($)',
         'title': '$help for Bot Commands',
         'type': 'checkbox',
         'default': true
@@ -62,6 +62,17 @@ setField({
     'section': 'Chat Additions',
     'subsection': 'Autocomplete'
 });
+setField({
+    'name': 'NamesAutoComplete',
+    'data': {
+        'label': 'Names (@)',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Chat Additions',
+    'subsection': 'Autocomplete'
+});
+
 
 function loadAutoComplete() {
 

@@ -1,3 +1,7 @@
+1.33.0.4
+ • Added names autocomplete with @ again (missed adding it with the new GUI)
+ • Fixed a little syntax error in moveVideo and playVideo (videos not getting moved)
+
 1.33.0.3
  • BigPlaylist can be turned on and off without reloading now
  • Added NSFW the Emotes as tooltip on the setting

@@ -34,7 +34,7 @@ function loadBigPlaylist() {
         oldAddVideo = unsafeWindow.addVideo,
         oldPlayVideo = unsafeWindow.playVideo,
         oldRemoveVideo = unsafeWindow.removeVideo,
-        oldMoveVideo = unsafeWindow.mpveVideo,
+        oldMoveVideo = unsafeWindow.moveVideo,
         oldPlaylist = $('#ulPlay').clone(true),
         oldIsLeader,
         oldBigPlaylistSetting = GM_config.get('BigPlaylist'),
@@ -207,7 +207,7 @@ function loadBigPlaylist() {
 
     unsafeWindow.moveVideo = function (vidinfo, position) {
         if (!GM_config.get('BigPlaylist')) {
-            oldMoveVideo(vidinfo);
+            oldMoveVideo(vidinfo, position);
         } else {
             var indexOfVid = unsafeWindow.getVideoIndex(vidinfo),
                 playlistElements,
@@ -233,7 +233,7 @@ function loadBigPlaylist() {
 
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
         if (!GM_config.get('BigPlaylist')) {
-            oldPlayVideo(vidinfo);
+            oldPlayVideo(vidinfo, time, playing);
         } else {
             var addedby = '',
                 title = '',
