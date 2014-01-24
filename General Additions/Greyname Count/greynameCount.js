@@ -21,17 +21,12 @@
     http://opensource.org/licenses/GPL-3.0
 */
 function loadGreynameCount() {
-    var oldAddUser = unsafeWindow.addUser,
-        oldRemoveUser = unsafeWindow.removeUser;
-
-    unsafeWindow.addUser = function (user, css, sort) {
-        oldAddUser(user, css, sort);
-        setViewerCount();
-    };
-    unsafeWindow.removeUser = function (id) {
-        oldRemoveUser(id);
-        setViewerCount();
-    };
+    onAddUser.push({
+        callback: setViewerCount
+    });
+    onRemoveUser.push({
+        callback: setViewerCount
+    });
     setViewerCount();
 }
 

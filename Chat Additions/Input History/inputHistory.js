@@ -51,7 +51,7 @@ function loadInputHistory() {
         if (isAutocompleteMenuActive && inputHistoryIndex === 0) {
             return;
         }
-        if (event.keyCode === 38) {//upkey
+        if (event.keyCode === 38) { //upkey
             if (inputHistoryIndex < inputHistory.length) {
                 setInputHistoryIndex(inputHistoryIndex + 1);
             } else {
@@ -60,7 +60,7 @@ function loadInputHistory() {
             //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);
 
-        } else if (event.keyCode === 40) {//downkey
+        } else if (event.keyCode === 40) { //downkey
             if (inputHistoryIndex > 0) {
                 setInputHistoryIndex(inputHistoryIndex - 1);
             } else {
@@ -71,6 +71,7 @@ function loadInputHistory() {
         }
     });
 }
+
 function setInputHistoryIndex(index) {
     inputHistoryIndex = index;
     if (index === 0) {

@@ -35,10 +35,7 @@ function loadMirrorPlayer() {
     commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
 
     //appening the class until we got our css files
-    //http://stackoverflow.com/a/3434665
-    var oldPlayVideo = unsafeWindow.playVideo,
-        indexOfVid,
-        title;
+    //http://stackoverflow.com/a/3434665;
     GM_addStyle('.mirror { ' +
         '-moz-transform: scaleX(-1); /* Gecko */ ' +
         '-o-transform: scaleX(-1); /* Operah */ ' +
@@ -47,19 +44,18 @@ function loadMirrorPlayer() {
         'filter: FlipH; /* IE 6/7/8 */' +
         '}');
 
-
-    unsafeWindow.playVideo = function (vidinfo, time, playing) {
-        indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
-        title = unsafeWindow.playlist[indexOfVid].title;
-        if (containsMirrored(title)) {
-            if (!isPlayerMirrored) {
+    onPlayVideo.push({
+        callback: function (vidinfo, time, playing, indexOfVid) {
+            if (containsMirrored(unsafeWindow.playlist[indexOfVid].title)) {
+                if (!isPlayerMirrored) {
+                    toggleMirrorPlayer();
+                }
+            } else if (isPlayerMirrored) {
                 toggleMirrorPlayer();
             }
-        } else if (isPlayerMirrored) {
-            toggleMirrorPlayer();
-        }
-        oldPlayVideo(vidinfo, time, playing);
-    };
+        },
+        preOld: true
+    });
 
     //checking the current video after loading the first time
     if (unsafeWindow.playlist.length !== 0) {

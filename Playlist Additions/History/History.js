@@ -22,15 +22,15 @@
 */
 function loadHistory() {
     commands.set('regularCommands', "history", printHistory, 'Shows the last 9 played videos on the YoutubeSearch panel.');
-    var oldPlayVideo = unsafeWindow.playVideo;
-    unsafeWindow.playVideo = function (vidinfo, time, playing) {
-        oldPlayVideo(vidinfo, time, playing);
-        //Keep the last 9 videos
-        if (history.length === 9) {
-            history.shift();
+    onPlayVideo.push({
+        callback: function (vidinfo, time, playing, indexOfVid) {
+            //Keep the last 9 videos
+            if (history.length === 9) {
+                history.shift();
+            }
+            history.push(unsafeWindow.playlist[indexOfVid]);
         }
-        history.push(unsafeWindow.playlist[unsafeWindow.getVideoIndex(vidinfo)]);
-    };
+    });
 }
 
 function printHistory() {

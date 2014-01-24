@@ -33,15 +33,13 @@ setField({
 function loadModSpy() {
     // Overwriting console.log
     var oldLog = unsafeWindow.console.log,
-        oldMoveVideo = unsafeWindow.moveVideo,
         filterList = [
             /^Resynch requested\.\./,
             /cleaned the playlist/,
             /Using HTML5 player is not recomended\./
         ],
         filter,
-        i,
-        oldPosition;
+        i;
     unsafeWindow.console.log = function (message) {
         // We don't want the cleaning messages in the chat (Ok in the console) .
         if (GM_config.get('ModSpy') && message && message.match) {
@@ -62,14 +60,13 @@ function loadModSpy() {
         }
         oldLog.apply(unsafeWindow.console, arguments);
     };
-    // Overwriting moveVideo to differentiate bump and move
-    unsafeWindow.moveVideo = function (vidinfo, position) {
-        oldPosition = unsafeWindow.getVideoIndex(vidinfo);
-        oldMoveVideo(vidinfo, position);
-        if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
-            bumpCheck = true;
+    onMoveVideo.push({
+        'callback': function (vidinfo, position, oldPosition) {
+            if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
+                bumpCheck = true;
+            }
         }
-    };
+    });
 }
 var bumpCheck = false;
 

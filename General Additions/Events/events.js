@@ -22,23 +22,97 @@
 */
 
 function loadEvents() {
-    var oldPlayVideo = unsafeWindow.playVideo;
+    var oldPlayVideo = unsafeWindow.playVideo,
+        oldMoveVideo = unsafeWindow.moveVideo,
+        oldAddUser = unsafeWindow.addUser,
+        oldRemoveUser = unsafeWindow.removeUser;
+
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
+        var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
+        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], true);
         oldPlayVideo(vidinfo, time, playing);
+        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], false);
         if (currentPlayer !== vidinfo.provider) {
-            var i;
-            for (i = 0; i < onPlayerChange.length; i += 1) {
-                try {
-                    //oldPlayer, newPlayer
-                    onPlayerChange[i](currentPlayer, vidinfo.provider);
-                } catch (err) {
-                    logError(onPlayerChange[i].name, err);
-                }
+            fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], false);
+            switch (vidinfo.provider) {
+            case 'youtube':
+                var oldAfterReady = $.tubeplayer.defaults.afterReady;
+                $.tubeplayer.defaults.afterReady = function (k3) {
+                    fireEvents(onPlayerReady, [currentPlayer, vidinfo.provider], false);
+                    oldAfterReady(k3);
+                };
+                break;
+            case 'vimeo':
+                $f($('#vimeo')[0]).addEvent('ready', function () {
+                    fireEvents(onPlayerReady, [currentPlayer, vidinfo.provider], false);
+                });
+                break;
             }
             currentPlayer = vidinfo.provider;
         }
     };
+
+    unsafeWindow.moveVideo = function (vidinfo, position) {
+        var oldPosition = unsafeWindow.getVideoIndex(vidinfo);
+        fireEvents(onMoveVideo, [vidinfo, position, oldPosition], true);
+        oldMoveVideo(vidinfo, position);
+        fireEvents(onMoveVideo, [vidinfo, position, oldPosition], false);
+    };
+
+
+    unsafeWindow.addUser = function (user, css, sort) {
+        fireEvents(onAddUser, [user, css, sort], true);
+        oldAddUser(user, css, sort);
+        fireEvents(onAddUser, [user, css, sort], false);
+    };
+
+    unsafeWindow.removeUser = function (id) {
+        var user = unsafeWindow.users[getIndexOfUser(id)];
+        fireEvents(onRemoveUser, [id, user], true);
+        oldRemoveUser(id);
+        fireEvents(onRemoveUser, [id, user], false);
+    };
+
+
 }
 
-var onPlayerChange = [],
-    currentPlayer = '';
+function loadPriorityEvents() {
+    var oldAddMessage = unsafeWindow.addMessage,
+        oldCreatePoll = unsafeWindow.createPoll;
+
+    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+        fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
+        oldAddMessage(username, message, userstyle, textstyle);
+        fireEvents(onAddMessage, [username, message, userstyle, textstyle], false);
+    };
+
+    unsafeWindow.createPoll = function (poll) {
+        fireEvents(onCreatePoll, [poll], true);
+        oldCreatePoll(poll);
+        fireEvents(onCreatePoll, [poll], false);
+    };
+}
+
+function fireEvents(listeners, parameters, preOld) {
+    var i;
+    for (i = 0; i < listeners.length; i += 1) {
+        //listeners[i].preOld = listeners[i].preOld || false;
+        if (!(listeners[i].preOld ^ preOld)) {
+            try {
+                listeners[i].callback.apply(this, parameters);
+            } catch (err) {
+                logError(listeners[i].callback.name, err);
+            }
+        }
+    }
+}
+
+var currentPlayer = '',
+    onMoveVideo = [],
+    onPlayerChange = [],
+    onPlayVideo = [],
+    onAddMessage = [],
+    onPlayerReady = [],
+    onRemoveUser = [],
+    onAddUser = [],
+    onCreatePoll = [];

@@ -60,6 +60,14 @@ function loadGeneralStuff() {
 
 }
 
+function htmlDecode(value) {
+    return $('<div/>').html(value).text();
+}
+
+function isConnected() {
+    return unsafeWindow.userInfo;
+}
+
 function logError(origin, err) {
     unsafeWindow.console.log("Error in %s %o", origin, err);
 }

@@ -1,3 +1,11 @@
+1.33.1
+ • Added more features to the poll menu (copy old, clear, -) and increased the size 
+ • Added a basic event system for the instasynch functions
+ • Fixed total playlist time being wrong when changing playlist/slow script loading
+ • Fixed sortable not working when changing the playlist and being leader
+ • Fixed the next video not being shown as active when the video player is off
+ • Fixed active video not getting displayed when video player is off with bigPlaylist
+
 1.33.0.4
  • Added names autocomplete with @ again (missed adding it with the new GUI)
  • Fixed a little syntax error in moveVideo and playVideo (videos not getting moved)

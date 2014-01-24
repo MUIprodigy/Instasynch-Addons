@@ -28,20 +28,13 @@ setField({
 });
 
 function loadPlayMessages() {
-    // Overwriting Adduser
-    var oldPlayVideo = unsafeWindow.playVideo,
-        indexOfVid,
-        title;
-
-    unsafeWindow.playVideo = function (vidinfo, time, playing) {
-        // Only if blackname or mod
-        if (GM_config.get('PlayMessages')) {
-            indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
-            title = ((unsafeWindow.playlist[indexOfVid].title.length > 240) ? unsafeWindow.playlist[indexOfVid].title.substring(0, 240) + "..." : unsafeWindow.playlist[indexOfVid].title);
-            unsafeWindow.addMessage('', 'Now playing: ' + title, '', 'hashtext');
+    onPlayVideo.push({
+        callback: function (vidinfo, time, playing, indexOfVid) {
+            if (GM_config.get('PlayMessages')) {
+                unsafeWindow.addMessage('', 'Now playing: ' + trimTitle(unsafeWindow.playlist[indexOfVid].title, 240), '', 'hashtext');
+            }
         }
-        oldPlayVideo(vidinfo, time, playing);
-    };
+    });
 }
 
 postConnectFunctions.push(loadPlayMessages);

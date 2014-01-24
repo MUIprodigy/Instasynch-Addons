@@ -66,7 +66,6 @@ function loadMouseWheelVolumecontrol() {
         }
     );
 
-    var oldPlayVideo = unsafeWindow.playVideo;
     //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
     //listen to volume change on the youtube player
     unsafeWindow.addEventListener("message",
@@ -78,28 +77,24 @@ function loadMouseWheelVolumecontrol() {
                 }
             } catch (ignore) {}
         }, false);
-    onPlayerChange.push(function (oldPlayer, newPlayer) {
-        if (vimeoVolumePollingIntervalId) {
-            clearInterval(vimeoVolumePollingIntervalId);
-            vimeoVolumePollingIntervalId = undefined;
-        }
-        switch (newPlayer) {
-        case 'youtube':
-            var oldAfterReady = $.tubeplayer.defaults.afterReady;
-            $.tubeplayer.defaults.afterReady = function (k3) {
-                initGlobalVolume();
-                oldAfterReady(k3);
-            };
-            break;
-        case 'vimeo':
-            $f($('#vimeo')[0]).addEvent('ready', initGlobalVolume);
-            //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
-            vimeoVolumePollingIntervalId = setInterval(function () {
-                $f($('#vimeo')[0]).api('getVolume', function (vol) {
-                    globalVolume = (vol * 100.0);
-                });
-            }, 1000);
-            break;
+
+    onPlayerReady.push({
+        'callback': function (oldPlayer, newPlayer) {
+            if (vimeoVolumePollingIntervalId) {
+                clearInterval(vimeoVolumePollingIntervalId);
+                vimeoVolumePollingIntervalId = undefined;
+            }
+            initGlobalVolume();
+            switch (newPlayer) {
+            case 'vimeo':
+                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+                vimeoVolumePollingIntervalId = setInterval(function () {
+                    $f($('#vimeo')[0]).api('getVolume', function (vol) {
+                        globalVolume = (vol * 100.0);
+                    });
+                }, 1000);
+                break;
+            }
         }
     });
 }

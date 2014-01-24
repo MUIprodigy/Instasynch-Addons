@@ -40,22 +40,67 @@ function loadBigPlaylist() {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist'),
         $originals,
         $helper,
-        activeIndex = -1,
+        needsReload = true,
         i;
     //script loading was too slow
-    if (unsafeWindow.playlist.length !== 0) {
-        activeIndex = getActiveVideoIndex();
-    }
+    needsReload = (unsafeWindow.playlist.length !== 0);
     onSettingsOpen.push(function () {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist');
     });
 
+    function enableSortable() {
+        if (GM_config.get('BigPlaylist')) {
+            $("#tablePlaylistBody").sortable({
+                update: function (event, ui) {
+                    unsafeWindow.sendcmd('move', {
+                        info: ui.item.data("info"),
+                        position: ui.item.index()
+                    });
+                    $("#tablePlaylistBody").sortable("cancel");
+                },
+                start: function (event, ui) {
+                    //Prevents click event from triggering when sorting videos
+                    $("#tablePlaylistBody").addClass('noclick');
+                },
+                helper: function (e, tr) {
+                    $originals = tr.children();
+                    $helper = tr.clone();
+                    $helper.children().each(function (index) {
+                        // Set helper cell sizes to match the original sizes
+                        $(this).width($originals.eq(index).width());
+                    });
+                    return $helper;
+                },
+                opacity: 0.5
+            }).disableSelection();
+            $("#tablePlaylistBody").sortable("enable");
+        } else {
+            //core.js, version 0.9.7
+            $("#ulPlay").sortable({
+                update: function (event, ui) {
+                    sendcmd('move', {
+                        info: ui.item.data("info"),
+                        position: ui.item.index()
+                    });
+                    $("#ulPlay").sortable("cancel");
+                },
+                start: function (event, ui) {
+                    //Prevents click event from triggering when sorting videos
+                    $("#ulPlay").addClass('noclick');
+                }
+
+            });
+            $("#ulPlay").sortable("enable");
+        }
+    };
     onSettingsSave.push(function () {
         if (oldBigPlaylistSetting !== GM_config.get('BigPlaylist')) {
-            activeIndex = getActiveVideoIndex();
             reloadPlaylistHTML(oldPlaylist);
-            reloadPlaylist(activeIndex);
+            reloadPlaylist();
             oldBigPlaylistSetting = GM_config.get('BigPlaylist');
+            if (unsafeWindow.isLeader) {
+                enableSortable();
+            }
         }
     });
     if (GM_config.get('BigPlaylist')) {
@@ -68,34 +113,9 @@ function loadBigPlaylist() {
         if (GM_config.get('BigPlaylist')) {
             //InstaSynch core.js, version 0.9.7
             if (userId === unsafeWindow.userInfo.id) {
-                $("#tablePlaylistBody").sortable({
-                    update: function (event, ui) {
-                        unsafeWindow.sendcmd('move', {
-                            info: ui.item.data("info"),
-                            position: ui.item.index()
-                        });
-                        $("#tablePlaylistBody").sortable("cancel");
-                    },
-                    start: function (event, ui) {
-                        //Prevents click event from triggering when sorting videos
-                        $("#tablePlaylistBody").addClass('noclick');
-                    },
-                    helper: function (e, tr) {
-                        $originals = tr.children();
-                        $helper = tr.clone();
-                        $helper.children().each(function (index) {
-                            // Set helper cell sizes to match the original sizes
-                            $(this).width($originals.eq(index).width());
-                        });
-                        return $helper;
-                    },
-                    opacity: 0.5
-                }).disableSelection();
-                $("#tablePlaylistBody").sortable("enable");
-            } else {
-                if (oldIsLeader) {
-                    $("#tablePlaylistBody").sortable("disable");
-                }
+                enableSortable();
+            } else if (oldIsLeader) {
+                $("#tablePlaylistBody").sortable("disable");
             }
         }
     };
@@ -251,8 +271,8 @@ function loadBigPlaylist() {
         }
     };
 
-    if (GM_config.get('BigPlaylist') && activeIndex !== -1) {
-        reloadPlaylist(activeIndex);
+    if (GM_config.get('BigPlaylist') && needsReload) {
+        reloadPlaylist();
     }
 }
 
@@ -291,6 +311,7 @@ function reloadPlaylist(activeIndex) {
         }
         this.splice(new_index, 0, this.splice(old_index, 1)[0]);
     };
+    unsafeWindow.totalTime = 0;
     for (i = 0; i < temp.length; i += 1) {
         unsafeWindow.addVideo(temp[i]);
     }

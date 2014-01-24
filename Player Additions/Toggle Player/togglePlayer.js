@@ -59,15 +59,18 @@ function loadTogglePlayer() {
         if (GM_config.get('PlayerActive')) {
             oldPlayVideo(vidinfo, time, playing);
         } else {
-            //copied from InstaSynch's playVideo
-            var addedby = '',
-                title = '',
-                indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
+            var indexOfVid = unsafeWindow.getVideoIndex(vidinfo),
+                addedby = unsafeWindow.playlist[indexOfVid].addedby,
+                title = trimTitle(unsafeWindow.playlist[indexOfVid].title, 240);
             if (indexOfVid > -1) {
-                title = unsafeWindow.playlist[indexOfVid].title;
-                addedby = unsafeWindow.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
-                $($('#ulPlay').children('li')[indexOfVid]).addClass('active');
+                if (GM_config.get('BigPlaylist')) {
+                    $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
+                    $('#slider').slider('option', 'max', unsafeWindow.playlist[indexOfVid].duration);
+                    $('#sliderDuration').html('/' + unsafeWindow.secondsToTime(unsafeWindow.playlist[indexOfVid].duration));
+                } else {
+                    $($('#ulPlay').children('li')[indexOfVid]).addClass('active');
+                }
                 $('#vidTitle').html(String.format('{0}<div class=\'via\'> via {1}</div>', title, addedby));
             }
         }

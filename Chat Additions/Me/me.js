@@ -31,8 +31,7 @@ function loadMe() {
         } else {
             oldAddMessage(username, message, userstyle, textstyle);
         }
-    }
-
+    };
 }
 
 preConnectFunctions.push(loadMe);

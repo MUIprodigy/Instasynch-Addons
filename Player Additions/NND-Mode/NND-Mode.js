@@ -85,15 +85,15 @@ setField({
 
 function loadNNDMode() {
     $('#media').css('position', 'relative');
-    var oldAddMessage = unsafeWindow.addMessage;
-    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
-        oldAddMessage(username, message, userstyle, textstyle);
-        if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$') {
-            if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
-                addMarqueeMessage(message);
+    onAddMessage.push({
+        callback: function (username, message, userstyle, textstyle) {
+            if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$') {
+                if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
+                    addMarqueeMessage(message);
+                }
             }
         }
-    };
+    });
     playerWidth = $('#media').width();
     playerHeight = $('#media').height();
 }

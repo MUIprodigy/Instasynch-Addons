@@ -33,29 +33,20 @@ setField({
 
 
 function loadLogInOffMessages() {
-    // Overwriting Adduser
-    var oldAddUser = unsafeWindow.addUser,
-        oldRemoveUser = unsafeWindow.removeUser,
-        user;
-
-    unsafeWindow.addUser = function (user, css, sort) {
-        // Only if blackname or mod
-        if (user.loggedin && GM_config.get('LogInOffMessages')) {
-            unsafeWindow.addMessage('', user.username + ' logged on.', '', 'hashtext');
-            if (user.username === 'JustPassingBy') {
-                unsafeWindow.addMessage('', 'Wish him a happy birthday !', '', 'hastext');
+    onRemoveUser.push({
+        callback: function (user, css, sort) {
+            if (user.loggedin && GM_config.get('LogInOffMessages')) {
+                unsafeWindow.addMessage('', String.format('{0} logged on.', user.username), '', 'hashtext');
             }
         }
-        oldAddUser(user, css, sort);
-    };
-    // Overwriting removeUser
-    unsafeWindow.removeUser = function (id) {
-        user = unsafeWindow.users[getIndexOfUser(id)];
-        if (user.loggedin && GM_config.get('LogInOffMessages')) {
-            unsafeWindow.addMessage('', user.username + ' logged off.', '', 'hashtext');
+    });
+    onRemoveUser.push({
+        callback: function (id, user) {
+            if (user.loggedin && GM_config.get('LogInOffMessages')) {
+                unsafeWindow.addMessage('', String.format('{0} logged off.', user.username), '', 'hashtext');
+            }
         }
-        oldRemoveUser(id);
-    };
+    });
 }
 
 postConnectFunctions.push(loadLogInOffMessages);
