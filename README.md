@@ -35,39 +35,7 @@ To use the scripts install <a href=https://chrome.google.com/webstore/detail/tam
 
 Then go to http://userscripts.org/scripts/show/181142 and install the script.
 
-
-Changes
-------------
-<pre>
-• Added <a href="#nnd-mode">NND-Mode</a>
-• Added <a href="#help">Help</a>
-• Added <a href="#playmessages">PlayMessages</a>
-• Added <a href="#bigplaylist">BigPlaylist</a>
-• Added <a href="#shuffle">Shuffle</a>
-• Added <a href="#history">History</a>
-• Added <a href="#timestamp">Timestamp</a>
-</pre>
-
-<pre>
-• For mods the chat will now stop scrolling when holding down ctrl so it's easier to click on someones name to kick or ban
-• Walls over an hour will show up red in the wallcounter now
-• <a href="#youtube-search">YouTube Search</a> now supports browsing playlists by pasting the link into the input field
-• Added <a href="#notifications">Notifications</a>
-• Changing settings with the ~ commands won't show up in the chat anymore
-</pre>
-
-<pre>
-• Added [alt] and [falt] tags
-• Added support for advanced tags that can take parameters.[marquee-10][marquee99],[alt10][alt99],[#7882BF][#FFFF00]
-• Settings prefix changed from : to ~
-• Improved autocomplete so it will work anywhere in text. The message will now only be sent when the command is at the beginning of the text field
-• Added <a href="#login-off-messages">Login-Off Messages</a>
-• Added <a href="#purge-too-long-command">Purge Too Long Command</a>
-• Added <a href="#trim-wall-command">Trim Wall Command</a>
-• Added <a href="#vote-purge-command">Vote Purge Command</a>
-• Added <a href="#youtube-search">YouTube Search</a>
-• Added <a href="#command-flood-protect">Command Flood Protect</a>
-</pre>
+<a href="changelog.txt">Changes</a>
 
 Just send a <a href="mailto:megafaqqq@gmail.com">mail</a> if you got suggestions or found a bug.
 
@@ -203,6 +171,11 @@ NND-Mode
 -------------------
 
 NicoNicoDouga-Mode will scroll the messages in the chat over the player. It can get laggy on some computers and firefox.
+
+Poll-Menu
+-------------------
+
+This adds more features for creating polls. Clear options, Copy the old Poll, remove options, moved the buttons to the top, smaller add and remove buttons.
 
 Login-Off Messages
 ------------------
