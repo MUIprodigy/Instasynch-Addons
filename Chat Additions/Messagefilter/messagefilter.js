@@ -41,6 +41,12 @@ setField({
 });
 
 function loadMessageFilter() {
+
+    var oldLinkify = unsafeWindow.linkify,
+        oldAddMessage = unsafeWindow.addMessage,
+        oldCreatePoll = unsafeWindow.createPoll,
+        oldNSFWEmotes;
+
     onSettingsOpen.push(function () {
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
     });
@@ -57,10 +63,6 @@ function loadMessageFilter() {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
-    var oldLinkify = unsafeWindow.linkify,
-        oldAddMessage = unsafeWindow.addMessage,
-        oldCreatePoll = unsafeWindow.createPoll;
-
     unsafeWindow.linkify = function (str, buildHashtagUrl, includeW3, target) {
         var emotes = [],
             index = -1;
@@ -250,13 +252,12 @@ function parseEmotes(message) {
     return message;
 }
 
-var oldNSFWEmotes,
-    filteredwords = {
-        "skip": "upvote",
-        "SKIP": "UPVOTE",
-        "gay": "hetero",
-        "GAY": "HETERO"
-    };
+var filteredwords = {
+    "skip": "upvote",
+    "SKIP": "UPVOTE",
+    "gay": "hetero",
+    "GAY": "HETERO"
+};
 
 
 preConnectFunctions.push(loadMessageFilter);
