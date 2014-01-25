@@ -97,7 +97,7 @@ function loadControlBar() {
             'title': 'Reload',
             'class': 'controlIcon spiralContainer',
         }).append(spiral.clone()).css('background-image', 'url(' + GM_getResourceURL('xIcon') + ')').click(function () {
-            video.destroyPlayer();
+            unsafeWindow.video.destroyPlayer();
             unsafeWindow.sendcmd('reload', null);
         }).mouseout(function () {
             $(this).empty().append(spiral.clone());
