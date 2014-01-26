@@ -1,3 +1,7 @@
+1.33.3.1
+ • Fixed position of join button for greynames in large layout
+ • Fixed user menu getting cut off in large layout
+
 1.33.3
  • Added large layout
  • Version in the settings is a link to the changelog now

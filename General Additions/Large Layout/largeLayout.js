@@ -92,7 +92,6 @@ function changeLayout() {
             'id': 'layoutStyles'
         }).text('.stage, #media-title .title, .top-descr, #footer .footer, #top {' +
             '    width: 1200px!important;' +
-            '    overflow: hidden!important;' +
             '}' +
             '#media, #live_embed_player_flash, #media iframe {' +
             '    width: 750px!important;' +
@@ -103,6 +102,9 @@ function changeLayout() {
             '}' +
             '#chat_users {' +
             '    height: 434px!important;' +
+            '}' +
+            '#btn-join {' +
+            '    top: 58px!important;' +
             '}' +
             '#chat {' +
             '    height: 436px!important;' +
