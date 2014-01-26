@@ -52,8 +52,6 @@ function loadControlBar() {
         'width:17px;' +
         'height:17px;' +
         'border-radius: 50%;' +
-        'background-repeat:no-repeat;' +
-        'background-position:50% 50%;' +
         '-webkit-animation: spin 2s linear 0s infinite reverse;' +
         '-moz-animation: spin 2s linear 0s infinite reverse;' +
         '-ms-animation: spin 2s linear 0s infinite reverse;' +
@@ -87,9 +85,10 @@ function loadControlBar() {
         '}');
 
     var spiral =
-        $('<div>', {
-            'class': 'spiral'
-        }).css('background-image', 'url(' + GM_getResourceURL('refreshIcon') + ')');
+        $('<img>', {
+            'class': 'spiral',
+            'src': GM_getResourceURL('refreshIcon')
+        });
     $('#toggleplaylistlock ').addClass('controlIcon');
     $('.basic-btn-btnbar').append(
         $('<div>', {
