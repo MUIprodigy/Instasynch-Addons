@@ -43,7 +43,7 @@ function loadYoutubeSearch() {
         .css('width', '380px').css('marginTop', '10px')
         .css('backgroundColor', '#DFDFDF').css('opacity', '0.9')
         .css('padding', '5px').css('display', 'none')
-        .css('position', 'relative');
+        .css('position', 'relative').css('right', '10px');
     // Close button container
     divremove = $('<div id="divclosesearch" />').addClass('x')
         .css('right', '0px').css('left', '')

@@ -293,7 +293,7 @@ function reloadPlaylistHTML(oldPlaylist) {
                 'id': 'tablePlaylistBody'
             })
         );
-        $('#playlist_items').css('width', '97.5%');
+        $('#playlist_items').css('width', 'calc(100% - 15px)');
     }
 }
 
