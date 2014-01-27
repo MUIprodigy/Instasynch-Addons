@@ -1,7 +1,7 @@
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch, original code
-    Copyright (C) 2013  fugXD, Bibbytube modification
+    Copyright (C) 2014  InstaSynch, original code
+    Copyright (C) 2014  fugXD, Bibbytube modification
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

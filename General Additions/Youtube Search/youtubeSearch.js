@@ -1,9 +1,9 @@
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
+    Copyright (C) 2014  InstaSynch
 
     <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
+    Copyright (C) 2014  Bibbytube
     Copyright (C) 2014  fugXD, restructure, convert to jquery.
 
     This program is free software: you can redistribute it and/or modify

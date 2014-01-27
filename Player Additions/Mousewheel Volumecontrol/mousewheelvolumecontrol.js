@@ -1,9 +1,9 @@
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
+    Copyright (C) 2014  InstaSynch
 
     <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
+    Copyright (C) 2014  Bibbytube
     Copyright (C) 2014  fugXD, filtering duplicate events, scroll speed dependent volume adjustments
 
     This program is free software: you can redistribute it and/or modify
