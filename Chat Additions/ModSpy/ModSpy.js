@@ -39,7 +39,13 @@ function loadModSpy() {
             /Using HTML5 player is not recomended\./
         ],
         filter,
-        i;
+        i,
+        lastUser;
+    onRemoveUser.push({
+        callback: function (id, user) {
+            lastUser = user;
+        }
+    });
     unsafeWindow.console.log = function (message) {
         // We don't want the cleaning messages in the chat (Ok in the console) .
         if (GM_config.get('ModSpy') && message && message.match) {
@@ -54,6 +60,8 @@ function loadModSpy() {
                 if (message.match(/ moved a video/g) && bumpCheck) {
                     message = message.replace("moved", "bumped");
                     bumpCheck = false;
+                } else if (message.match(/has (banned)|(kicked) a user./)) {
+                    message = message.replace(/a user/, lastUser.username);
                 }
                 unsafeWindow.addMessage('', message, '', 'hashtext');
             }

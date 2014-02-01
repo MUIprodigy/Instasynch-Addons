@@ -47,6 +47,7 @@ function loadPollMenu() {
         $('<button>').text('Copy Old').click(function () {
             if (oldPoll) {
                 var i = 0;
+                $('#clear-poll-options').click();
                 if ($('#create-poll > .create-poll-option').length < oldPoll.options.length) {
                     while (oldPoll.options.length > $('#create-poll > .create-poll-option').length) {
                         $('#add-poll-options').click();
@@ -63,7 +64,9 @@ function loadPollMenu() {
             }
         })
     ).append(
-        $('<button>').text('Clear').click(function () {
+        $('<button>', {
+            'id': 'clear-poll-options'
+        }).text('Clear').click(function () {
             $('#create-poll > #title').val('')
             $(".create-poll-option").each(function (index) {
                 $(this).val('');

@@ -1,3 +1,8 @@
+1.33.3.3
+ • Added banned/kicked who
+ • Added progress bar for the video
+ • Moved images to imgur
+
 1.33.3.2
  • Updated license
 

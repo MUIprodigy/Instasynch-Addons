@@ -25,13 +25,15 @@ function loadEvents() {
     var oldPlayVideo = unsafeWindow.playVideo,
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
-        oldRemoveUser = unsafeWindow.removeUser;
-
+        oldRemoveUser = unsafeWindow.removeUser,
+        oldPlayerDestroy = unsafeWindow.video.destroyPlayer;
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
+        if (currentPlayer !== vidinfo.provider) {
+            fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], true);
+        }
         var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
         fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], true);
         oldPlayVideo(vidinfo, time, playing);
-        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], false);
         if (currentPlayer !== vidinfo.provider) {
             fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], false);
             switch (vidinfo.provider) {
@@ -50,6 +52,7 @@ function loadEvents() {
             }
             currentPlayer = vidinfo.provider;
         }
+        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], false);
     };
 
     unsafeWindow.moveVideo = function (vidinfo, position) {
@@ -73,7 +76,19 @@ function loadEvents() {
         fireEvents(onRemoveUser, [id, user], false);
     };
 
+    unsafeWindow.removeUser = function (id) {
+        var user = unsafeWindow.users[getIndexOfUser(id)];
+        fireEvents(onRemoveUser, [id, user], true);
+        oldRemoveUser(id);
+        fireEvents(onRemoveUser, [id, user], false);
+    };
 
+    unsafeWindow.video.destroyPlayer = function () {
+        fireEvents(onPlayerDestroy, [], true);
+        oldPlayerDestroy();
+        fireEvents(onPlayerDestroy, [], false);
+        currentPlayer = '';
+    };
 }
 
 function loadPriorityEvents() {
@@ -115,4 +130,5 @@ var currentPlayer = '',
     onPlayerReady = [],
     onRemoveUser = [],
     onAddUser = [],
-    onCreatePoll = [];
+    onCreatePoll = [],
+    onPlayerDestroy = [];

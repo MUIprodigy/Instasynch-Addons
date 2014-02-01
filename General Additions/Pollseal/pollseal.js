@@ -21,7 +21,7 @@
     http://opensource.org/licenses/GPL-3.0
 */
 function loadPollSeal() {
-    var url = GM_getResourceURL('pollseal');
+    var url = 'http://i.imgur.com/YR9hGSt.png';
     $('.st-poll').css('background', String.format('url({0}) 0 0 #DFDFDF', url));
 
     $('.st-poll').css('background-size', 'auto 100%');

@@ -88,10 +88,10 @@ var notified = false;
 
 function toggleNotify() {
     if (unsafeWindow.newMsg && !notified) {
-        $('head > link:last-of-type')[0].href = GM_getResourceURL('notificationFavicon');
+        $('head > link:last-of-type')[0].href = "https://github.com/Bibbytube/Instasynch-Addons/blob/master/Chat%20Additions/Name%20Notification/notificationFavicon.ico?raw=true";
         notified = true;
     } else {
-        $('head > link:last-of-type')[0].href = GM_getResourceURL('favicon');
+        $('head > link:last-of-type')[0].href = "http://instasynch.com/favicon.ico";
         notified = false;
     }
 }

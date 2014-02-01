@@ -39,7 +39,7 @@ function loadSettingsLoader() {
                     $('<li>').append(
                         $('<a>').append(
                             $('<img>', {
-                                'src': GM_getResourceURL('settingsCog')
+                                'src': 'http://i.imgur.com/V3vOIkS.png'
                             })
                         ).append('Addon Settings').addClass('addonsClicker').click(function () {
                             if (GM_config.isOpen) {
@@ -114,7 +114,7 @@ function loadSettingsLoader() {
 
     GM_config.init({
         'id': 'GM_config',
-        'title': String.format('<div style="height:50px";><img src="{0}" style="float:left;" height="50"/> <p style="margin:inherit;">InstaSynch Addon Settings</p><a style="margin:inherit; color:white;" href="https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt" target="_blank">{1}</a></div>', GM_getResourceURL("icon64"), GM_info.script.version),
+        'title': String.format('<div style="height:50px";><img src="http://i.imgur.com/f3vYHNN.png" style="float:left;" height="50"/> <p style="margin:inherit;">InstaSynch Addon Settings</p><a style="margin:inherit; color:white;" href="https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt" target="_blank">{0}</a></div>', GM_info.script.version),
         'fields': fields,
         'css': '#GM_config .config_header{ font-size: 15pt; color:#FFF; text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;  margin: 0 0 0 0px; }' +
             '#GM_config .config_var{ margin: 0 0 4 10px;}' +

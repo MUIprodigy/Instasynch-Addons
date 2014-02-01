@@ -87,7 +87,7 @@ function loadControlBar() {
     var spiral =
         $('<img>', {
             'class': 'spiral',
-            'src': GM_getResourceURL('refreshIcon')
+            'src': 'http://i.imgur.com/mTaDkth.png'
         });
     $('#toggleplaylistlock ').addClass('controlIcon');
     $('.basic-btn-btnbar').append(
@@ -95,7 +95,7 @@ function loadControlBar() {
             'id': 'reloadPlayer',
             'title': 'Reload',
             'class': 'controlIcon spiralContainer',
-        }).append(spiral.clone()).css('background-image', 'url(' + GM_getResourceURL('xIcon') + ')').click(function () {
+        }).append(spiral.clone()).css('background-image', 'url(http://i.imgur.com/xc24UeF.png)').click(function () {
             unsafeWindow.video.destroyPlayer();
             unsafeWindow.sendcmd('reload', null);
         }).mouseout(function () {
@@ -106,7 +106,7 @@ function loadControlBar() {
             'id': 'resynchPlayer',
             'title': 'Resynch',
             'class': 'controlIcon spiralContainer',
-        }).append(spiral.clone()).css('background-image', 'url(' + GM_getResourceURL('playIcon') + ')').click(function () {
+        }).append(spiral.clone()).css('background-image', 'url(http://i.imgur.com/LZp95IU.png)').click(function () {
             unsafeWindow.sendcmd('resynch', null);
         }).mouseout(function () {
             $(this).empty().append(spiral.clone());

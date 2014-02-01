@@ -77,7 +77,6 @@ function loadOnClickKickBan() {
                                     unsafeWindow.sendcmd('ban', {
                                         userid: userId
                                     });
-                                    unsafeWindow.addMessage('', 'b& user: ' + user, '', 'hashtext');
                                 } else {
                                     unsafeWindow.sendcmd('leaverban', {
                                         username: user
@@ -93,7 +92,6 @@ function loadOnClickKickBan() {
                                     unsafeWindow.sendcmd('kick', {
                                         userid: userId
                                     });
-                                    unsafeWindow.addMessage('', 'Kicked user: ' + user, '', 'hashtext');
                                 } else {
                                     unsafeWindow.addMessage('', "Didn't find the user", '', 'hashtext');
                                 }
