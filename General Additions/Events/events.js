@@ -26,7 +26,8 @@ function loadEvents() {
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
-        oldPlayerDestroy = unsafeWindow.video.destroyPlayer;
+        oldPlayerDestroy = unsafeWindow.video.destroyPlayer,
+        oldSkips = unsafeWindow.skips;
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
         if (currentPlayer !== vidinfo.provider) {
             fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], true);
@@ -64,6 +65,14 @@ function loadEvents() {
 
 
     unsafeWindow.addUser = function (user, css, sort) {
+        if (user.loggedin) {
+            if (parseInt(user.permissions, 10) > 0) {
+                modsCount += 1;
+            }
+            blacknamesCount += 1;
+        } else {
+            greynamesCount += 1;
+        }
         fireEvents(onAddUser, [user, css, sort], true);
         oldAddUser(user, css, sort);
         fireEvents(onAddUser, [user, css, sort], false);
@@ -71,6 +80,14 @@ function loadEvents() {
 
     unsafeWindow.removeUser = function (id) {
         var user = unsafeWindow.users[getIndexOfUser(id)];
+        if (user.loggedin) {
+            if (parseInt(user.permissions, 10) > 0) {
+                modsCount -= 1;
+            }
+            blacknamesCount -= 1;
+        } else {
+            greynamesCount -= 1;
+        }
         fireEvents(onRemoveUser, [id, user], true);
         oldRemoveUser(id);
         fireEvents(onRemoveUser, [id, user], false);
@@ -88,6 +105,11 @@ function loadEvents() {
         oldPlayerDestroy();
         fireEvents(onPlayerDestroy, [], false);
         currentPlayer = '';
+    };
+    unsafeWindow.skips = function (skips, skipsNeeded) {
+        fireEvents(onSkips, [skips, skipsNeeded], true);
+        oldSkips(skips, skipsNeeded);
+        fireEvents(onSkips, [skips, skipsNeeded], false);
     };
 }
 
@@ -123,6 +145,9 @@ function fireEvents(listeners, parameters, preOld) {
 }
 
 var currentPlayer = '',
+    blacknamesCount = 0,
+    greynamesCount = 0,
+    modsCount = 0,
     onMoveVideo = [],
     onPlayerChange = [],
     onPlayVideo = [],
@@ -131,4 +156,5 @@ var currentPlayer = '',
     onRemoveUser = [],
     onAddUser = [],
     onCreatePoll = [],
-    onPlayerDestroy = [];
+    onPlayerDestroy = [],
+    onSkips = [];

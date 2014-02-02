@@ -24,11 +24,11 @@ function loadSettingsLoader() {
     //add styles for the button
     GM_addStyle(
         ".addonsClicker {" +
-        "    background: #2284B5 !important;" +
+        "    background: #2eb6e6 !important;" +
         "    color: #FFF !important;" +
         "}" +
         ".addonsClicker:hover {" +
-        "    background: #196F9A !important;" +
+        "    background: #2284B5 !important;" +
         "}");
     //add the button
     $('#loginfrm').css('display', 'flex');
@@ -121,8 +121,8 @@ function loadSettingsLoader() {
             'input[type="checkbox"] { margin: 3px 3px 3px 0px; float:left;}' +
             'html { background:#BBB; opacity:0.9 }' +
             '#GM_config { background: #444444; height: 97%; }' +
-            '#GM_config .section_header { background:#2284B5; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; cursor:pointer; } ' +
-            '#GM_config .section_header:hover { background:#196F9A; transition: background-color 0.2s ease-in-out; -webkit-transition: background-color 0.2s ease-in-out; -moz-transition: background-color 0.2s ease-in-out; }' +
+            '#GM_config .section_header { background:#2eb6e6; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; cursor:pointer; } ' +
+            '#GM_config .section_header:hover { background:#2284B5; transition: background-color 0.2s ease-in-out; -webkit-transition: background-color 0.2s ease-in-out; -moz-transition: background-color 0.2s ease-in-out; }' +
             '#GM_config .section_desc { cursor:pointer; }' +
             '#GM_config .section_desc:hover { background:#C9C9C9;transition: background-color 0.2s ease-in-out; -webkit-transition: background-color 0.2s ease-in-out; -moz-transition: background-color 0.2s ease-in-out; }' +
             '#GM_config .field_label { color:#FFF; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }' +

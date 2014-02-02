@@ -137,7 +137,9 @@ function loadPollMenu() {
             });
         });
         oldPoll = poll;
-        unsafeWindow.createPoll(poll);
+        if (poll.options.length !== 0) {
+            unsafeWindow.createPoll(poll);
+        }
     }
 }
 var oldPoll = undefined;

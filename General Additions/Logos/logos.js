@@ -20,18 +20,24 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadGreynameCount() {
 
-    function setViewerCount() {
-        $('#viewercount').html(String.format('{0}/{1}', blacknamesCount, greynamesCount));
+
+
+function loadLogos() {
+    $('.descr-stat-tip :first').empty().append($('<img>', {
+        'src': 'http://i.imgur.com/ehkt2RB.png'
+    })).attr('title', 'viewing').css('position', 'relative').css('top', '1px');
+    $('.descr-stat-tip :last').empty().append($('<img>', {
+        'src': 'http://i.imgur.com/4ZEPN8D.png'
+    })).attr('title', 'visits');
+    if (isBibbyRoom()) {
+        var temp = $('.top-descr :first > :first');
+        $('.top-descr').empty().append(
+            $('<img>', {
+                'src': 'http://i.imgur.com/4AyXQt0.png'
+            }).css('height', '60px').css('position', 'relative').css('top', '-1px')
+        ).append(temp).css('height', '49px');
     }
-    onAddUser.push({
-        callback: setViewerCount
-    });
-    onRemoveUser.push({
-        callback: setViewerCount
-    });
-    setViewerCount();
 }
 
-preConnectFunctions.push(loadGreynameCount);
+preConnectFunctions.push(loadLogos);

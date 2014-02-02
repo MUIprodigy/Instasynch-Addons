@@ -29,7 +29,8 @@ function loadPreConnectionPrePriorityScripts() {
         loadSettingsLoader,
         loadBigPlaylist,
         loadNewLoadUserlist,
-        loadEvents
+        loadEvents,
+        loadControlBar
     ]);
 }
 

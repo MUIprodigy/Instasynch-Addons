@@ -1,4 +1,8 @@
-1.33.3.3
+1.33.4.1
+ • Fixed empty poll getting created when the script is loading slow and there was no poll
+ • Fixed emote link in the settings not opening up a new tab
+
+1.33.4
  • Added banned/kicked who
  • Added progress bar for the video
  • Moved images to imgur

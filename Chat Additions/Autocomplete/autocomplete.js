@@ -34,7 +34,7 @@ setField({
 setField({
     'name': 'EmotesAutoComplete',
     'data': {
-        'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm"> Emotes</a> (/)',
+        'label': '<a style="color:white;" href="http://dl.dropboxusercontent.com/u/75446821/Bibby/Emotes.htm" target="_blank"> Emotes</a> (/)',
         'type': 'checkbox',
         'default': true
     },

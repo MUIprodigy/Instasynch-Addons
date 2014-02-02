@@ -41,6 +41,7 @@ function loadProgressBar() {
             '<feGaussianBlur stdDeviation=\'5\'/>',
             '</filter>',
             '</svg>#autocall")'),
+
         oldProgressBarSetting = GM_config.get('ProgressBar');
 
     onSettingsOpen.push(function () {
@@ -82,14 +83,6 @@ function loadProgressBar() {
     });
     onPlayerReady.push({
         callback: function (oldPlayer, newPlayer) {
-            // switch (newPlayer) {
-            // case 'youtube':
-            //     $('#progressbar').css('background-color', '#CC191F');
-            //     break;
-            // case 'vimeo':
-            //     $('#progressbar').css('background-color', '#00ADEF');
-            //     break;
-            // }
             progressbarInterval = setUpInterval();
         }
     });
