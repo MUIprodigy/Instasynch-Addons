@@ -92,7 +92,11 @@ function loadEvents() {
         oldRemoveUser(id);
         fireEvents(onRemoveUser, [id, user], false);
     };
-
+    onReconnecting.push({
+        callback: function () {
+            modsCount = blacknamesCount = greynamesCount = 0;
+        }
+    });
     unsafeWindow.video.destroyPlayer = function () {
         fireEvents(onPlayerDestroy, [], true);
         oldPlayerDestroy();
@@ -114,6 +118,20 @@ function loadPriorityEvents() {
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
         oldAddMessage(username, message, userstyle, textstyle);
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], false);
+
+        if (username === '') {
+            if (userstyle === '' && textstyle === 'hashtext') {
+                if (message === 'Connecting..') {
+                    fireEvents(onConnecting, [], false);
+                } else if (message === 'Connection Successful!') {
+                    fireEvents(onConnect, [], false);
+                }
+            } else if (userstyle === 'system-msg') {
+                if (message === 'Reconnecting...') {
+                    fireEvents(onReconnecting, [], false);
+                }
+            }
+        }
     };
 
     unsafeWindow.createPoll = function (poll) {
@@ -150,4 +168,7 @@ var currentPlayer = '',
     onAddUser = [],
     onCreatePoll = [],
     onPlayerDestroy = [],
-    onSkips = [];
+    onSkips = [],
+    onConnecting = [],
+    onConnect = [],
+    onReconnecting = [];

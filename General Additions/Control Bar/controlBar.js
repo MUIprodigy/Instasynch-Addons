@@ -262,7 +262,7 @@ function loadControlBar() {
                 }
             }).mouseout(function () {
                 $(this).empty().append(shakeIcon.clone())
-            }).css('float', 'none').css('margin-right', '0px')
+            }).css('float', 'none').css('margin-right', '0px').css('margin-left', '0px')
         ).append(
             $('<div>', {
                 'id': 'skipCounter',
@@ -278,7 +278,8 @@ function loadControlBar() {
                 'name': 'URLinput',
                 'id': 'URLinput',
                 'type': 'text',
-                'placeholder': 'Add Video'
+                'title': 'Start typing to search',
+                'placeholder': 'Add Video / Search'
             }).css('height', '23px').css('padding-top', '0px').css('padding-bottom', '0px').css('padding-left', '4px')
             .css('margin-right', '0px').css('border-width', '0px').css('width', '200px')
         ).append(

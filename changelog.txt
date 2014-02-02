@@ -1,3 +1,6 @@
+1.33.5.2
+ • Fixed viewer counter being wrong when getting disconnected
+
 1.33.5.1
  • fixed viewer counter not decrementing
  • fixed btn bar elements not being the same height when zooming
