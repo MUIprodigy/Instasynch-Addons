@@ -47,6 +47,12 @@ function loadControlBar() {
         '.click-nav ul .clicker:hover {',
         '  background: #2284B5;',
         '}',
+        '#mirrorPlayer {',
+        '  background-image: url(http://i.imgur.com/YqmK8gZ.png);',
+        '}',
+        '#mirrorPlayer:hover {',
+        '  background-image: initial;',
+        '}',
         '.animationContainer {',
         '  -webkit-animation-play-state: paused;',
         '  -moz-animation-play-state: paused;',
@@ -75,6 +81,7 @@ function loadControlBar() {
         '  -ms-animation-play-state: inherit;',
         '  -o-animation-play-state: inherit;',
         '  animation-play-state: inherit;',
+        '  pointer-events: none;',
         '}',
         '@keyframes spiral {',
         '  0% { transform: rotate(360deg); }',
@@ -113,6 +120,7 @@ function loadControlBar() {
         '  -ms-animation-play-state: inherit;',
         '  -o-animation-play-state: inherit;',
         '  animation-play-state: inherit;',
+        '  pointer-events: none;',
         '}',
         '@keyframes spinner {',
         '  0% { transform: rotateY(360deg); }',
@@ -148,6 +156,7 @@ function loadControlBar() {
         '  -ms-animation-play-state: inherit;',
         '  -o-animation-play-state: inherit;',
         '  animation-play-state: inherit;',
+        '  pointer-events: none;',
         '}',
         '@keyframes pulse {',
         '  0%, 100% { transform: scale(1); }',
@@ -166,7 +175,7 @@ function loadControlBar() {
         '  50% { -moz-transform: scale(1.2); }',
         '}',
         '@-o-keyframes pulse {',
-        '  0% { -o-transform: scale(1); }',
+        '  0%, 100%  { -o-transform: scale(1); }',
         '  50% { -o-transform: scale(1.2); }',
         '}',
         '.shake {',
@@ -183,6 +192,7 @@ function loadControlBar() {
         '  -ms-animation-play-state: inherit;',
         '  -o-animation-play-state: inherit;',
         '  animation-play-state: inherit;',
+        '  pointer-events: none;',
         '}',
         '@keyframes shake {',
         '  0%, 100% { transform: translateX(0px); }',
@@ -208,28 +218,28 @@ function loadControlBar() {
     var resynchSpiral =
         $('<img>', {
             'class': 'spiral',
-            'src': 'http://i.imgur.com/wgtVYx6.png'
-        }).css('pointer-events', 'none'),
+            'src': 'http://i.imgur.com/k5gajYE.png'
+        }),
         reloadSpiral =
             $('<img>', {
                 'class': 'spiral',
                 'src': 'http://i.imgur.com/ARxZzeE.png'
-            }).css('pointer-events', 'none'),
+            }),
         mirrorSpinner =
             $('<img>', {
                 'class': 'spinner',
                 'src': 'http://i.imgur.com/YqmK8gZ.png'
-            }).css('pointer-events', 'none'),
+            }),
         pulseIcon =
             $('<img>', {
                 'class': 'pulse',
                 'src': 'http://i.imgur.com/Fv1wJk5.png'
-            }).css('pointer-events', 'none'),
+            }),
         shakeIcon =
             $('<img>', {
                 'class': 'shake',
                 'src': 'http://i.imgur.com/ceHuy2q.png'
-            }).css('pointer-events', 'none');
+            });
 
     onSkips.push({
         callback: function (skips, skipsNeeded) {
@@ -257,7 +267,8 @@ function loadControlBar() {
             $('<div>', {
                 'id': 'skipCounter',
                 'title': '0%'
-            }).text('0/0').css('height', '16px').css('margin-left', '0px').css('padding-top', '4px').css('padding-bottom', '1px').css('cursor', 'default')
+            }).text('0/0').css('height', '23px').css('margin-left', '0px').css('padding', '4px 2px 0px 3px').css('cursor', 'default')
+            .css('box-sizing', 'border-box').css('-webkit-box-sizing', 'border-box').css('-moz-box-sizing', 'border-box')
         ).css('float', 'left').css('width', '70px')
     ).append(
         $('<div>', {
@@ -268,8 +279,8 @@ function loadControlBar() {
                 'id': 'URLinput',
                 'type': 'text',
                 'placeholder': 'Add Video'
-            }).css('height', '21px').css('padding-top', '0px').css('padding-bottom', '0px').css('padding-left', '4px')
-            .css('margin-right', '0px').css('border-width', '1px').css('width', '200px')
+            }).css('height', '23px').css('padding-top', '0px').css('padding-bottom', '0px').css('padding-left', '4px')
+            .css('margin-right', '0px').css('border-width', '0px').css('width', '200px')
         ).append(
             $('<div>', {
                 'id': 'addUrl',
@@ -325,12 +336,9 @@ function loadControlBar() {
             'id': 'mirrorPlayer',
             'title': 'Mirror Player',
             'class': 'controlIcon animationContainer',
-        }).append(mirrorSpinner.clone()).css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').click(function () {
+        }).append(mirrorSpinner.clone()).click(function () {
             toggleMirrorPlayer();
-        }).hover(function () {
-            $(this).css('background-image', 'initial')
-        }, function () {
-            $(this).css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)')
+        }).mouseout(function () {
             $(this).empty().append(mirrorSpinner.clone());
         })
     );

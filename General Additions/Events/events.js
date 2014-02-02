@@ -93,13 +93,6 @@ function loadEvents() {
         fireEvents(onRemoveUser, [id, user], false);
     };
 
-    unsafeWindow.removeUser = function (id) {
-        var user = unsafeWindow.users[getIndexOfUser(id)];
-        fireEvents(onRemoveUser, [id, user], true);
-        oldRemoveUser(id);
-        fireEvents(onRemoveUser, [id, user], false);
-    };
-
     unsafeWindow.video.destroyPlayer = function () {
         fireEvents(onPlayerDestroy, [], true);
         oldPlayerDestroy();
