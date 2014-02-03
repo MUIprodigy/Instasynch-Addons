@@ -1,1 +1,0 @@
- addMessage('', '<strong><font color="#FF0000">Scriptlocation changed to here http://userscripts.org/scripts/show/181142 <br> Remove the old script and install the new one.<br> -faqqq<font><strong>','' ,'hashtext'); 
