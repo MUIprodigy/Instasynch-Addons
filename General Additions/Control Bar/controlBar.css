@@ -26,10 +26,6 @@
         -o-animation: spiral 1s linear 0s infinite reverse;
         animation: spiral 1s linear 0s infinite reverse;
 }
-@keyframes spiral {
-        0% {transform: rotate(360deg);}
-        100% {transform: rotate(0deg);}
-}
 @-webkit-keyframes spiral {
         0% {-webkit-transform: rotate(360deg);}
         100% {-webkit-transform: rotate(0deg);}
@@ -46,6 +42,10 @@
         0% {-o-transform: rotate(360deg);}
         100% {-o-transform: rotate(0deg);}
 }
+@keyframes spiral {
+        0% {transform: rotate(360deg);}
+        100% {transform: rotate(0deg);}
+}
 .basic-btn-btnbar {
         width: calc(100% - 11px) !important;
 }
@@ -55,10 +55,6 @@
         -ms-animation: spinner 1s linear 0s infinite reverse;
         -o-animation: spinner 1s linear 0s infinite reverse;
         animation: spinner 1s linear 0s infinite reverse;
-}
-@keyframes spinner {
-        0% {transform: rotateY(360deg);}
-        100% {transform: rotateY(0deg);}
 }
 @-webkit-keyframes spinner {
         0% {-webkit-transform: rotateY(360deg);}
@@ -76,16 +72,16 @@
         0% {-o-transform: rotateY(360deg);}
         100% {-o-transform: rotateY(0deg);}
 }
+@keyframes spinner {
+        0% {transform: rotateY(360deg);}
+        100% {transform: rotateY(0deg);}
+}
 .pulse {
         -webkit-animation: pulse 1s linear 0s infinite reverse;
         -moz-animation: pulse 1s linear 0s infinite reverse;
         -ms-animation: pulse 1s linear 0s infinite reverse;
         -o-animation: pulse 1s linear 0s infinite reverse;
         animation: pulse 1s linear 0s infinite reverse;
-}
-@keyframes pulse {
-        0%, 100% {transform: scale(1);}
-        50% {transform: scale(1.2);}
 }
 @-webkit-keyframes pulse {
         0%, 100% {-webkit-transform: scale(1);}
@@ -103,16 +99,16 @@
         0%, 100% {-o-transform: scale(1);}
         50% {-o-transform: scale(1.2);}
 }
+@keyframes pulse {
+        0%, 100% {transform: scale(1);}
+        50% {transform: scale(1.2);}
+}
 .shake {
         -webkit-animation: shake 1s linear 0s infinite reverse;
         -moz-animation: shake 1s linear 0s infinite reverse;
         -ms-animation: shake 1s linear 0s infinite reverse;
         -o-animation: shake 1s linear 0s infinite reverse;
         animation: shake 1s linear 0s infinite reverse;
-}
-@keyframes shake {
-        0%, 100% {transform: translateX(0px);}
-        50% {transform: translateX(3px);}
 }
 @-webkit-keyframes shake {
         0%, 100% {-webkit-transform: translateX(0px);}
@@ -130,16 +126,16 @@
         0%, 100% {-o-transform: translateX(0px);}
         50% {-o-transform: translateX(3px);}
 }
+@keyframes shake {
+        0%, 100% {transform: translateX(0px);}
+        50% {transform: translateX(3px);}
+}
 .grow {
         -webkit-animation: grow 1s linear 0s infinite normal;
         -moz-animation: grow 1s linear 0s infinite normal;
         -ms-animation: grow 1s linear 0s infinite normal;
         -o-animation: grow 1s linear 0s infinite normal;
         animation: grow 1s linear 0s infinite normal;
-}
-@keyframes grow {
-        0%{transform: scale(1);}
-        100% {transform: scale(1.2);}
 }
 @-webkit-keyframes grow {
         0%{-webkit-transform: scale(1);}
@@ -157,6 +153,10 @@
         0%{-o-transform: scale(1);}
         100% {-o-transform: scale(1.2);}
 }
+@keyframes grow {
+        0%{transform: scale(1);}
+        100% {transform: scale(1.2);}
+}
 .marquee {
         -webkit-animation: marquee 1s linear 0s infinite reverse;
         -moz-animation: marquee 1s linear 0s infinite reverse;
@@ -164,25 +164,25 @@
         -o-animation: marquee 1s linear 0s infinite reverse;
         animation: marquee 1s linear 0s infinite reverse;
 }
-@keyframes marquee {
-        0%{background-position-x: 0px;}
-        100% {background-position-x: 92px;}
-}
 @-webkit-keyframes marquee {
-        0%{background-position-x: 0px;}
-        100% {background-position-x: 92px;}
+        0%{background-position: 0px;}
+        100% {background-position: 92px;}
 }
 @-ms-keyframes marquee {
-        0%{background-position-x: 0px;}
-        100% {background-position-x: 92px;}
+        0%{background-position: 0px;}
+        100% {background-position: 92px;}
 }
 @-moz-keyframes  marquee {
-        0%{background-position-x: 0px;}
-        100% {background-position-x: 92px;}
+        0%{background-position: 0px;}
+        100% {background-position: 92px;}
 }
 @-o-keyframes marquee {
-        0%{background-position-x: 0px;}
-        100% {background-position-x: 92px;}
+        0%{background-position: 0px;}
+        100% {background-position: 92px;}
+}
+@keyframes marquee {
+        0%{background-position: 0px;}
+        100% {background-position: 92px;}
 }
 .spinner, .spiral, .pulse, .shake, .grow, .marquee {
         -webkit-animation-play-state: running;
