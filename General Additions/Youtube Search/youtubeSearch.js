@@ -37,31 +37,22 @@ var resultsPerPage = 9,
     prevButton;
 
 function loadYoutubeSearch() {
+    GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
     // Search results container
-    divresults = $('<div id="searchResults" />')
-        .css('cssFloat', 'right').css('styleFloat', 'right')
-        .css('width', '380px').css('marginTop', '10px')
-        .css('backgroundColor', '#DFDFDF').css('opacity', '0.9')
-        .css('padding', '5px').css('display', 'none')
-        .css('position', 'relative').css('right', '10px');
+    divresults = $('<div id="searchResults" />');
     // Close button container
-    divremove = $('<div id="divclosesearch" />').addClass('x')
-        .css('right', '0px').css('left', '')
-        .css('top', '0px').css('position', 'absolute')
-        .css('z-index', '2');
+    divremove = $('<div id="divclosesearch" />').addClass('x');
 
     nextDisabled = false;
     prevDisabled = false;
     // 'Moar' link container
-    prevButton = $('<input id="prevButton" />').prop('disabled', true).prop('type', 'button').val('<< Prev').css('cursor', 'pointer');
-    nextButton = $('<input id="nextButton" />').prop('disabled', true).prop('type', 'button').val('Next >>').css('cursor', 'pointer');
+    prevButton = $('<input id="prevButton" />').prop('disabled', true).prop('type', 'button').val('<< Prev');
+    nextButton = $('<input id="nextButton" />').prop('disabled', true).prop('type', 'button').val('Next >>');
     divmore = $('<div id="divmore" />').append(
         prevButton
     ).append(
         nextButton
-    ).css('textAlign', 'center').css('height', 'auto')
-        .css('width', '380px').css('position', 'relative')
-        .css('zIndex', '1');
+    );
 
     //insert search result container
     $('.poll-container').before(divresults);
@@ -223,11 +214,13 @@ function showResults(entries, index) {
                     $('<p>').append(
                         $('<span>').text(duration).css('background', 'rgba(0, 0, 0, 0.7').css('color', durationColor)
                     ).css('position', 'absolute').css('bottom', '0px').css('right', '0px')
-                ).css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px').css('cursor', 'pointer').css('z-index', '2').click(addLinkToPl).hover(showTitle, hideTitle)
+                ).addClass('searchResult').click(addLinkToPl).hover(showTitle, hideTitle)
             );
         } else {
             divresults.append(
-                $('<div>').text('Video Remove By Youtube').css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px')
+                $('<div>', {
+                    'class': 'searchResult'
+                }).text('Video Remove By Youtube').addClass('searchResult').css('cursor', 'default')
             );
         }
     }
@@ -235,7 +228,7 @@ function showResults(entries, index) {
     if (Math.min(indexOfSearch + resultsPerPage, entries.length) % 3 !== 0) {
         for (i = 0; i < 3 - Math.min(indexOfSearch + resultsPerPage, entries.length) % 3; i += 1) {
             divresults.append(
-                $('<div>').css('overflow', 'hidden').css('position', 'relative').css('float', 'left').css('height', '90px').css('width', '120px').css('margin', '1px')
+                $('<div>').css('cursor', 'default').addClass('searchResult')
             );
         }
     }

@@ -24,252 +24,56 @@
 function loadControlBar() {
     $('#resynch').remove();
     $('#reload').remove();
-    GM_addStyle('.controlIcon {'.concat(
-        '  float: right;',
-        '  margin-right: 2px;',
-        '  margin-left: 2px;',
-        '  width: 23px;',
-        '  height: 23px;',
-        '  cursor: pointer;',
-        '  position: relative;',
-        '  transition:background-color 0.2s ease-in-out;',
-        '  -webkit-transition:background-color 0.2s ease-in-out;',
-        '  -moz-transition:background-color 0.2s ease-in-out;',
-        '  background-color: #2eb6e6',
-        '}',
-        '.controlIcon:hover{',
-        '  background-color: #2284B5',
-        '}',
-        '.click-nav ul .clicker {',
-        '  background: #2eb6e6;',
-        '  color: #FFF;',
-        '}',
-        '.click-nav ul .clicker:hover {',
-        '  background: #2284B5;',
-        '}',
-        '#mirrorPlayer {',
-        '  background-image: url(http://i.imgur.com/YqmK8gZ.png);',
-        '}',
-        '#mirrorPlayer:hover {',
-        '  background-image: initial;',
-        '}',
-        '.animationContainer {',
-        '  -webkit-animation-play-state: paused;',
-        '  -moz-animation-play-state: paused;',
-        '  -ms-animation-play-state: paused;',
-        '  -o-animation-play-state: paused;',
-        '  animation-play-state: paused;',
-        '}',
-        '.animationContainer:hover {',
-        ' -webkit-animation-play-state: running;',
-        '  -moz-animation-play-state: running;',
-        '  -ms-animation-play-state: running;',
-        '  -o-animation-play-state: running;',
-        '  animation-play-state: running;',
-        '}',
-        '.spiral {',
-        '  width:23px;',
-        '  height:23px;',
-        '  border-radius: 50%;',
-        '  -webkit-animation: spiral 1s linear 0s infinite reverse;',
-        '  -moz-animation: spiral 1s linear 0s infinite reverse;',
-        '  -ms-animation: spiral 1s linear 0s infinite reverse;',
-        '  -o-animation: spiral 1s linear 0s infinite reverse;',
-        '  animation: spiral 1s linear 0s infinite reverse; ',
-        '  -webkit-animation-play-state: inherit;',
-        '  -moz-animation-play-state: inherit;',
-        '  -ms-animation-play-state: inherit;',
-        '  -o-animation-play-state: inherit;',
-        '  animation-play-state: inherit;',
-        '  pointer-events: none;',
-        '}',
-        '@keyframes spiral {',
-        '  0% { transform: rotate(360deg); }',
-        '  100% { transform: rotate(0deg); }',
-        '}',
-        '@-webkit-keyframes spiral {',
-        '  0% {-webkit-transform: rotate(360deg); }',
-        '  100% { -webkit-transform: rotate(0deg); }',
-        '}',
-        '@-ms-keyframes spiral {',
-        '  0% {-ms-transform: rotate(360deg); }',
-        '  100% { -ms-transform: rotate(0deg); }',
-        '}',
-        '@-moz-keyframes spiral {',
-        '  0% { -moz-transform: rotate(360deg); }',
-        '  100% { -moz-transform: rotate(0deg); }',
-        '}',
-        '@-o-keyframes spiral {',
-        '  0% { -o-transform: rotate(360deg); }',
-        '  100% { -o-transform: rotate(0deg); }',
-        '}',
-        '.basic-btn-btnbar {',
-        '  width: calc(100% - 11px)!important;',
-        '}',
-        '.spinner {',
-        '  width:23px;',
-        '  height:23px;',
-        '  border-radius: 50%;',
-        '  -webkit-animation: spinner 1s linear 0s infinite reverse;',
-        '  -moz-animation: spinner 1s linear 0s infinite reverse;',
-        '  -ms-animation: spinner 1s linear 0s infinite reverse;',
-        '  -o-animation: spinner 1s linear 0s infinite reverse;',
-        '  animation: spinner 1s linear 0s infinite reverse; ',
-        '  -webkit-animation-play-state: inherit;',
-        '  -moz-animation-play-state: inherit;',
-        '  -ms-animation-play-state: inherit;',
-        '  -o-animation-play-state: inherit;',
-        '  animation-play-state: inherit;',
-        '  pointer-events: none;',
-        '}',
-        '@keyframes spinner {',
-        '  0% { transform: rotateY(360deg); }',
-        '  100% { transform: rotateY(0deg); }',
-        '}',
-        '@-webkit-keyframes spinner {',
-        '  0% {-webkit-transform: rotateY(360deg); }',
-        '  100% { -webkit-transform: rotateY(0deg); }',
-        '}',
-        '@-ms-keyframes spinner {',
-        '  0% {-ms-transform: rotateY(360deg); }',
-        '  100% { -ms-transform: rotateY(0deg); }',
-        '}',
-        '@-moz-keyframes spinner {',
-        '  0% { -moz-transform: rotateY(360deg); }',
-        '  100% { -moz-transform: rotateY(0deg); }',
-        '}',
-        '@-o-keyframes spinner {',
-        '  0% { -o-transform: rotateY(360deg); }',
-        '  100% { -o-transform: rotateY(0deg); }',
-        '}',
-        '.pulse {',
-        '  width:23px;',
-        '  height:23px;',
-        '  border-radius: 50%;',
-        '  -webkit-animation: pulse 1s linear 0s infinite reverse;',
-        '  -moz-animation: pulse 1s linear 0s infinite reverse;',
-        '  -ms-animation: pulse 1s linear 0s infinite reverse;',
-        '  -o-animation: pulse 1s linear 0s infinite reverse;',
-        '  animation: pulse 1s linear 0s infinite reverse; ',
-        '  -webkit-animation-play-state: inherit;',
-        '  -moz-animation-play-state: inherit;',
-        '  -ms-animation-play-state: inherit;',
-        '  -o-animation-play-state: inherit;',
-        '  animation-play-state: inherit;',
-        '  pointer-events: none;',
-        '}',
-        '@keyframes pulse {',
-        '  0%, 100% { transform: scale(1); }',
-        '  50% { transform: scale(1.2); }',
-        '}',
-        '@-webkit-keyframes pulse {',
-        '  0%, 100% { -webkit-transform: scale(1); }',
-        '  50% { -webkit-transform: scale(1.2); }',
-        '}',
-        '@-ms-keyframes pulse {',
-        '  0%, 100% { -ms-transform: scale(1); }',
-        '  50% { -ms-transform: scale(1.2); }',
-        '}',
-        '@-moz-keyframes  pulse {',
-        '  0%, 100% { -moz-transform: scale(1); }',
-        '  50% { -moz-transform: scale(1.2); }',
-        '}',
-        '@-o-keyframes pulse {',
-        '  0%, 100%  { -o-transform: scale(1); }',
-        '  50% { -o-transform: scale(1.2); }',
-        '}',
-        '.shake {',
-        '  width:23px;',
-        '  height:23px;',
-        '  border-radius: 50%;',
-        '  -webkit-animation: shake 1s linear 0s infinite reverse;',
-        '  -moz-animation: shake 1s linear 0s infinite reverse;',
-        '  -ms-animation: shake 1s linear 0s infinite reverse;',
-        '  -o-animation: shake 1s linear 0s infinite reverse;',
-        '  animation: shake 1s linear 0s infinite reverse; ',
-        '  -webkit-animation-play-state: inherit;',
-        '  -moz-animation-play-state: inherit;',
-        '  -ms-animation-play-state: inherit;',
-        '  -o-animation-play-state: inherit;',
-        '  animation-play-state: inherit;',
-        '  pointer-events: none;',
-        '}',
-        '@keyframes shake {',
-        '  0%, 100% { transform: translateX(0px); }',
-        '  50% { transform: translateX(3px); }',
-        '}',
-        '@-webkit-keyframes shake {',
-        '  0%, 100% { -webkit-transform: translateX(0px); }',
-        '  50% { -webkit-transform: translateX(3px); }',
-        '}',
-        '@-ms-keyframes shake {',
-        '  0%, 100% { -ms-transform: translateX(0px); }',
-        '  50% { -ms-transform: translateX(3px); }',
-        '}',
-        '@-moz-keyframes shake {',
-        '  0%, 100% { -moz-transform: translateX(0px); }',
-        '  50% { -moz-transform: translateX(3px); }',
-        '}',
-        '@-o-keyframes shake {',
-        '  0%, 100% { -o-transform: translateX(0px); }',
-        '  50% { -o-transform: translateX(3px); }',
-        '}'));
+    GM_addStyle(GM_getResourceText('controlBarCSS'));
 
-    var resynchSpiral =
-        $('<img>', {
-            'class': 'spiral',
-            'src': 'http://i.imgur.com/k5gajYE.png'
-        }),
-        reloadSpiral =
-            $('<img>', {
-                'class': 'spiral',
-                'src': 'http://i.imgur.com/ARxZzeE.png'
-            }),
-        mirrorSpinner =
-            $('<img>', {
-                'class': 'spinner',
-                'src': 'http://i.imgur.com/YqmK8gZ.png'
-            }),
-        pulseIcon =
-            $('<img>', {
-                'class': 'pulse',
-                'src': 'http://i.imgur.com/Fv1wJk5.png'
-            }),
-        shakeIcon =
-            $('<img>', {
-                'class': 'shake',
-                'src': 'http://i.imgur.com/ceHuy2q.png'
-            });
+    var skipRate = 0,
+        skipText = $('#skipCounter').text();
 
+    function addAnimation(child, cls) {
+        child.unbind('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration').addClass(cls);
+    }
+
+    function removeAnimation(child, cls) {
+        child.one('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration', function () {
+            child.removeClass(cls);
+        });
+    }
     onSkips.push({
         callback: function (skips, skipsNeeded) {
             $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
         }
     });
+    if (isConnected()) {
+        skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
+    }
+
     $('.basic-btn-btnbar').empty().append(
         $('<div>', {
             'id': 'skipContainer'
         }).append(
             $('<div>', {
                 'id': 'skip',
-                'class': 'controlIcon animationContainer',
+                'class': 'controlIcon',
                 'title': 'Skip'
-            }).append(shakeIcon.clone()).css('background-image', 'url(http://i.imgur.com/FhBdt3X.png)').click(function () {
+            }).append(
+                $('<div>').css('background-image', 'url(http://i.imgur.com/ceHuy2q.png)').addClass('animationContainer')
+            ).click(function () {
                 if (unsafeWindow.userInfo.loggedin) {
                     unsafeWindow.sendcmd('skip', null);
                 } else {
                     unsafeWindow.addMessage("", "You must be logged in to vote to skip.", "", "errortext");
                 }
-            }).mouseout(function () {
-                $(this).empty().append(shakeIcon.clone())
-            }).css('float', 'none').css('margin-right', '0px').css('margin-left', '0px')
+            }).hover(function () {
+                addAnimation($(this).children().eq(0), 'shake');
+            }, function () {
+                removeAnimation($(this).children().eq(0), 'shake');
+            })
         ).append(
             $('<div>', {
                 'id': 'skipCounter',
-                'title': '0%'
-            }).text('0/0').css('height', '23px').css('margin-left', '0px').css('padding', '4px 2px 0px 3px').css('cursor', 'default')
-            .css('box-sizing', 'border-box').css('-webkit-box-sizing', 'border-box').css('-moz-box-sizing', 'border-box')
-        ).css('float', 'left').css('width', '70px')
+                'title': skipRate + '%'
+            }).text(skipText)
+        )
     ).append(
         $('<div>', {
             'id': 'addVid'
@@ -280,15 +84,16 @@ function loadControlBar() {
                 'type': 'text',
                 'title': 'Start typing to search',
                 'placeholder': 'Add Video / Search'
-            }).css('height', '23px').css('padding-top', '0px').css('padding-bottom', '0px').css('padding-left', '4px')
-            .css('margin-right', '0px').css('border-width', '0px').css('width', '200px')
+            })
         ).append(
             $('<div>', {
                 'id': 'addUrl',
-                'class': 'controlIcon animationContainer',
+                'class': 'controlIcon',
                 'title': 'Add Video'
                 //.css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)')
-            }).append(pulseIcon.clone()).click(function () {
+            }).append(
+                $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
+            ).click(function () {
                 var url = $('#URLinput').val();
                 if ($('#URLinput').val().trim() !== '') {
                     unsafeWindow.sendcmd('add', {
@@ -296,10 +101,12 @@ function loadControlBar() {
                     });
                 }
                 $('#URLinput').val('');
-            }).mouseout(function () {
-                $(this).empty().append(pulseIcon.clone())
-            }).css('float', 'none').css('margin-left', '0px')
-        ).css('float', 'left').css('display', 'flex')
+            }).hover(function () {
+                addAnimation($(this).children().eq(0), 'pulse');
+            }, function () {
+                removeAnimation($(this).children().eq(0), 'pulse');
+            })
+        )
     ).append(
         $('<div>', {
             'id': 'toggleplaylistlock'
@@ -309,43 +116,79 @@ function loadControlBar() {
             }).css('top', '3px').css('position', 'relative')
         ).click(function () {
             unsafeWindow.sendcmd('toggleplaylistlock', null);
-        }).css('float', 'right').css('margin-right', '0px').css('background-color', 'initial').css('height', '23px').css('cursor', 'pointer')
-        .css('width', '17px').css('margin-left', '1px')
+        })
     ).append(
         $('<div>', {
             'id': 'reloadPlayer',
             'title': 'Reload',
-            'class': 'controlIcon animationContainer',
-        }).append(reloadSpiral.clone()).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function () {
+            'class': 'controlIcon',
+        }).append(
+            $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
+        ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function () {
             unsafeWindow.video.destroyPlayer();
             unsafeWindow.sendcmd('reload', null);
-        }).mouseout(function () {
-            $(this).empty().append(reloadSpiral.clone());
+        }).hover(function () {
+            addAnimation($(this).children().eq(0), 'spiral');
+        }, function () {
+            removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
         $('<div>', {
             'id': 'resynchPlayer',
             'title': 'Resynch',
-            'class': 'controlIcon animationContainer',
-        }).append(resynchSpiral.clone()).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function () {
+            'class': 'controlIcon',
+        }).append(
+            $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
+        ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function () {
             unsafeWindow.sendcmd('resynch', null);
-        }).mouseout(function () {
-            $(this).empty().append(resynchSpiral.clone());
+        }).hover(function () {
+            addAnimation($(this).children().eq(0), 'spiral');
+        }, function () {
+            removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
         $('<div>', {
             'id': 'mirrorPlayer',
             'title': 'Mirror Player',
-            'class': 'controlIcon animationContainer',
-        }).append(mirrorSpinner.clone()).click(function () {
+            'class': 'controlIcon',
+        }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function () {
             toggleMirrorPlayer();
-        }).mouseout(function () {
-            $(this).empty().append(mirrorSpinner.clone());
+        }).hover(function () {
+            addAnimation($(this).children().eq(0), 'spinner');
+        }, function () {
+            removeAnimation($(this).children().eq(0), 'spinner');
+        })
+    )
+    //Fullscreen button
+    // .append(
+    // $('<div>', {
+    // 'id': 'fullscreen',
+    // 'title': 'Fullscreen',
+    // 'class': 'controlIcon',
+    // }).append(
+    // $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
+    // ).click(function () {
+    // toggleFullscreen();
+    // }).hover(function () {
+    // addAnimation($(this).children().eq(0), 'grow');
+    // }, function () {
+    // removeAnimation($(this).children().eq(0), 'grow');
+    // })
+    // )
+    .append(
+        $('<div>', {
+            'id': 'nnd-Mode',
+            'title': 'NND Mode (scrolling Text)',
+            'class': 'controlIcon',
+        }).append(
+            $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
+        ).click(function () {
+            GM_config.set('NNDMode', !GM_config.get('NNDMode'));
+            GM_config.save();
+        }).hover(function () {
+            addAnimation($(this).children().eq(0), 'marquee');
+        }, function () {
+            removeAnimation($(this).children().eq(0), 'marquee');
         })
     );
-    // $('#URLinput').css('margin-right', '0px');
-    // $('#addVid').css('display', 'inline-table').css('top', '-1px');
-    // $('#addUrl').text('+').css('margin-left', '0px').css('margin-right', '2px').css('position', 'relative')
-    //     .css('top', '-2px').css('height', '13px').css('border-top-width', '2px')
-    //     .css('border-right-width', '1px').css('width', '13px').css('padding', '2px 2px 4px 2px');
 }

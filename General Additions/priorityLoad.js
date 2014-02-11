@@ -43,7 +43,7 @@ function loadPreConnectionPostPriorityScripts() {
 }
 
 function loadPostConnectionPrePriorityScripts() {
-
+    executeFunctions([]);
 }
 
 function loadPostConnectionPostPriorityScripts() {

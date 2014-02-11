@@ -45,7 +45,7 @@ function loadMessageFilter() {
     var oldLinkify = unsafeWindow.linkify,
         oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
-        oldNSFWEmotes;
+        oldNSFWEmotes = GM_config.get('NSFWEmotes');
 
     onSettingsOpen.push(function () {
         oldNSFWEmotes = GM_config.get('NSFWEmotes');

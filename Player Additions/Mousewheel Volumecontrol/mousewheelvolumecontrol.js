@@ -29,10 +29,37 @@ setField({
         'type': 'checkbox',
         'default': true
     },
-    'section': 'Player Additions'
+    'section': 'Player Additions',
+    'subsection': 'Volume'
+});
+
+setField({
+    'name': 'Volumebar',
+    'data': {
+        'label': 'Volume bar when changing volume',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'Player Additions',
+    'subsection': 'Volume'
 });
 
 function loadMouseWheelVolumecontrol() {
+    var firefoxBlur = 'url("data:image/svg+xml;utf8,'.concat(
+        '<svg xmlns=\'http://www.w3.org/2000/svg\'>',
+        '<filter id=\'autocall\' x=\'-300%\' width=\'500%\'>',
+        '<feGaussianBlur stdDeviation=\'5\'/>',
+        '</filter>',
+        '</svg>#autocall")');
+    $('<div>', {
+        'id': 'volumebarContainer'
+    }).append(
+        $('<div>', {
+            'id': 'volumebar'
+        }).css('height', '0px').css('width', '5px').css('position', 'absolute').css('left', '-8px')
+        .css('background-color', 'lime').addClass('blur5').css('display', 'none').css('filter', firefoxBlur)
+    ).css('float', 'left').css('width', '0px').css('position', 'relative').insertBefore('#media');
+
     //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
 
     //prevent the site from scrolling while over the player
@@ -73,7 +100,7 @@ function loadMouseWheelVolumecontrol() {
             try {
                 var parsed = JSON.parse(event.data);
                 if (parsed.event && parsed.event === 'infoDelivery' && parsed.info && parsed.info.volume) {
-                    globalVolume = parsed.info.volume;
+                    setGlobalVolume(parsed.info.volume);
                 }
             } catch (ignore) {}
         }, false);
@@ -90,9 +117,9 @@ function loadMouseWheelVolumecontrol() {
                 //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
                 vimeoVolumePollingIntervalId = setInterval(function () {
                     $f($('#vimeo')[0]).api('getVolume', function (vol) {
-                        globalVolume = (vol * 100.0);
+                        setGlobalVolume(vol * 100.0);
                     });
-                }, 1000);
+                }, 500);
                 break;
             }
         }
@@ -101,10 +128,19 @@ function loadMouseWheelVolumecontrol() {
 
 var isPlayerReady = false,
     globalVolume = 50,
+    oldGlobalVolume = 50,
     mouserOverPlayer = false,
     vimeoVolumePollingIntervalId = undefined,
-    previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
+    previousVolumeScrollTime = new Date().getTime(), // used to measure speed of scrolling
+    volumebarFadeoutTimeout;
 
+function setGlobalVolume(val) {
+    oldGlobalVolume = globalVolume;
+    globalVolume = val;
+    if (oldGlobalVolume !== globalVolume) {
+        displayVolumebar();
+    }
+}
 
 function initGlobalVolume() {
     if (isPlayerReady) {
@@ -126,12 +162,32 @@ function adjustVolume(deltaVolume) {
     setVol(globalVolume + deltaVolume);
 }
 
+function setUpVolumebarTimeout() {
+    if (volumebarFadeoutTimeout) {
+        clearTimeout(volumebarFadeoutTimeout);
+    }
+    volumebarFadeoutTimeout = setTimeout(function () {
+        $('#volumebar').fadeOut("slow", function () {
+            $('#volumebar').css('display', 'initial');
+            $('#volumebar').css('display', 'none');
+        });
+    }, 500);
+}
+
+function displayVolumebar() {
+    if (GM_config.get('Volumebar')) {
+        $('#volumebar').stop();
+        $('#volumebar').css('top', playerHeight - (globalVolume / 100) * playerHeight).css('height', (globalVolume / 100) * playerHeight).css('opacity', '1').css('display', 'initial');
+        setUpVolumebarTimeout();
+    }
+}
 // Set volume to specific value, argument is number 0-100
 function setVol(volume) {
     // clamp input value
     volume = Math.max(0, volume);
     volume = Math.min(100, volume);
-    globalVolume = volume;
+    setGlobalVolume(volume);
+
     if (currentPlayer === 'youtube') {
         $('#media').tubeplayer('volume', Math.round(volume));
     } else if (currentPlayer === 'vimeo') {

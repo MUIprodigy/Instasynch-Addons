@@ -92,7 +92,7 @@ function loadBigPlaylist() {
             });
             $("#ulPlay").sortable("enable");
         }
-    };
+    }
     onSettingsSave.push(function () {
         if (oldBigPlaylistSetting !== GM_config.get('BigPlaylist')) {
             reloadPlaylistHTML(oldPlaylist);
@@ -201,7 +201,7 @@ function loadBigPlaylist() {
                 ).append(
                     $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align', 'right').css('width', '100px')
                 ).append(
-                    $('<td>').append(removeBtn).append($('<br>')).css('width', '15px')
+                    isUserMod() ? $('<td>').append(removeBtn).append($('<br>')).css('width', '15px') : undefined
                 )
             );
             unsafeWindow.totalTime += vidinfo.duration;
@@ -315,7 +315,7 @@ function reloadPlaylist(activeIndex) {
     for (i = 0; i < temp.length; i += 1) {
         unsafeWindow.addVideo(temp[i]);
     }
-    unsafeWindow.sendcmd('reload', null)
+    unsafeWindow.sendcmd('reload', null);
 }
 
 function trimTitle(title, length) {

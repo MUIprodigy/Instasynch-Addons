@@ -33,6 +33,26 @@ setField({
 });
 
 function loadLayout() {
+    GM_addStyle(
+        ".layoutClickable {                       \
+            margin: 0 2px 0 2px;                  \
+            cursor: pointer;                      \
+            color: #ccc;                          \
+            text-decoration: underline;           \
+        }                                         \
+        .layoutNotClickable {                     \
+            color: white;                         \
+            text-decoration: none!important;      \
+            cursor: default;                      \
+        }                                         \
+        #layoutSelector {                         \
+            color: white;                         \
+            text-align: center;                   \
+            font-size: 13px;                      \
+            height: 20px;                         \
+            margin-top: 7px;                      \
+        }");
+
     var oldLayout = GM_config.get('Layout');
     onSettingsOpen.push(function () {
         oldLayout = GM_config.get('Layout');
@@ -45,7 +65,7 @@ function loadLayout() {
     });
     $('#playlistcontrols').css('width', '100%');
     $('.sliderContainer').css('width', '100%');
-    $('.roomFooter ').css('margin-top', '0px')
+    $('.roomFooter ').css('margin-top', '0px');
     if (GM_config.get('Layout') !== 'normal') {
         changeLayout();
     }
@@ -58,99 +78,37 @@ function loadLayout() {
     }
     var normal = $('<a>', {
         'id': 'normalLayout'
-    }).text('normal').click(setLayout).css('margin', '0 2px 0 2px').css('color', 'white').css('cursor', 'pointer')
-        .css('color', '#ccc').css('text-decoration', 'underline'),
+    }).text('normal').click(setLayout).addClass('layoutClickable'),
         large = $('<a>', {
             'id': 'largeLayout'
-        }).text('large').click(setLayout).css('margin', '0 2px 0 2px').css('color', 'white').css('cursor', 'pointer')
-            .css('color', '#ccc').css('text-decoration', 'underline');
+        }).text('large').click(setLayout).addClass('layoutClickable');
     switch (GM_config.get('Layout')) {
     case 'normal':
-        normal.css('color', 'white').css('text-decoration', 'none').css('cursor', 'default');
+        normal.addClass('layoutNotClickable');
         break;
     case 'large':
-        large.css('color', 'white').css('text-decoration', 'none').css('cursor', 'default');
+        large.addClass('layoutNotClickable');
         break;
     }
     $('<div>', {
-        'id': 'layout'
-    }).text('layout:').css('color', 'white').css('text-align', 'center')
-        .css('font-size', '13px').css('height', '20px').css('margin-top', '7px').insertBefore('#roomFooter');
-    $('#layout').append(normal).append(large);
+        'id': 'layoutSelector'
+    }).text('layout:').insertBefore('#roomFooter');
+    $('#layoutSelector').append(normal).append(large);
 }
+var largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
 
 function changeLayout() {
-    $('#layout').children().each(function () {
-        $(this).css('color', '#ccc').css('text-decoration', 'underline').css('cursor', 'pointer');
+    $('#layoutSelector').children().each(function () {
+        $(this).removeClass('layoutNotClickable');
     });
-    $(String.format('#{0}Layout', GM_config.get('Layout'))).css('color', 'white').css('text-decoration', 'none').css('cursor', 'default');
+    $(String.format('#{0}Layout', GM_config.get('Layout'))).addClass('layoutNotClickable');
     $('#layoutStyles').remove();
     switch (GM_config.get('Layout')) {
     case 'large':
         //css by v4c with some minor changes http://userscripts.org/scripts/show/182167
         $('head').append($('<style>', {
             'id': 'layoutStyles'
-        }).text('.stage, #media-title .title, .top-descr, #footer .footer, #top {' +
-            '    width: 1200px!important;' +
-            '}' +
-            '#media, #live_embed_player_flash, #media iframe {' +
-            '    width: 750px!important;' +
-            '    height: 436px!important;' +
-            '}' +
-            '#chat_list {' +
-            '    height:395px!important;' +
-            '}' +
-            '#chat_users {' +
-            '    height: 434px!important;' +
-            '}' +
-            '#btn-join {' +
-            '    top: 58px!important;' +
-            '}' +
-            '#chat {' +
-            '    height: 436px!important;' +
-            '}' +
-            '#playlist {' +
-            '    width: 749px!important;' +
-            '}' +
-            '.sliderContainer {' +
-            '    width: 100%!important;' +
-            '}' +
-            '.sliderContainer .slider {' +
-            '    width: 620px!important;' +
-            '}' +
-            '.poll-container {' +
-            '    margin: 5px 26px 0 0!important;' +
-            '}' +
-            '#chat #join-chat input {' +
-            '    margin: 118px 5px 0 100px!important;' +
-            '}' +
-            '#playlist_items {' +
-            '    width: 750px' +
-            '}' +
-            '.pl-info {' +
-            '    width: 680px!important;' +
-            '}' +
-            '.duration {' +
-            '    right: 0px!important;' +
-            '}' +
-            '#playlist_items li .pl-info .expand {' +
-            '    left: 692px!important;' +
-            '}' +
-            '#playlist_items li .pl-info .removeBtn {' +
-            '    left: 710px!important;' +
-            '}' +
-            '.logoutput {' +
-            '    margin-left: 1077px!important;' +
-            '}' +
-            '#playlist .playlist .pllist li .title {' +
-            '    width: 630px!important;' +
-            '}' +
-            '#playlist .playlist #playlist_items {' +
-            'height: 368px;' +
-            '}' +
-            '#searchResults {' +
-            'right: 35px!important;' +
-            '}'));
+        }).text(largeLayoutCSS));
         break;
     }
     playerWidth = $('#media').width();

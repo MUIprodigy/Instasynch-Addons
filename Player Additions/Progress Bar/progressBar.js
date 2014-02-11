@@ -41,9 +41,14 @@ function loadProgressBar() {
             '<feGaussianBlur stdDeviation=\'5\'/>',
             '</filter>',
             '</svg>#autocall")'),
-
         oldProgressBarSetting = GM_config.get('ProgressBar');
 
+    GM_addStyle(".blur5 {\
+            -webkit-filter: blur(5px);\
+            -moz-filter: blur(5px);\
+            -ms-filter: blur(5px);\
+            -o-filter: blur(5px);\
+        }");
     onSettingsOpen.push(function () {
         oldProgressBarSetting = GM_config.get('ProgressBar');
     });
@@ -54,19 +59,20 @@ function loadProgressBar() {
         }
     });
 
-    $('<div>', {
-        'id': 'progressbarContainer'
-    }).append(
-        $('<hr>', {
-            'id': 'progressbar'
-        }).css('margin', '10px 0px 0px 0px').css('width', '0px').css('float', 'left').css('background-color', '#2284B5').css('height', '10px')
-        .css('border-width', '0px 0px 0px 0px').css('-webkit-filter', 'blur(5px)').css('-moz-filter', 'blur(5px)')
-        .css('-ms-filter', 'blur(5px)').css('-o-filter', 'blur(5px)').css('filter', firefoxBlur).css('position', 'relative')
-    ).append(
-        $('<img>', {
-            'src': 'http://i.imgur.com/GiBiY.png'
-        }).css('width', '30').css('height', '21').addClass('mirror').css('position', 'relative').css('top', '1px').css('left', '-25px')
-    ).css('height', '20px').css('display', GM_config.get('ProgressBar') ? 'flex' : 'none').insertBefore('#media');
+    $('.stage').prepend(
+        $('<div>', {
+            'id': 'progressbarContainer'
+        }).append(
+            $('<hr>', {
+                'id': 'progressbar'
+            }).css('margin', '10px 0px 0px 0px').css('width', '0px').css('float', 'left').css('background-color', '#2284B5').css('height', '10px')
+            .css('border-width', '0px 0px 0px 0px').css('position', 'relative').addClass('blur5').css('filter', firefoxBlur)
+        ).append(
+            $('<img>', {
+                'src': 'http://i.imgur.com/GiBiY.png'
+            }).css('width', '30').css('height', '21').addClass('mirror').css('position', 'relative').css('top', '1px').css('left', '-25px')
+        ).css('height', '20px').css('display', GM_config.get('ProgressBar') ? 'flex' : 'none')
+    );
 
     function setUpInterval() {
         return setInterval(function () {

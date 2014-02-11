@@ -22,26 +22,20 @@
 */
 function loadSettingsLoader() {
     //add styles for the button
-    GM_addStyle(
-        ".addonsClicker {" +
-        "    background: #2eb6e6 !important;" +
-        "    color: #FFF !important;" +
-        "}" +
-        ".addonsClicker:hover {" +
-        "    background: #2284B5 !important;" +
-        "}");
+    GM_addStyle(GM_getResourceText('settingsLoaderCSS'));
     //add the button
-    $('#loginfrm').css('display', 'flex');
     $('#loginfrm > :first-child').before(
         $('<div id="addonsMenu" />').append(
             $('<div>').append(
                 $('<ul>').append(
                     $('<li>').append(
-                        $('<a>').append(
+                        $('<a>', {
+                            'id': 'addonsClicker'
+                        }).append(
                             $('<img>', {
                                 'src': 'http://i.imgur.com/V3vOIkS.png'
                             })
-                        ).append('Addon Settings').addClass('addonsClicker').click(function () {
+                        ).append('Addon Settings').click(function () {
                             if (GM_config.isOpen) {
                                 GM_config.close();
                             } else {
@@ -51,12 +45,13 @@ function loadSettingsLoader() {
                     )
                 ).addClass('js')
             ).addClass('click-nav')
-        ).css('color', 'white').css('float', 'left').css('padding-top', '5px').css('padding-right', '5px')
+        )
     );
 
     var fields = {},
         firstMiddle = true,
-        firstInner = true;
+        firstInner = true,
+        configCSS = GM_getResourceText('GM_configCSS');
     //combine each sections settings with each other
     //first items with no section (is a section when it has no type)
     for (var outerProp in settingsFields) {
@@ -116,18 +111,7 @@ function loadSettingsLoader() {
         'id': 'GM_config',
         'title': String.format('<div style="height:50px";><img src="http://i.imgur.com/f3vYHNN.png" style="float:left;" height="50"/> <p style="margin:inherit;">InstaSynch Addon Settings</p><a style="margin:inherit; color:white;" href="https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt" target="_blank">{0}</a></div>', GM_info.script.version),
         'fields': fields,
-        'css': '#GM_config .config_header{ font-size: 15pt; color:#FFF; text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;  margin: 0 0 0 0px; }' +
-            '#GM_config .config_var{ margin: 0 0 4 10px;}' +
-            'input[type="checkbox"] { margin: 3px 3px 3px 0px; float:left;}' +
-            'html { background:#BBB; opacity:0.9 }' +
-            '#GM_config { background: #444444; height: 97%; }' +
-            '#GM_config .section_header { background:#2eb6e6; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; cursor:pointer; } ' +
-            '#GM_config .section_header:hover { background:#2284B5; transition: background-color 0.2s ease-in-out; -webkit-transition: background-color 0.2s ease-in-out; -moz-transition: background-color 0.2s ease-in-out; }' +
-            '#GM_config .section_desc { cursor:pointer; }' +
-            '#GM_config .section_desc:hover { background:#C9C9C9;transition: background-color 0.2s ease-in-out; -webkit-transition: background-color 0.2s ease-in-out; -moz-transition: background-color 0.2s ease-in-out; }' +
-            '#GM_config .field_label { color:#FFF; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }' +
-            '#GM_config .reset { color:#FFF; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; padding-right: 12px; }' +
-            'input[type="text"] { text-align: right}',
+        'css': configCSS,
         'events': {
             'open': function (args) {
                 $('#GM_config').css('height', '90%').css('top', '55px').css('left', '5px').css('width', '375px');

@@ -63,16 +63,24 @@ function loadEvents() {
         fireEvents(onMoveVideo, [vidinfo, position, oldPosition], false);
     };
 
-
-    unsafeWindow.addUser = function (user, css, sort) {
+    function countUser(user, increment) {
+        var val = (increment) ? 1 : -1;
         if (user.loggedin) {
             if (parseInt(user.permissions, 10) > 0) {
-                modsCount += 1;
+                modsCount += val;
             }
-            blacknamesCount += 1;
+            blacknamesCount += val;
         } else {
-            greynamesCount += 1;
+            greynamesCount += val;
         }
+    }
+    if (isConnected) {
+        for (var i = 0; i < unsafeWindow.users.length; i++) {
+            countUser(unsafeWindow.users[i], true);
+        }
+    }
+    unsafeWindow.addUser = function (user, css, sort) {
+        countUser(user, true);
         fireEvents(onAddUser, [user, css, sort], true);
         oldAddUser(user, css, sort);
         fireEvents(onAddUser, [user, css, sort], false);
@@ -80,21 +88,15 @@ function loadEvents() {
 
     unsafeWindow.removeUser = function (id) {
         var user = unsafeWindow.users[getIndexOfUser(id)];
-        if (user.loggedin) {
-            if (parseInt(user.permissions, 10) > 0) {
-                modsCount -= 1;
-            }
-            blacknamesCount -= 1;
-        } else {
-            greynamesCount -= 1;
-        }
+        countUser(user, false);
         fireEvents(onRemoveUser, [id, user], true);
         oldRemoveUser(id);
         fireEvents(onRemoveUser, [id, user], false);
     };
-    onReconnecting.push({
+    onConnect.push({
         callback: function () {
             modsCount = blacknamesCount = greynamesCount = 0;
+            $('#tablePlaylistBody').empty();
         }
     });
     unsafeWindow.video.destroyPlayer = function () {
@@ -133,7 +135,6 @@ function loadPriorityEvents() {
             }
         }
     };
-
     unsafeWindow.createPoll = function (poll) {
         fireEvents(onCreatePoll, [poll], true);
         oldCreatePoll(poll);

@@ -67,7 +67,7 @@ function loadPollMenu() {
         $('<button>', {
             'id': 'clear-poll-options'
         }).text('Clear').click(function () {
-            $('#create-poll > #title').val('')
+            $('#create-poll > #title').val('');
             $(".create-poll-option").each(function (index) {
                 $(this).val('');
             });

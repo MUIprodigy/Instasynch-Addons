@@ -69,7 +69,7 @@ function loadNewLoadUserlist() {
                 $('#ban').data('id', user['id']);
                 $('#kick').data('id', user['id']);
                 $('#mute').data('ip', user.ip);
-                $('#unmute').data('ip', user.ip)
+                $('#unmute').data('ip', user.ip);
                 //show or hide mute/unmute buttons
                 if (unsafeWindow.isMuted(user.ip)) {
                     $("#unmute").show();
@@ -134,7 +134,7 @@ function loadNewLoadUserlist() {
                 break;
             }
         }
-    }
+    };
 }
 
 function compareUser(a, b) {

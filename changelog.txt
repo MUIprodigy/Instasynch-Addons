@@ -1,3 +1,16 @@
+1.33.6
+ • Added volume bar 
+ • Added NND Button 
+ • Fixed skips / user-count not displaying correctly when script is loading slow
+ • Remove-video-button won't get displayed for non mods now
+ • Changed animations so they finish an iteration instead of just resetting 
+ • Improved looks of settings window
+ • Fixed couple syntax errors
+
+1.33.5.3
+ • Fixed video duplicates when reconnecting
+ • Moved css into seperate files
+  
 1.33.5.2
  • Fixed viewer counter being wrong when getting disconnected
 

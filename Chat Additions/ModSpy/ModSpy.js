@@ -60,7 +60,7 @@ function loadModSpy() {
                 if (message.match(/ moved a video/g) && bumpCheck) {
                     message = message.replace("moved", "bumped");
                     bumpCheck = false;
-                } else if (message.match(/has (banned)|(kicked) a user./)) {
+                } else if (message.match(/has (banned)|(kicked) a user\./)) {
                     message = message.replace(/a user/, lastUser.username);
                 }
                 unsafeWindow.addMessage('', message, '', 'hashtext');

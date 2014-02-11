@@ -34,16 +34,6 @@ setField({
 function loadMirrorPlayer() {
     commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
 
-    //appening the class until we got our css files
-    //http://stackoverflow.com/a/3434665;
-    GM_addStyle('.mirror { ' +
-        '-moz-transform: scaleX(-1); /* Gecko */ ' +
-        '-o-transform: scaleX(-1); /* Operah */ ' +
-        '-webkit-transform: scaleX(-1); /* webkit */ ' +
-        'transform: scaleX(-1); /* standard */ ' +
-        'filter: FlipH; /* IE 6/7/8 */' +
-        '}');
-
     onPlayVideo.push({
         callback: function (vidinfo, time, playing, indexOfVid) {
             if (containsMirrored(unsafeWindow.playlist[indexOfVid].title)) {
