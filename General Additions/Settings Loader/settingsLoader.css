@@ -1,0 +1,16 @@
+#addonsMenu {
+	color: white;
+	float: left;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+#addonsClicker {
+	background: #2eb6e6 !important;
+	color: #FFF !important;
+}
+#addonsClicker:hover {
+	background: #2284B5 !important;
+}
+#loginfrm {
+	display: flex;
+}

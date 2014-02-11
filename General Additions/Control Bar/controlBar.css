@@ -1,0 +1,250 @@
+.controlIcon {
+        float: right;
+        margin-right: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.2s ease-in-out;
+        -webkit-transition: background-color 0.2s ease-in-out;
+        -moz-transition: background-color 0.2s ease-in-out;
+        background-color: #2eb6e6
+}
+.controlIcon:hover {
+        background-color: #2284B5
+}
+.click-nav ul .clicker {
+        background: #2eb6e6;
+        color: #FFF;
+}
+.click-nav ul .clicker:hover {
+        background: #2284B5;
+}
+.spiral {
+        -webkit-animation: spiral 1s linear 0s infinite reverse;
+        -moz-animation: spiral 1s linear 0s infinite reverse;
+        -ms-animation: spiral 1s linear 0s infinite reverse;
+        -o-animation: spiral 1s linear 0s infinite reverse;
+        animation: spiral 1s linear 0s infinite reverse;
+}
+@keyframes spiral {
+        0% {transform: rotate(360deg);}
+        100% {transform: rotate(0deg);}
+}
+@-webkit-keyframes spiral {
+        0% {-webkit-transform: rotate(360deg);}
+        100% {-webkit-transform: rotate(0deg);}
+}
+@-ms-keyframes spiral {
+        0% {-ms-transform: rotate(360deg);}
+        100% {-ms-transform: rotate(0deg);}
+}
+@-moz-keyframes spiral {
+        0% {-moz-transform: rotate(360deg);}
+        100% {-moz-transform: rotate(0deg);}
+}
+@-o-keyframes spiral {
+        0% {-o-transform: rotate(360deg);}
+        100% {-o-transform: rotate(0deg);}
+}
+.basic-btn-btnbar {
+        width: calc(100% - 11px) !important;
+}
+.spinner {
+        -webkit-animation: spinner 1s linear 0s infinite reverse;
+        -moz-animation: spinner 1s linear 0s infinite reverse;
+        -ms-animation: spinner 1s linear 0s infinite reverse;
+        -o-animation: spinner 1s linear 0s infinite reverse;
+        animation: spinner 1s linear 0s infinite reverse;
+}
+@keyframes spinner {
+        0% {transform: rotateY(360deg);}
+        100% {transform: rotateY(0deg);}
+}
+@-webkit-keyframes spinner {
+        0% {-webkit-transform: rotateY(360deg);}
+        100% {-webkit-transform: rotateY(0deg);}
+}
+@-ms-keyframes spinner {
+        0% {-ms-transform: rotateY(360deg);}
+        100% {-ms-transform: rotateY(0deg);}
+}
+@-moz-keyframes spinner {
+        0% {-moz-transform: rotateY(360deg);}
+        100% {-moz-transform: rotateY(0deg);}
+}
+@-o-keyframes spinner {
+        0% {-o-transform: rotateY(360deg);}
+        100% {-o-transform: rotateY(0deg);}
+}
+.pulse {
+        -webkit-animation: pulse 1s linear 0s infinite reverse;
+        -moz-animation: pulse 1s linear 0s infinite reverse;
+        -ms-animation: pulse 1s linear 0s infinite reverse;
+        -o-animation: pulse 1s linear 0s infinite reverse;
+        animation: pulse 1s linear 0s infinite reverse;
+}
+@keyframes pulse {
+        0%, 100% {transform: scale(1);}
+        50% {transform: scale(1.2);}
+}
+@-webkit-keyframes pulse {
+        0%, 100% {-webkit-transform: scale(1);}
+        50% {-webkit-transform: scale(1.2);}
+}
+@-ms-keyframes pulse {
+        0%, 100% {-ms-transform: scale(1);}
+        50% {-ms-transform: scale(1.2);}
+}
+@-moz-keyframes  pulse {
+        0%, 100% {-moz-transform: scale(1);}
+        50% {-moz-transform: scale(1.2);}
+}
+@-o-keyframes pulse {
+        0%, 100% {-o-transform: scale(1);}
+        50% {-o-transform: scale(1.2);}
+}
+.shake {
+        -webkit-animation: shake 1s linear 0s infinite reverse;
+        -moz-animation: shake 1s linear 0s infinite reverse;
+        -ms-animation: shake 1s linear 0s infinite reverse;
+        -o-animation: shake 1s linear 0s infinite reverse;
+        animation: shake 1s linear 0s infinite reverse;
+}
+@keyframes shake {
+        0%, 100% {transform: translateX(0px);}
+        50% {transform: translateX(3px);}
+}
+@-webkit-keyframes shake {
+        0%, 100% {-webkit-transform: translateX(0px);}
+        50% {-webkit-transform: translateX(3px);}
+}
+@-ms-keyframes shake {
+        0%, 100% {-ms-transform: translateX(0px);}
+        50% {-ms-transform: translateX(3px);}
+}
+@-moz-keyframes shake {
+        0%, 100% {-moz-transform: translateX(0px);}
+        50% {-moz-transform: translateX(3px);}
+}
+@-o-keyframes shake {
+        0%, 100% {-o-transform: translateX(0px);}
+        50% {-o-transform: translateX(3px);}
+}
+.grow {
+        -webkit-animation: grow 1s linear 0s infinite normal;
+        -moz-animation: grow 1s linear 0s infinite normal;
+        -ms-animation: grow 1s linear 0s infinite normal;
+        -o-animation: grow 1s linear 0s infinite normal;
+        animation: grow 1s linear 0s infinite normal;
+}
+@keyframes grow {
+        0%{transform: scale(1);}
+        100% {transform: scale(1.2);}
+}
+@-webkit-keyframes grow {
+        0%{-webkit-transform: scale(1);}
+        100% {-webkit-transform: scale(1.2);}
+}
+@-ms-keyframes grow {
+        0%{-ms-transform: scale(1);}
+        100% {-ms-transform: scale(1.2);}
+}
+@-moz-keyframes  grow {
+        0%{-moz-transform: scale(1);}
+        100% {-moz-transform: scale(1.2);}
+}
+@-o-keyframes grow {
+        0%{-o-transform: scale(1);}
+        100% {-o-transform: scale(1.2);}
+}
+.marquee {
+        -webkit-animation: marquee 1s linear 0s infinite reverse;
+        -moz-animation: marquee 1s linear 0s infinite reverse;
+        -ms-animation: marquee 1s linear 0s infinite reverse;
+        -o-animation: marquee 1s linear 0s infinite reverse;
+        animation: marquee 1s linear 0s infinite reverse;
+}
+@keyframes marquee {
+        0%{background-position-x: 0px;}
+        100% {background-position-x: 92px;}
+}
+@-webkit-keyframes marquee {
+        0%{background-position-x: 0px;}
+        100% {background-position-x: 92px;}
+}
+@-ms-keyframes marquee {
+        0%{background-position-x: 0px;}
+        100% {background-position-x: 92px;}
+}
+@-moz-keyframes  marquee {
+        0%{background-position-x: 0px;}
+        100% {background-position-x: 92px;}
+}
+@-o-keyframes marquee {
+        0%{background-position-x: 0px;}
+        100% {background-position-x: 92px;}
+}
+.spinner, .spiral, .pulse, .shake, .grow, .marquee {
+        -webkit-animation-play-state: running;
+        -moz-animation-play-state: running;
+        -ms-animation-play-state: running;
+        -o-animation-play-state: running;
+        animation-play-state: running;
+}
+.animationContainer {
+        pointer-events: none;
+        width: 23px;
+        height: 23px;
+}
+#skip {
+        float: none;
+        margin-right: 0px;
+        margin-left: 0px;
+        background-image: url(http://i.imgur.com/FhBdt3X.png);
+}
+#skipCounter {
+        height: 23px;
+        margin-left: 0px;
+        padding: 4px 2px 0px 3px;
+        cursor: default;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+}
+#skipContainer {
+        float: left;
+        width: 70px;
+}
+#URLinput {
+        height: 23px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 4px;
+        margin-right: 0px;
+        border-width: 0px;
+        width: 200px;
+}
+#addUrl {
+        float: none;
+        margin-left: 0px;
+}
+#addVid {
+        float: left;
+        display: flex!important;
+}
+#toggleplaylistlock {
+        float: right;
+        margin-right: 0px;
+        background-color: initial;
+        height: 23px;
+        cursor: pointer;
+        width: 17px;
+        margin-left: 1px;
+}
+.mirror { 
+        -moz-transform: scaleX(-1); 
+        -o-transform: scaleX(-1); 
+        -webkit-transform: scaleX(-1); 
+        transform: scaleX(-1);
+        filter: FlipH;
+}
