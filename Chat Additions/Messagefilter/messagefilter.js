@@ -233,7 +233,7 @@ function parseEmotes(message) {
             if (exactMatches.length !== 0) {
                 code = unsafeWindow.$codes[exactMatches[exactMatches.length - 1]];
                 if (emoteStart !== 0) {
-                    if (message[emoteStart - 1] == '\\') {
+                    if (message[emoteStart - 1] === '\\') {
                         message = message.substring(0, emoteStart - 1) + message.substring(emoteStart);
                         i = emoteStart + exactMatches[exactMatches.length - 1].length;
                     } else {

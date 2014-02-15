@@ -1,3 +1,9 @@
+1.33.7
+ • Added Fullscreen
+ 
+1.33.6.1
+ • fixed playlistLock being displayed wrong when script is loading slow
+
 1.33.6
  • Added volume bar 
  • Added NND Button 

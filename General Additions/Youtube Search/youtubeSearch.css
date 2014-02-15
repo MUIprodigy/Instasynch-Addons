@@ -1,9 +1,8 @@
-#searchResults {
+#search-results {
 	float: right;
 	width: 380px;
 	margin-top: 10px;
 	background-color: #DFDFDF;
-	opacity: 0.9;
 	padding: 5px;
 	display: none;
 	position: relative;
@@ -25,7 +24,7 @@
 	position: relative;
 	z-index: 1;
 }
-.searchResult {
+.search-result {
 	overflow: hidden;
 	position: relative;
 	float: left;

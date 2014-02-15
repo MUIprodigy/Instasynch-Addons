@@ -88,7 +88,7 @@ function loadNNDMode() {
     $('#media').css('position', 'relative');
     onAddMessage.push({
         callback: function (username, message, userstyle, textstyle) {
-            if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$') {
+            if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
                 if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
                     addMarqueeMessage(message);
                 }
@@ -108,14 +108,13 @@ var marqueeMessages = [],
 function addMarqueeMessage(message) {
     var i,
         jqueryMessage,
-        top,
-        temp;
+        top;
     message = parseMessageForNND(message);
     jqueryMessage = $('<div>').append(
         $('<marquee direction="left" />').append(
             $('<div/>').html(message).css('font-size', GM_config.get('NNDModeFontSize')).css('opacity', 0.65)
         ).attr('scrollamount', GM_config.get('NNDModeSpeed'))
-    ).css('color', 'white').css('position', 'absolute').css('width', playerWidth).css('pointer-events', 'none').addClass('textShadow');
+    ).css('color', 'white').css('position', 'absolute').css('width', playerWidth).css('pointer-events', 'none').addClass('textShadow').addClass('NND-element');
 
     top = (Math.random() * (playerHeight - 60));
     jqueryMessage.css('top', top + 'px');

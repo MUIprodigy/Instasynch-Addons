@@ -51,10 +51,13 @@ function loadSettingsLoader() {
     var fields = {},
         firstMiddle = true,
         firstInner = true,
-        configCSS = GM_getResourceText('GM_configCSS');
+        configCSS = GM_getResourceText('GM_configCSS'),
+        outerProp,
+        middleProp,
+        innerProp;
     //combine each sections settings with each other
     //first items with no section (is a section when it has no type)
-    for (var outerProp in settingsFields) {
+    for (outerProp in settingsFields) {
         if (settingsFields.hasOwnProperty(outerProp)) {
             if (settingsFields[outerProp].type) {
                 fields[outerProp] = settingsFields[outerProp];
@@ -62,12 +65,12 @@ function loadSettingsLoader() {
         }
     }
     //sections
-    for (var outerProp in settingsFields) {
+    for (outerProp in settingsFields) {
         if (settingsFields.hasOwnProperty(outerProp)) {
             if (!settingsFields[outerProp].type) {
                 firstMiddle = true;
                 //items with no sub section
-                for (var middleProp in settingsFields[outerProp]) {
+                for (middleProp in settingsFields[outerProp]) {
                     if (settingsFields[outerProp].hasOwnProperty(middleProp)) {
                         if (middleProp !== 'isSection' && settingsFields[outerProp][middleProp].type) {
                             fields[middleProp] = settingsFields[outerProp][middleProp];
@@ -80,12 +83,12 @@ function loadSettingsLoader() {
                     }
                 } //no subsections
                 //subsections
-                for (var middleProp in settingsFields[outerProp]) {
+                for (middleProp in settingsFields[outerProp]) {
                     if (settingsFields[outerProp].hasOwnProperty(middleProp)) {
                         if (!settingsFields[outerProp][middleProp].type) {
                             firstInner = true;
                             //all the items in the subsection
-                            for (var innerProp in settingsFields[outerProp][middleProp]) {
+                            for (innerProp in settingsFields[outerProp][middleProp]) {
                                 if (settingsFields[outerProp][middleProp].hasOwnProperty(innerProp) && innerProp !== 'isSection') {
                                     fields[innerProp] = settingsFields[outerProp][middleProp][innerProp];
                                     //first item has to have the subsection description
@@ -140,17 +143,20 @@ function loadSettingsLoader() {
 
                     $('#GM_config_buttons_holder > :last-child', this.contentWindow.document || this.contentDocument).before(saveAndCloseButton);
                 });
-                for (var i = 0; i < onSettingsOpen.length; i++) {
+                var i;
+                for (i = 0; i < onSettingsOpen.length; i += 1) {
                     onSettingsOpen[i](args);
                 }
             },
             'save': function (args) {
-                for (var i = 0; i < onSettingsSave.length; i++) {
+                var i;
+                for (i = 0; i < onSettingsSave.length; i += 1) {
                     onSettingsSave[i](args);
                 }
             },
             'reset': function (args) {
-                for (var i = 0; i < onSettingsReset.length; i++) {
+                var i;
+                for (i = 0; i < onSettingsReset.length; i += 1) {
                     onSettingsReset[i](args);
                 }
             }

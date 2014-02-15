@@ -39,7 +39,7 @@ var resultsPerPage = 9,
 function loadYoutubeSearch() {
     GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
     // Search results container
-    divresults = $('<div id="searchResults" />');
+    divresults = $('<div id="search-results" />');
     // Close button container
     divremove = $('<div id="divclosesearch" />').addClass('x');
 
@@ -214,13 +214,13 @@ function showResults(entries, index) {
                     $('<p>').append(
                         $('<span>').text(duration).css('background', 'rgba(0, 0, 0, 0.7').css('color', durationColor)
                     ).css('position', 'absolute').css('bottom', '0px').css('right', '0px')
-                ).addClass('searchResult').click(addLinkToPl).hover(showTitle, hideTitle)
+                ).addClass('search-result').click(addLinkToPl).hover(showTitle, hideTitle)
             );
         } else {
             divresults.append(
                 $('<div>', {
-                    'class': 'searchResult'
-                }).text('Video Remove By Youtube').addClass('searchResult').css('cursor', 'default')
+                    'class': 'search-result'
+                }).text('Video Remove By Youtube').addClass('search-result').css('cursor', 'default')
             );
         }
     }
@@ -228,7 +228,7 @@ function showResults(entries, index) {
     if (Math.min(indexOfSearch + resultsPerPage, entries.length) % 3 !== 0) {
         for (i = 0; i < 3 - Math.min(indexOfSearch + resultsPerPage, entries.length) % 3; i += 1) {
             divresults.append(
-                $('<div>').css('cursor', 'default').addClass('searchResult')
+                $('<div>').css('cursor', 'default').addClass('search-result')
             );
         }
     }

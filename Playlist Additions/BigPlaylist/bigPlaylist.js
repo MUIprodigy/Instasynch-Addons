@@ -78,7 +78,7 @@ function loadBigPlaylist() {
             //core.js, version 0.9.7
             $("#ulPlay").sortable({
                 update: function (event, ui) {
-                    sendcmd('move', {
+                    unsafeWindow.sendcmd('move', {
                         info: ui.item.data("info"),
                         position: ui.item.index()
                     });

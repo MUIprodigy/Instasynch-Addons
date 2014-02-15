@@ -74,14 +74,12 @@ function loadPollMenu() {
         })
     ).append(
         $('<button>').text('Create').click(function () {
-            var poll = {},
-                option;
+            var poll = {};
             poll.title = $("#title").val();
             poll.options = [];
             $(".create-poll-option").each(function (index) {
-                option = $(this).val();
-                if (option.trim() != "") {
-                    poll.options.push(option);
+                if ($(this).val().trim() != "") {
+                    poll.options.push($(this).val().trim());
                 }
             });
             unsafeWindow.sendcmd("poll-create", poll);
@@ -126,8 +124,7 @@ function loadPollMenu() {
         preOld: true
     });
     if (isConnected()) {
-        var poll = {},
-            option;
+        var poll = {};
         poll.title = $(".poll-title").text();
         poll.options = [];
         $('.poll-item').each(function () {

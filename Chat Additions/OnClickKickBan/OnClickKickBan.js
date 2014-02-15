@@ -34,19 +34,17 @@ function loadOnClickKickBan() {
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
-                keyDown =
-                    function (event) {
-                        if (!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
-                            isCtrlKeyDown = true;
-                            currentElement.css('cursor', 'pointer');
-                        }
+                keyDown = function (event) {
+                    if (!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
+                        isCtrlKeyDown = true;
+                        currentElement.css('cursor', 'pointer');
+                    }
                 },
-                keyUp =
-                    function (event) {
-                        if (isCtrlKeyDown && !event.ctrlKey) {
-                            isCtrlKeyDown = false;
-                            currentElement.css('cursor', 'default');
-                        }
+                keyUp = function (event) {
+                    if (isCtrlKeyDown && !event.ctrlKey) {
+                        isCtrlKeyDown = false;
+                        currentElement.css('cursor', 'default');
+                    }
                 };
             //add the events to the latest username in the chat list
             $('#chat_list > span:last-of-type').prev()
@@ -99,19 +97,16 @@ function loadOnClickKickBan() {
                         }
                     }
                 })
-                .hover(
-                    function (event) {
-                        currentElement = $(this);
-                        $(document).bind('keydown', keyDown);
-                        $(document).bind('keyup', keyUp);
-                    },
-                    function () {
-                        currentElement.css('cursor', 'default');
-                        isCtrlKeyDown = false;
-                        $(document).unbind('keydown', keyDown);
-                        $(document).unbind('keyup', keyUp);
-                    }
-            );
+                .hover(function (event) {
+                    currentElement = $(this);
+                    $(document).bind('keydown', keyDown);
+                    $(document).bind('keyup', keyUp);
+                }, function () {
+                    currentElement.css('cursor', 'default');
+                    isCtrlKeyDown = false;
+                    $(document).unbind('keydown', keyDown);
+                    $(document).unbind('keyup', keyUp);
+                });
         }
     };
 

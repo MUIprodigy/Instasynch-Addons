@@ -33,6 +33,10 @@ setField({
 });
 
 function loadLayout() {
+    $('head').append($('<style>', {
+        'id': 'layoutStyles'
+    }));
+
     GM_addStyle(
         ".layoutClickable {                       \
             margin: 0 2px 0 2px;                  \
@@ -51,7 +55,8 @@ function loadLayout() {
             font-size: 13px;                      \
             height: 20px;                         \
             margin-top: 7px;                      \
-        }");
+        }"
+    );
 
     var oldLayout = GM_config.get('Layout');
     onSettingsOpen.push(function () {
@@ -102,13 +107,11 @@ function changeLayout() {
         $(this).removeClass('layoutNotClickable');
     });
     $(String.format('#{0}Layout', GM_config.get('Layout'))).addClass('layoutNotClickable');
-    $('#layoutStyles').remove();
+    $('#layoutStyles').text('');
     switch (GM_config.get('Layout')) {
     case 'large':
         //css by v4c with some minor changes http://userscripts.org/scripts/show/182167
-        $('head').append($('<style>', {
-            'id': 'layoutStyles'
-        }).text(largeLayoutCSS));
+        $('#layoutStyles').text(largeLayoutCSS);
         break;
     }
     playerWidth = $('#media').width();

@@ -27,7 +27,8 @@ function loadEvents() {
         oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
         oldPlayerDestroy = unsafeWindow.video.destroyPlayer,
-        oldSkips = unsafeWindow.skips;
+        oldSkips = unsafeWindow.skips,
+        i;
     unsafeWindow.playVideo = function (vidinfo, time, playing) {
         if (currentPlayer !== vidinfo.provider) {
             fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], true);
@@ -75,7 +76,7 @@ function loadEvents() {
         }
     }
     if (isConnected) {
-        for (var i = 0; i < unsafeWindow.users.length; i++) {
+        for (i = 0; i < unsafeWindow.users.length; i += 1) {
             countUser(unsafeWindow.users[i], true);
         }
     }
@@ -114,7 +115,8 @@ function loadEvents() {
 
 function loadPriorityEvents() {
     var oldAddMessage = unsafeWindow.addMessage,
-        oldCreatePoll = unsafeWindow.createPoll;
+        oldCreatePoll = unsafeWindow.createPoll,
+        i;
 
     unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
@@ -135,10 +137,30 @@ function loadPriorityEvents() {
             }
         }
     };
+    var oldPoll = {
+        title: ''
+    };
+
+    function pollEquals(oldPoll, newPoll) {
+        if (oldPoll.title === newPoll.title) {
+            for (i = 0; i < newPoll.options.length; i += 1) {
+                if (oldPoll.options[i].option !== newPoll.options[i].option) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
     unsafeWindow.createPoll = function (poll) {
-        fireEvents(onCreatePoll, [poll], true);
+        if (!pollEquals(oldPoll, poll)) {
+            fireEvents(onCreatePoll, [poll], true);
+        }
         oldCreatePoll(poll);
-        fireEvents(onCreatePoll, [poll], false);
+        if (!pollEquals(oldPoll, poll)) {
+            fireEvents(onCreatePoll, [poll], false);
+        }
+        oldPoll = poll;
     };
 }
 

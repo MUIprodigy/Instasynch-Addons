@@ -25,9 +25,64 @@ function loadControlBar() {
     $('#resynch').remove();
     $('#reload').remove();
     GM_addStyle(GM_getResourceText('controlBarCSS'));
+    var oldLayoutCSS = '',
+        fullscreenCSS = GM_getResourceText('fullscreenCSS');
+
+    $('head').append($('<script>', {
+        'type': 'text/javascript',
+        'src': 'https://raw.github.com/private-face/jquery.fullscreen/master/release/jquery.fullscreen-0.4.1.js'
+    }));
+
+    function toggleFullscreen() {
+        if (!$.fullscreen.isFullScreen()) {
+            $('body').fullscreen();
+        } else {
+            $.fullscreen.exit();
+        }
+    }
+    $('body').append($('<div>', {
+        'id': 'block-fullscreen'
+    }).click(toggleFullscreen));
+    onCreatePoll.push({
+        callback: function () {
+            $('.poll-container').removeClass('poll-container2');
+            $('#hide-poll').removeClass('hide-poll2');
+        }
+    });
+    $('.playlist').prepend($('<div>', {
+        'id': 'hide-playlist'
+    }).append(
+        $('<div>').click(function () {
+            $('#playlist .playlist #playlist_items').toggleClass('playlist2');
+            $('#hide-playlist').toggleClass('hide-playlist2');
+            $('#chat').toggleClass('chat2');
+        })
+    ));
+    $('.poll-container').prepend(
+        $('<div>', {
+            'id': 'hide-poll'
+        }).append(
+            $('<div>').click(function () {
+                $('.poll-container').toggleClass('poll-container2');
+                $('#hide-poll').toggleClass('hide-poll2');
+            })
+        )
+    );
+    $(document).bind('fscreenchange', function (e, state, elem) {
+        if ($.fullscreen.isFullScreen()) {
+            $('.NND-element').remove();
+            oldLayoutCSS = $('#layoutStyles').text();
+            $('#layoutStyles').text(fullscreenCSS);
+        } else {
+            $('#layoutStyles').text(oldLayoutCSS);
+        }
+
+        $('#state').text($.fullscreen.isFullScreen() ? '' : 'not');
+    });
 
     var skipRate = 0,
-        skipText = $('#skipCounter').text();
+        skipText = $('#skipCounter').text(),
+        playlistLock;
 
     function addAnimation(child, cls) {
         child.unbind('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration').addClass(cls);
@@ -45,6 +100,7 @@ function loadControlBar() {
     });
     if (isConnected()) {
         skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
+        playlistLock = $('#toggleplaylistlock img').attr('src');
     }
 
     $('.basic-btn-btnbar').empty().append(
@@ -112,7 +168,7 @@ function loadControlBar() {
             'id': 'toggleplaylistlock'
         }).append(
             $('<img>', {
-                'src': '/images/lock.png'
+                'src': playlistLock
             }).css('top', '3px').css('position', 'relative')
         ).click(function () {
             unsafeWindow.sendcmd('toggleplaylistlock', null);
@@ -121,7 +177,7 @@ function loadControlBar() {
         $('<div>', {
             'id': 'reloadPlayer',
             'title': 'Reload',
-            'class': 'controlIcon',
+            'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function () {
@@ -136,7 +192,7 @@ function loadControlBar() {
         $('<div>', {
             'id': 'resynchPlayer',
             'title': 'Resynch',
-            'class': 'controlIcon',
+            'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function () {
@@ -150,7 +206,7 @@ function loadControlBar() {
         $('<div>', {
             'id': 'mirrorPlayer',
             'title': 'Mirror Player',
-            'class': 'controlIcon',
+            'class': 'controlIcon'
         }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function () {
             toggleMirrorPlayer();
         }).hover(function () {
@@ -158,28 +214,23 @@ function loadControlBar() {
         }, function () {
             removeAnimation($(this).children().eq(0), 'spinner');
         })
-    )
-    //Fullscreen button
-    // .append(
-    // $('<div>', {
-    // 'id': 'fullscreen',
-    // 'title': 'Fullscreen',
-    // 'class': 'controlIcon',
-    // }).append(
-    // $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
-    // ).click(function () {
-    // toggleFullscreen();
-    // }).hover(function () {
-    // addAnimation($(this).children().eq(0), 'grow');
-    // }, function () {
-    // removeAnimation($(this).children().eq(0), 'grow');
-    // })
-    // )
-    .append(
+    ).append(
+        $('<div>', {
+            'id': 'fullscreen',
+            'title': 'Fullscreen',
+            'class': 'controlIcon'
+        }).append(
+            $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
+        ).click(toggleFullscreen).hover(function () {
+            addAnimation($(this).children().eq(0), 'grow');
+        }, function () {
+            removeAnimation($(this).children().eq(0), 'grow');
+        })
+    ).append(
         $('<div>', {
             'id': 'nnd-Mode',
             'title': 'NND Mode (scrolling Text)',
-            'class': 'controlIcon',
+            'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
         ).click(function () {

@@ -81,6 +81,7 @@ var isPlayerMirrored = false;
 
 function toggleMirrorPlayer() {
     $('#media > :first-child').toggleClass('mirror');
+    $('#block-fullscreen').toggleClass('block-fullscreen2');
     isPlayerMirrored = !isPlayerMirrored;
 }
 
