@@ -1,3 +1,6 @@
+1.33.7.1
+ • Fixed jquery.fullscreen not working with NoScript
+
 1.33.7
  • Added Fullscreen
  

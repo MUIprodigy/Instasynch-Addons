@@ -11,8 +11,6 @@ Command List
 'printWallCounter
 'mirrorPlayer
 'clearChat
-'printAddonSettings
-'clearAddonSettings
 'printMyWallCounter
 'exportPlaylist title? duration? addedby? thumbnail? all? xml?
 'history
@@ -143,6 +141,11 @@ To browse a playlist simply paste the playlist link into the input field.
 
 Click <a href="General Additions/Youtube Search/youtubesearchexample.gif" >here</a> for the example.
 
+Fullscreen
+-----------
+
+Use the fullscreen button in the control bar to enable it. Poll can be hidden and the playlist can be minimized by clicking the buttons that appear when hovering over it.
+
 History
 ------------------
 
@@ -237,11 +240,32 @@ Settings
 --------
 
 All the settings will be saved with the Tamper/Greasemonkey API.
-To show all the current set values use <code>'printAddOnSettings</code>. And to restore default use <code>'clearAddOnSettings</code>
-When changing a setting the new value will be shown in the chat.
+Use the settings GUI accessible with the 'Addon Settings' button.
 
 
 
 
 Gifs made with <a href="http://blog.bahraniapps.com/?page_id=21">GifCam</a>
 
+License
+-----------
+<InstaSynch - Watch Videos with friends.>
+Copyright (C) 2014  InstaSynch
+
+<Bibbytube - Modified InstaSynch client code>
+Copyright (C) 2014  Bibbytube
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+http://opensource.org/licenses/GPL-3.0

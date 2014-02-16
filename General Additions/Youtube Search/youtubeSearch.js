@@ -1,25 +1,5 @@
 /*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
     Copyright (C) 2014  fugXD, restructure, convert to jquery.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
 */
 var resultsPerPage = 9,
     indexOfSearch,
@@ -58,7 +38,7 @@ function loadYoutubeSearch() {
     $('.poll-container').before(divresults);
 
     // Setting events on the URL input
-    $("#URLinput").bind("keydown", function (event) {
+    $("#URLinput").bind("keydown", function(event) {
         if (event.keyCode === $.ui.keyCode.ESCAPE) {
             closeResults();
         } else {
@@ -109,7 +89,7 @@ function search() {
             isPlaylist = false;
             url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
             $.getJSON(url,
-                function (data) {
+                function(data) {
                     var feed = data.feed;
                     entries = feed.entry;
                     showResults(entries, 0);

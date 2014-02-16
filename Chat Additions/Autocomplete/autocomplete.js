@@ -1,26 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
 setField({
     'name': 'TagsAutoComplete',
     'data': {
@@ -77,7 +54,7 @@ setField({
 function loadAutoComplete() {
 
     var i,
-        emotes = (function () {
+        emotes = (function() {
             var temp = Object.keys(unsafeWindow.$codes);
             for (i = 0; i < temp.length; i += 1) {
                 temp[i] = '/' + temp[i];
@@ -99,7 +76,7 @@ function loadAutoComplete() {
 
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")
-        .bind("keydown", function (event) {
+        .bind("keydown", function(event) {
             // don't navigate away from the field on tab when selecting an item
             if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
                 event.keyCode = $.ui.keyCode.ENTER; // fake select the item
@@ -109,7 +86,7 @@ function loadAutoComplete() {
         .autocomplete({
             delay: 0,
             minLength: 0,
-            source: function (request, response) {
+            source: function(request, response) {
                 if (!autocomplete) {
                     return;
                 }
@@ -120,41 +97,41 @@ function loadAutoComplete() {
                     matches = [];
                 if (partToComplete.length > 0) {
                     switch (partToComplete[0]) {
-                    case '/':
-                        if (!GM_config.get('EmotesAutoComplete') || (lastIndex !== 0 && (!message[lastIndex - 1].match(/\s/) && !message[lastIndex - 1].match(/\]/)))) {
-                            return;
-                        }
-                        break;
-                    case '\'':
-                        if (!GM_config.get('CommandsAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
-                            return;
-                        }
-                        break;
-                    case '[':
-                        if (!GM_config.get('TagsAutoComplete')) {
-                            return;
-                        }
-                        break;
-                    case '@':
-                        if (!GM_config.get('NamesAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
-                            return;
-                        }
-                        break;
-                    case '$':
-                        if (!GM_config.get('BotCommandsAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
-                            return;
-                        }
-                        break;
+                        case '/':
+                            if (!GM_config.get('EmotesAutoComplete') || (lastIndex !== 0 && (!message[lastIndex - 1].match(/\s/) && !message[lastIndex - 1].match(/\]/)))) {
+                                return;
+                            }
+                            break;
+                        case '\'':
+                            if (!GM_config.get('CommandsAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                                return;
+                            }
+                            break;
+                        case '[':
+                            if (!GM_config.get('TagsAutoComplete')) {
+                                return;
+                            }
+                            break;
+                        case '@':
+                            if (!GM_config.get('NamesAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                                return;
+                            }
+                            break;
+                        case '$':
+                            if (!GM_config.get('BotCommandsAutoComplete') || (lastIndex !== 0 && !message[lastIndex - 1].match(/\s/))) {
+                                return;
+                            }
+                            break;
                     }
                     if (partToComplete[0] === '@') {
-                        matches = $.map(getUsernameArray(), function (item) {
+                        matches = $.map(getUsernameArray(), function(item) {
                             item = '@' + item;
                             if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
                                 return item;
                             }
                         });
                     } else {
-                        matches = $.map(autoCompleteData, function (item) {
+                        matches = $.map(autoCompleteData, function(item) {
                             if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
                                 return item;
                             }
@@ -165,10 +142,10 @@ function loadAutoComplete() {
                 response(matches.slice(0, 7));
             },
             autoFocus: true,
-            focus: function () {
+            focus: function() {
                 return false; // prevent value inserted on focus
             },
-            select: function (event, ui) {
+            select: function(event, ui) {
                 var message = this.value,
                     caretPosition = doGetCaretPosition(unsafeWindow.cin),
                     lastIndex = lastIndexOfSet(message.substring(0, caretPosition), ['/', '\'', '[', '@', '$']);
@@ -189,10 +166,10 @@ function loadAutoComplete() {
                 }
                 return false;
             },
-            close: function () {
+            close: function() {
                 isAutocompleteMenuActive = false;
             },
-            open: function () {
+            open: function() {
                 isAutocompleteMenuActive = true;
             }
         });

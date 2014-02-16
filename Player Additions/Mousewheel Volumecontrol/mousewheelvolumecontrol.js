@@ -1,25 +1,5 @@
 /*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
     Copyright (C) 2014  fugXD, filtering duplicate events, scroll speed dependent volume adjustments
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
 */
 
 setField({
@@ -85,10 +65,10 @@ function loadMouseWheelVolumecontrol() {
     }
     //add hover event to the player
     $('#media').hover(
-        function () {
+        function() {
             mouserOverPlayer = true;
         },
-        function () {
+        function() {
             mouserOverPlayer = false;
         }
     );
@@ -96,7 +76,7 @@ function loadMouseWheelVolumecontrol() {
     //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
     //listen to volume change on the youtube player
     unsafeWindow.addEventListener("message",
-        function (event) {
+        function(event) {
             try {
                 var parsed = JSON.parse(event.data);
                 if (parsed.event && parsed.event === 'infoDelivery' && parsed.info && parsed.info.volume) {
@@ -106,21 +86,21 @@ function loadMouseWheelVolumecontrol() {
         }, false);
 
     onPlayerReady.push({
-        'callback': function (oldPlayer, newPlayer) {
+        'callback': function(oldPlayer, newPlayer) {
             if (vimeoVolumePollingIntervalId) {
                 clearInterval(vimeoVolumePollingIntervalId);
                 vimeoVolumePollingIntervalId = undefined;
             }
             initGlobalVolume();
             switch (newPlayer) {
-            case 'vimeo':
-                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
-                vimeoVolumePollingIntervalId = setInterval(function () {
-                    $f($('#vimeo')[0]).api('getVolume', function (vol) {
-                        setGlobalVolume(vol * 100.0);
-                    });
-                }, 500);
-                break;
+                case 'vimeo':
+                    //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+                    vimeoVolumePollingIntervalId = setInterval(function() {
+                        $f($('#vimeo')[0]).api('getVolume', function(vol) {
+                            setGlobalVolume(vol * 100.0);
+                        });
+                    }, 500);
+                    break;
             }
         }
     });
@@ -149,7 +129,7 @@ function initGlobalVolume() {
         if (currentPlayer === 'youtube') {
             setVol($('#media').tubeplayer('volume'));
         } else if (currentPlayer === 'vimeo') {
-            $f($('#vimeo')[0]).api('getVolume', function (vol) {
+            $f($('#vimeo')[0]).api('getVolume', function(vol) {
                 setVol(vol * 100.0);
             });
         }
@@ -166,8 +146,8 @@ function setUpVolumebarTimeout() {
     if (volumebarFadeoutTimeout) {
         clearTimeout(volumebarFadeoutTimeout);
     }
-    volumebarFadeoutTimeout = setTimeout(function () {
-        $('#volumebar').fadeOut("slow", function () {
+    volumebarFadeoutTimeout = setTimeout(function() {
+        $('#volumebar').fadeOut("slow", function() {
             $('#volumebar').css('display', 'initial');
             $('#volumebar').css('display', 'none');
         });

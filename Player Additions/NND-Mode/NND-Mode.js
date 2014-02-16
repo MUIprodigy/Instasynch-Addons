@@ -1,26 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
 setField({
     'name': 'NNDMode',
     'data': {
@@ -87,7 +64,7 @@ function loadNNDMode() {
     GM_addStyle(".textShadow {text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }");
     $('#media').css('position', 'relative');
     onAddMessage.push({
-        callback: function (username, message, userstyle, textstyle) {
+        callback: function(username, message, userstyle, textstyle) {
             if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
                 if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
                     addMarqueeMessage(message);
@@ -124,7 +101,7 @@ function addMarqueeMessage(message) {
         min: jqueryMessage.children().eq(0).children().eq(0).position().left
     });
     if (!marqueeIntervalId) {
-        marqueeIntervalId = setInterval(function () {
+        marqueeIntervalId = setInterval(function() {
             if (marqueeMessages.length === 0) {
                 clearInterval(marqueeIntervalId);
                 marqueeIntervalId = undefined;
@@ -202,15 +179,15 @@ function parseMessageForNND(message) {
         var ret = '',
             format;
         switch (word) {
-        case 'hexcolor':
-            format = '<span style="color:{0}">';
-            break;
-        case 'spoiler':
-            format = '[spoiler]{0}[/spoiler]';
-            break;
-        default:
-            format = '';
-            break;
+            case 'hexcolor':
+                format = '<span style="color:{0}">';
+                break;
+            case 'spoiler':
+                format = '[spoiler]{0}[/spoiler]';
+                break;
+            default:
+                format = '';
+                break;
         }
         ret = String.format(format, $0, $1);
         return GM_config.get('Tags') ? ret : '';

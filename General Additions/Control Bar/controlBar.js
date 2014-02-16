@@ -1,37 +1,9 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
 function loadControlBar() {
     $('#resynch').remove();
     $('#reload').remove();
     GM_addStyle(GM_getResourceText('controlBarCSS'));
     var oldLayoutCSS = '',
         fullscreenCSS = GM_getResourceText('fullscreenCSS');
-
-    $('head').append($('<script>', {
-        'type': 'text/javascript',
-        'src': 'https://raw.github.com/private-face/jquery.fullscreen/master/release/jquery.fullscreen-0.4.1.js'
-    }));
 
     function toggleFullscreen() {
         if (!$.fullscreen.isFullScreen()) {
@@ -44,7 +16,7 @@ function loadControlBar() {
         'id': 'block-fullscreen'
     }).click(toggleFullscreen));
     onCreatePoll.push({
-        callback: function () {
+        callback: function() {
             $('.poll-container').removeClass('poll-container2');
             $('#hide-poll').removeClass('hide-poll2');
         }
@@ -52,7 +24,7 @@ function loadControlBar() {
     $('.playlist').prepend($('<div>', {
         'id': 'hide-playlist'
     }).append(
-        $('<div>').click(function () {
+        $('<div>').click(function() {
             $('#playlist .playlist #playlist_items').toggleClass('playlist2');
             $('#hide-playlist').toggleClass('hide-playlist2');
             $('#chat').toggleClass('chat2');
@@ -62,13 +34,13 @@ function loadControlBar() {
         $('<div>', {
             'id': 'hide-poll'
         }).append(
-            $('<div>').click(function () {
+            $('<div>').click(function() {
                 $('.poll-container').toggleClass('poll-container2');
                 $('#hide-poll').toggleClass('hide-poll2');
             })
         )
     );
-    $(document).bind('fscreenchange', function (e, state, elem) {
+    $(document).bind('fscreenchange', function(e, state, elem) {
         if ($.fullscreen.isFullScreen()) {
             $('.NND-element').remove();
             oldLayoutCSS = $('#layoutStyles').text();
@@ -82,25 +54,24 @@ function loadControlBar() {
 
     var skipRate = 0,
         skipText = $('#skipCounter').text(),
-        playlistLock;
+        playlistLock = $('#toggleplaylistlock img').attr('src');
 
     function addAnimation(child, cls) {
         child.unbind('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration').addClass(cls);
     }
 
     function removeAnimation(child, cls) {
-        child.one('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration', function () {
+        child.one('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration', function() {
             child.removeClass(cls);
         });
     }
     onSkips.push({
-        callback: function (skips, skipsNeeded) {
+        callback: function(skips, skipsNeeded) {
             $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
         }
     });
     if (isConnected()) {
         skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
-        playlistLock = $('#toggleplaylistlock img').attr('src');
     }
 
     $('.basic-btn-btnbar').empty().append(
@@ -113,15 +84,15 @@ function loadControlBar() {
                 'title': 'Skip'
             }).append(
                 $('<div>').css('background-image', 'url(http://i.imgur.com/ceHuy2q.png)').addClass('animationContainer')
-            ).click(function () {
+            ).click(function() {
                 if (unsafeWindow.userInfo.loggedin) {
                     unsafeWindow.sendcmd('skip', null);
                 } else {
                     unsafeWindow.addMessage("", "You must be logged in to vote to skip.", "", "errortext");
                 }
-            }).hover(function () {
+            }).hover(function() {
                 addAnimation($(this).children().eq(0), 'shake');
-            }, function () {
+            }, function() {
                 removeAnimation($(this).children().eq(0), 'shake');
             })
         ).append(
@@ -149,7 +120,7 @@ function loadControlBar() {
                 //.css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)')
             }).append(
                 $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
-            ).click(function () {
+            ).click(function() {
                 var url = $('#URLinput').val();
                 if ($('#URLinput').val().trim() !== '') {
                     unsafeWindow.sendcmd('add', {
@@ -157,9 +128,9 @@ function loadControlBar() {
                     });
                 }
                 $('#URLinput').val('');
-            }).hover(function () {
+            }).hover(function() {
                 addAnimation($(this).children().eq(0), 'pulse');
-            }, function () {
+            }, function() {
                 removeAnimation($(this).children().eq(0), 'pulse');
             })
         )
@@ -170,7 +141,7 @@ function loadControlBar() {
             $('<img>', {
                 'src': playlistLock
             }).css('top', '3px').css('position', 'relative')
-        ).click(function () {
+        ).click(function() {
             unsafeWindow.sendcmd('toggleplaylistlock', null);
         })
     ).append(
@@ -180,12 +151,12 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
-        ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function () {
+        ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function() {
             unsafeWindow.video.destroyPlayer();
             unsafeWindow.sendcmd('reload', null);
-        }).hover(function () {
+        }).hover(function() {
             addAnimation($(this).children().eq(0), 'spiral');
-        }, function () {
+        }, function() {
             removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
@@ -195,11 +166,11 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
-        ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function () {
+        ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function() {
             unsafeWindow.sendcmd('resynch', null);
-        }).hover(function () {
+        }).hover(function() {
             addAnimation($(this).children().eq(0), 'spiral');
-        }, function () {
+        }, function() {
             removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
@@ -207,11 +178,11 @@ function loadControlBar() {
             'id': 'mirrorPlayer',
             'title': 'Mirror Player',
             'class': 'controlIcon'
-        }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function () {
+        }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function() {
             toggleMirrorPlayer();
-        }).hover(function () {
+        }).hover(function() {
             addAnimation($(this).children().eq(0), 'spinner');
-        }, function () {
+        }, function() {
             removeAnimation($(this).children().eq(0), 'spinner');
         })
     ).append(
@@ -221,9 +192,9 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
-        ).click(toggleFullscreen).hover(function () {
+        ).click(toggleFullscreen).hover(function() {
             addAnimation($(this).children().eq(0), 'grow');
-        }, function () {
+        }, function() {
             removeAnimation($(this).children().eq(0), 'grow');
         })
     ).append(
@@ -233,12 +204,12 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
-        ).click(function () {
+        ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
             GM_config.save();
-        }).hover(function () {
+        }).hover(function() {
             addAnimation($(this).children().eq(0), 'marquee');
-        }, function () {
+        }, function() {
             removeAnimation($(this).children().eq(0), 'marquee');
         })
     );

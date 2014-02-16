@@ -1,30 +1,8 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
 function loadNameNotification() {
     var oldAddMessage = unsafeWindow.addMessage;
 
     //overwrite InstaSynch's addMessage function
-    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         var possibleNames = [],
             exactMatches = [],
             nameStart = -1,
@@ -78,7 +56,7 @@ function loadNameNotification() {
             toggleNotify();
         }
     };
-    $('#cin').focus(function () {
+    $('#cin').focus(function() {
         if (notified) {
             toggleNotify();
         }

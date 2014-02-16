@@ -1,25 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
 function loadCommandLoader() {
     var items = {};
     items.regularCommands = [
@@ -63,7 +41,7 @@ function loadCommandLoader() {
     //listen to the sites message events
     //some commands need to be executed in the scope of GM for the API to work
     unsafeWindow.addEventListener("message",
-        function (event) {
+        function(event) {
             try {
                 var parsed = JSON.parse(event.data);
                 if (parsed.commandParameters) {
@@ -73,7 +51,7 @@ function loadCommandLoader() {
         }, false);
 
     commands = {
-        set: function (arrayName, funcName, func, description) {
+        set: function(arrayName, funcName, func, description) {
             if (funcName[0] !== '$') {
                 funcName = "'" + funcName;
             }
@@ -81,10 +59,10 @@ function loadCommandLoader() {
             items.commandFunctionMap[funcName.toLowerCase()] = func;
             items.descriptionMap[funcName.toLowerCase()] = description;
         },
-        get: function (arrayName) {
+        get: function(arrayName) {
             return items[arrayName];
         },
-        getDescription: function (funcName) {
+        getDescription: function(funcName) {
             funcName = funcName.toLowerCase();
             if (items.descriptionMap.hasOwnProperty(funcName + ' ')) {
                 funcName = funcName + ' ';
@@ -95,10 +73,10 @@ function loadCommandLoader() {
                 return items.descriptionMap[funcName.toLowerCase()];
             }
         },
-        getAll: function () {
+        getAll: function() {
             return items;
         },
-        execute: function (funcName, params) {
+        execute: function(funcName, params) {
             commandExecuted = false;
             funcName = funcName.toLowerCase();
             if (funcName[0] === '$') {
@@ -121,7 +99,7 @@ function loadCommandLoader() {
         }
     };
 
-    $("#chat input").bind("keypress", function (event) {
+    $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
             var params = $(this).val().split(' ');
             commands.execute(params[0], params);

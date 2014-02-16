@@ -1,25 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
 function loadSettingsLoader() {
     //add styles for the button
     GM_addStyle(GM_getResourceText('settingsLoaderCSS'));
@@ -35,7 +13,7 @@ function loadSettingsLoader() {
                             $('<img>', {
                                 'src': 'http://i.imgur.com/V3vOIkS.png'
                             })
-                        ).append('Addon Settings').click(function () {
+                        ).append('Addon Settings').click(function() {
                             if (GM_config.isOpen) {
                                 GM_config.close();
                             } else {
@@ -116,27 +94,27 @@ function loadSettingsLoader() {
         'fields': fields,
         'css': configCSS,
         'events': {
-            'open': function (args) {
+            'open': function(args) {
                 $('#GM_config').css('height', '90%').css('top', '55px').css('left', '5px').css('width', '375px');
                 //collapse all items in the section
-                $('#GM_config').each(function () {
-                    $('#GM_config .section_header', this.contentWindow.document || this.contentDocument).click(function () {
+                $('#GM_config').each(function() {
+                    $('#GM_config .section_header', this.contentWindow.document || this.contentDocument).click(function() {
                         $(this).nextUntil().slideToggle(250);
                     });
                 });
                 //collapse all items in the subsection
-                $('#GM_config').each(function () {
-                    $('#GM_config .section_desc', this.contentWindow.document || this.contentDocument).click(function () {
+                $('#GM_config').each(function() {
+                    $('#GM_config .section_desc', this.contentWindow.document || this.contentDocument).click(function() {
                         $(this).nextUntil('#GM_config .section_desc').slideToggle(250);
                     });
                 });
                 //Add a save and close button
-                $('#GM_config').each(function () {
+                $('#GM_config').each(function() {
                     var saveAndCloseButton = $('#GM_config_closeBtn', this.contentWindow.document || this.contentDocument).clone(false);
                     saveAndCloseButton.attr({
                         id: 'GM_config_save_closeBtn',
                         title: 'Save and close window'
-                    }).text("Save and Close").click(function () {
+                    }).text("Save and Close").click(function() {
                         GM_config.save();
                         GM_config.close();
                     });
@@ -148,13 +126,13 @@ function loadSettingsLoader() {
                     onSettingsOpen[i](args);
                 }
             },
-            'save': function (args) {
+            'save': function(args) {
                 var i;
                 for (i = 0; i < onSettingsSave.length; i += 1) {
                     onSettingsSave[i](args);
                 }
             },
-            'reset': function (args) {
+            'reset': function(args) {
                 var i;
                 for (i = 0; i < onSettingsReset.length; i += 1) {
                     onSettingsReset[i](args);

@@ -1,28 +1,5 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
 function loadNewLoadUserlist() {
-    unsafeWindow.addUser = function (user, css, sort) {
+    unsafeWindow.addUser = function(user, css, sort) {
         user.css = css;
         var muted = unsafeWindow.isMuted(user.ip) ? "muted" : "",
             index = unsafeWindow.users.length,
@@ -36,7 +13,7 @@ function loadNewLoadUserlist() {
                 id: user.id,
                 css: css
             },
-            "click": function () {
+            "click": function() {
                 $('#cin')['val']($('#cin')['val']() + $(this).data('username'));
                 $('#cin')['focus']();
             },
@@ -49,9 +26,9 @@ function loadNewLoadUserlist() {
             .append($('<span/>', {
                 "html": user.username
             })));
-        userElement.hover(function () {
+        userElement.hover(function() {
             var thisElement = $(this);
-            $(this).data('hover', setTimeout(function () {
+            $(this).data('hover', setTimeout(function() {
                 $('#bio .username span').html(thisElement.data('username'));
                 //$("#chat").offset().top is the offten from the top of the page, Use turnary operation: If bio goes above chat, minus some pixels
                 $('#bio').css('top', ((thisElement.offset().top - $("#chat").offset().top - 15) < -10 ? -10 : thisElement.offset().top - $("#chat").offset().top - 15)); //cant be less than -10 pixels
@@ -59,7 +36,7 @@ function loadNewLoadUserlist() {
                 $('#bio .userinfo').html('');
                 $('#bio').show();
                 if (thisElement.data('css').indexOf('b') != -1) {
-                    unsafeWindow.getUserInfo(thisElement.data('username'), function (avatar, bio) {
+                    unsafeWindow.getUserInfo(thisElement.data('username'), function(avatar, bio) {
                         $('#bio .avatar img').attr('src', avatar);
                         $('#bio .userinfo').html(bio);
                     });
@@ -79,9 +56,9 @@ function loadNewLoadUserlist() {
                     $("#unmute").hide();
                 }
             }, 600));
-        }, function () {
+        }, function() {
             clearTimeout($(this).data('hover'));
-            setTimeout(function () {
+            setTimeout(function() {
                 if (!unsafeWindow.mouseOverBio) {
                     $('#bio').hide();
                 }
@@ -106,7 +83,7 @@ function loadNewLoadUserlist() {
     };
 
 
-    unsafeWindow.loadUserlist = function (userlist) {
+    unsafeWindow.loadUserlist = function(userlist) {
         unsafeWindow.users = new Array();
         $('#chat_users').html('');
         for (var i = 0; i < userlist.length; i++) {
@@ -121,7 +98,7 @@ function loadNewLoadUserlist() {
             unsafeWindow.addUser(user, css, false);
         }
     };
-    unsafeWindow.renameUser = function (id, username) {
+    unsafeWindow.renameUser = function(id, username) {
         var user,
             i;
         //start from the end since unnamed will be at the end of the list

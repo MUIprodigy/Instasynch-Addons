@@ -1,25 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
 setField({
     'name': 'Tags',
     'data': {
@@ -47,11 +25,11 @@ function loadMessageFilter() {
         oldCreatePoll = unsafeWindow.createPoll,
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
 
-    onSettingsOpen.push(function () {
+    onSettingsOpen.push(function() {
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
     });
 
-    onSettingsSave.push(function () {
+    onSettingsSave.push(function() {
         if (oldNSFWEmotes !== GM_config.get('NSFWEmotes')) {
             toggleNSFWEmotes();
             oldNSFWEmotes = GM_config.get('NSFWEmotes');
@@ -63,28 +41,28 @@ function loadMessageFilter() {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
-    unsafeWindow.linkify = function (str, buildHashtagUrl, includeW3, target) {
+    unsafeWindow.linkify = function(str, buildHashtagUrl, includeW3, target) {
         var emotes = [],
             index = -1;
         //remove image urls so they wont get linkified
-        str = str.replace(/src=\"([^\"]*)\"/gi, function (match) {
+        str = str.replace(/src=\"([^\"]*)\"/gi, function(match) {
             emotes.push(match);
             return 'src=\"\"';
         });
         str = oldLinkify(str, buildHashtagUrl, includeW3, target);
         //put them back in
-        str = str.replace(/src=\"\"/gi, function () {
+        str = str.replace(/src=\"\"/gi, function() {
             index += 1;
             return emotes[index];
         });
         return str;
     };
     //overwrite InstaSynch's addMessage function
-    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         oldAddMessage(username, parseMessage(message, true), userstyle, textstyle);
         //continue with InstaSynch's addMessage function
     };
-    unsafeWindow.createPoll = function (poll) {
+    unsafeWindow.createPoll = function(poll) {
         var i;
         poll.title = unsafeWindow.linkify(parseMessage(poll.title, false), false, true);
         for (i = 0; i < poll.options.length; i += 1) {
@@ -157,19 +135,19 @@ function parseMessage(message, isChatMessage) {
         var ret = '',
             format;
         switch (word) {
-        case 'hexcolor':
-            format = '<span style="color:{0}">';
-            break;
-        case 'marquee':
-            format = '<MARQUEE behavior="scroll" direction={0} width="100%" scrollamount="{1}">';
-            $0 = ($0 ? "left" : "right");
-            break;
-        case 'alternate':
-            format = '<MARQUEE behavior="alternate" direction="right" width="100%" scrollamount="{0}">';
-            break;
-        case 'spoiler':
-            format = '[spoiler]{0}[/spoiler]';
-            break;
+            case 'hexcolor':
+                format = '<span style="color:{0}">';
+                break;
+            case 'marquee':
+                format = '<MARQUEE behavior="scroll" direction={0} width="100%" scrollamount="{1}">';
+                $0 = ($0 ? "left" : "right");
+                break;
+            case 'alternate':
+                format = '<MARQUEE behavior="alternate" direction="right" width="100%" scrollamount="{0}">';
+                break;
+            case 'spoiler':
+                format = '[spoiler]{0}[/spoiler]';
+                break;
         }
         ret = String.format(format, $0, $1);
         return GM_config.get('Tags') ? ret : '';

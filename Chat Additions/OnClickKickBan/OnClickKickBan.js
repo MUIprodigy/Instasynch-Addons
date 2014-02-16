@@ -1,25 +1,3 @@
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2014  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
 function loadOnClickKickBan() {
     if (!isUserMod()) {
         return;
@@ -27,20 +5,20 @@ function loadOnClickKickBan() {
     var oldAddMessage = unsafeWindow.addMessage,
         chatCtrlDown = false;
     //overwrite InstaSynch's  addMessage function
-    unsafeWindow.addMessage = function (username, message, userstyle, textstyle) {
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
         if (username !== '') {
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
-                keyDown = function (event) {
+                keyDown = function(event) {
                     if (!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
                         isCtrlKeyDown = true;
                         currentElement.css('cursor', 'pointer');
                     }
                 },
-                keyUp = function (event) {
+                keyUp = function(event) {
                     if (isCtrlKeyDown && !event.ctrlKey) {
                         isCtrlKeyDown = false;
                         currentElement.css('cursor', 'default');
@@ -48,7 +26,7 @@ function loadOnClickKickBan() {
                 };
             //add the events to the latest username in the chat list
             $('#chat_list > span:last-of-type').prev()
-                .on('click', function (event) {
+                .on('click', function(event) {
                     if (event.ctrlKey) {
                         var user = $(this)[0].innerHTML,
                             userFound = false,
@@ -97,11 +75,11 @@ function loadOnClickKickBan() {
                         }
                     }
                 })
-                .hover(function (event) {
+                .hover(function(event) {
                     currentElement = $(this);
                     $(document).bind('keydown', keyDown);
                     $(document).bind('keyup', keyUp);
-                }, function () {
+                }, function() {
                     currentElement.css('cursor', 'default');
                     isCtrlKeyDown = false;
                     $(document).unbind('keydown', keyDown);
@@ -127,11 +105,11 @@ function loadOnClickKickBan() {
         }
     }
     $('#chat_list').hover(
-        function () {
+        function() {
             $(document).bind('keydown', chatKeyDown);
             $(document).bind('keyup', chatKeyUp);
         },
-        function () {
+        function() {
             chatCtrlDown = false;
             $(document).unbind('keydown', chatKeyDown);
             $(document).unbind('keyup', chatKeyUp);

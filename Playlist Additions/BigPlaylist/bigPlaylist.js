@@ -1,22 +1,5 @@
 /*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2014  InstaSynch, original code
     Copyright (C) 2014  fugXD, Bibbytube modification
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
 */
 
 setField({
@@ -44,28 +27,28 @@ function loadBigPlaylist() {
         i;
     //script loading was too slow
     needsReload = (unsafeWindow.playlist.length !== 0);
-    onSettingsOpen.push(function () {
+    onSettingsOpen.push(function() {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist');
     });
 
     function enableSortable() {
         if (GM_config.get('BigPlaylist')) {
             $("#tablePlaylistBody").sortable({
-                update: function (event, ui) {
+                update: function(event, ui) {
                     unsafeWindow.sendcmd('move', {
                         info: ui.item.data("info"),
                         position: ui.item.index()
                     });
                     $("#tablePlaylistBody").sortable("cancel");
                 },
-                start: function (event, ui) {
+                start: function(event, ui) {
                     //Prevents click event from triggering when sorting videos
                     $("#tablePlaylistBody").addClass('noclick');
                 },
-                helper: function (e, tr) {
+                helper: function(e, tr) {
                     $originals = tr.children();
                     $helper = tr.clone();
-                    $helper.children().each(function (index) {
+                    $helper.children().each(function(index) {
                         // Set helper cell sizes to match the original sizes
                         $(this).width($originals.eq(index).width());
                     });
@@ -77,14 +60,14 @@ function loadBigPlaylist() {
         } else {
             //core.js, version 0.9.7
             $("#ulPlay").sortable({
-                update: function (event, ui) {
+                update: function(event, ui) {
                     unsafeWindow.sendcmd('move', {
                         info: ui.item.data("info"),
                         position: ui.item.index()
                     });
                     $("#ulPlay").sortable("cancel");
                 },
-                start: function (event, ui) {
+                start: function(event, ui) {
                     //Prevents click event from triggering when sorting videos
                     $("#ulPlay").addClass('noclick');
                 }
@@ -93,7 +76,7 @@ function loadBigPlaylist() {
             $("#ulPlay").sortable("enable");
         }
     }
-    onSettingsSave.push(function () {
+    onSettingsSave.push(function() {
         if (oldBigPlaylistSetting !== GM_config.get('BigPlaylist')) {
             reloadPlaylistHTML(oldPlaylist);
             reloadPlaylist();
@@ -107,7 +90,7 @@ function loadBigPlaylist() {
         reloadPlaylistHTML();
     }
 
-    unsafeWindow.makeLeader = function (userId) {
+    unsafeWindow.makeLeader = function(userId) {
         oldIsLeader = unsafeWindow.isLeader;
         oldMakeLeader(userId);
         if (GM_config.get('BigPlaylist')) {
@@ -123,7 +106,7 @@ function loadBigPlaylist() {
 
     // override functions from InstaSynch's io.js, version 0.9.7
     // overrides addVideo, removeVideo, moveVideo and playVideo
-    unsafeWindow.addVideo = function (vidinfo) {
+    unsafeWindow.addVideo = function(vidinfo) {
         if (!GM_config.get('BigPlaylist')) {
             oldAddVideo(vidinfo);
         } else {
@@ -150,7 +133,7 @@ function loadBigPlaylist() {
 
             removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
-                'click': function () {
+                'click': function() {
                     unsafeWindow.sendcmd('remove', {
                         info: $(this).parent().parent().data('info')
                     });
@@ -183,7 +166,7 @@ function loadBigPlaylist() {
                         $('<div>', {
                             'title': vidinfo.title
                         }).text(trimTitle(vidinfo.title, 100)).css('overflow', 'hidden')
-                    ).on('click', function () {
+                    ).on('click', function() {
                         //InstaSynch io.js, version 0.9.7
                         if ($("#tablePlaylistBody").hasClass("noclick")) {
                             $("#tablePlaylistBody").removeClass('noclick');
@@ -210,7 +193,7 @@ function loadBigPlaylist() {
         }
     };
 
-    unsafeWindow.removeVideo = function (vidinfo) {
+    unsafeWindow.removeVideo = function(vidinfo) {
         if (!GM_config.get('BigPlaylist')) {
             oldRemoveVideo(vidinfo);
         } else {
@@ -225,7 +208,7 @@ function loadBigPlaylist() {
         }
     };
 
-    unsafeWindow.moveVideo = function (vidinfo, position) {
+    unsafeWindow.moveVideo = function(vidinfo, position) {
         if (!GM_config.get('BigPlaylist')) {
             oldMoveVideo(vidinfo, position);
         } else {
@@ -235,7 +218,7 @@ function loadBigPlaylist() {
             if (indexOfVid > -1) {
                 unsafeWindow.playlist.move(indexOfVid, position);
                 playlistElements = $('#tablePlaylistBody tr').clone(true);
-                playlistElements.move = function (old_index, new_index) {
+                playlistElements.move = function(old_index, new_index) {
                     if (new_index >= this.length) {
                         k = new_index - this.length;
                         while ((k--) + 1) {
@@ -251,7 +234,7 @@ function loadBigPlaylist() {
         }
     };
 
-    unsafeWindow.playVideo = function (vidinfo, time, playing) {
+    unsafeWindow.playVideo = function(vidinfo, time, playing) {
         if (!GM_config.get('BigPlaylist')) {
             oldPlayVideo(vidinfo, time, playing);
         } else {
@@ -301,7 +284,7 @@ function reloadPlaylist(activeIndex) {
     var temp = unsafeWindow.playlist,
         i;
     unsafeWindow.playlist = [];
-    unsafeWindow.playlist.move = function (old_index, new_index) //Code is property of Reid from stackoverflow
+    unsafeWindow.playlist.move = function(old_index, new_index) //Code is property of Reid from stackoverflow
     {
         if (new_index >= this.length) {
             var k = new_index - this.length;
