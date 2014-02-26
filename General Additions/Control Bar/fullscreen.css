@@ -17,7 +17,6 @@
   left: 0;
   bottom: 382px;
   z-index: 10000002;
-  opacity: 0.3;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -53,9 +52,6 @@ div#chat_users {
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
-}
-#playlist {
-  width: 749px !important;
 }
 #playlist_items {
   width: 740px
@@ -123,12 +119,11 @@ div#chat_users {
 }
 #playlist {
   position: fixed;
-  width: 750px;
+  width: 749px;
   left: 0;
   bottom: 39px;
   pointer-events: painted;
   z-index: 10000001;
-  opacity: 0.3;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -145,7 +140,6 @@ div#chat_users {
   width: 400px;
   height: auto;
   z-index: 10000010;
-  opacity: 0.30;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -232,4 +226,8 @@ div#chat_users {
 }
 body {
   overflow: hidden;
+}
+
+#opacity-sliders {
+  display: inline-flex!important;
 }

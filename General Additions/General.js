@@ -50,6 +50,10 @@ function logError(origin, err) {
     unsafeWindow.console.log("Error in %s %o", origin, err);
 }
 
+function isUsername(username) {
+    return username.match(/^([A-Za-z0-9]|([-_](?![-_]))){5,16}$/) !== null;
+}
+
 function getUrlOfInfo(vidinfo) {
     var url;
     switch (vidinfo.provider) {

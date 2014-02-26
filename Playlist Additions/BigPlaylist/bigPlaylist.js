@@ -23,10 +23,7 @@ function loadBigPlaylist() {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist'),
         $originals,
         $helper,
-        needsReload = true,
         i;
-    //script loading was too slow
-    needsReload = (unsafeWindow.playlist.length !== 0);
     onSettingsOpen.push(function() {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist');
     });
@@ -107,6 +104,8 @@ function loadBigPlaylist() {
     // override functions from InstaSynch's io.js, version 0.9.7
     // overrides addVideo, removeVideo, moveVideo and playVideo
     unsafeWindow.addVideo = function(vidinfo) {
+        var timeTo = 0,
+            selector = '#ulPlay';
         if (!GM_config.get('BigPlaylist')) {
             oldAddVideo(vidinfo);
         } else {
@@ -120,6 +119,7 @@ function loadBigPlaylist() {
             var vidurl = '',
                 vidicon = '',
                 removeBtn;
+
             if (vidinfo.info.provider === 'youtube') {
                 vidurl = 'http://www.youtube.com/watch?v=' + vidinfo.info.id;
                 vidicon = 'https://www.youtube.com/favicon.ico';
@@ -139,8 +139,6 @@ function loadBigPlaylist() {
                     });
                 }
             });
-
-            // Create the <tr> (row) in the table for the new video
             $('#tablePlaylistBody').append(
                 $('<tr>', {
                     'data': {
@@ -162,10 +160,10 @@ function loadBigPlaylist() {
                         )
                     ).css('padding', '0px').css('width', '45px')
                 ).append(
-                    $('<td>').append(
-                        $('<div>', {
-                            'title': vidinfo.title
-                        }).text(trimTitle(vidinfo.title, 100)).css('overflow', 'hidden')
+                    $('<td>', {
+                        'title': vidinfo.title
+                    }).append(
+                        $('<div>').text(trimTitle(vidinfo.title, 100)).css('overflow', 'hidden')
                     ).on('click', function() {
                         //InstaSynch io.js, version 0.9.7
                         if ($("#tablePlaylistBody").hasClass("noclick")) {
@@ -190,14 +188,20 @@ function loadBigPlaylist() {
             unsafeWindow.totalTime += vidinfo.duration;
             $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
             $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
+            selector = '#tablePlaylistBody'
         }
+        timeTo = unsafeWindow.totalTime - vidinfo.duration;
+        for (i = 0; i < getActiveVideoIndex(); i += 1) {
+            timeTo -= unsafeWindow.playlist[i].duration;
+        }
+        $(selector + ' > :last-child').attr('title', String.format('{0} until this video gets played.', unsafeWindow.secondsToTime(timeTo)));
     };
 
     unsafeWindow.removeVideo = function(vidinfo) {
+        var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
         if (!GM_config.get('BigPlaylist')) {
             oldRemoveVideo(vidinfo);
         } else {
-            var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
             if (indexOfVid > -1 && indexOfVid < unsafeWindow.playlist.length) {
                 unsafeWindow.totalTime -= unsafeWindow.playlist[indexOfVid].duration;
                 unsafeWindow.playlist.splice(indexOfVid, 1);
@@ -205,6 +209,9 @@ function loadBigPlaylist() {
             }
             $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
             $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
+        }
+        if (indexOfVid > getActiveVideoIndex()) {
+            setupTimeTo();
         }
     };
 
@@ -232,6 +239,7 @@ function loadBigPlaylist() {
                 $('#tablePlaylistBody').html(playlistElements);
             }
         }
+        setupTimeTo();
     };
 
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
@@ -252,10 +260,31 @@ function loadBigPlaylist() {
                 $('#sliderDuration').html('/' + unsafeWindow.secondsToTime(unsafeWindow.playlist[indexOfVid].duration));
             }
         }
+        setupTimeTo();
     };
+    if (isConnected()) {
+        if (GM_config.get('BigPlaylist')) {
+            reloadPlaylist();
+        } else {
+            setupTimeTo();
+        }
+    }
+}
 
-    if (GM_config.get('BigPlaylist') && needsReload) {
-        reloadPlaylist();
+function setupTimeTo() {
+    var timeTo = 0,
+        i,
+        selector = '#ulPlay';
+    if (GM_config.get('BigPlaylist')) {
+        selector = '#tablePlaylistBody';
+    }
+
+    for (i = 0; i <= getActiveVideoIndex(); i += 1) {
+        $(selector).children().eq(i).attr('title', '[00:00] until this video gets played.');
+    }
+    for (i -= 1; i < unsafeWindow.playlist.length - 1; i += 1) {
+        timeTo += unsafeWindow.playlist[i].duration;
+        $(selector).children().eq(i + 1).attr('title', String.format('{0} until this video gets played.', unsafeWindow.secondsToTime(timeTo)));
     }
 }
 

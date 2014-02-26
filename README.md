@@ -17,7 +17,7 @@ Command List
 'help
 
 //Mod Commands
-'bump [user]
+'bump [user] [position]?
 'removeLast [user]
 'trimWall [user] [maxMinutes]?
 'purgeTooLong [maxMinutes]?
@@ -198,8 +198,8 @@ To prevent getting kicked from flood protection the commands will be delayed whe
 Bump Command
 ------------
 
-To bump a users last added video simply use the command <code>'bump [user]</code>.
-The video will be moved right under the active video.
+To bump a users last added video simply use the command <code>'bump [user] [position]?</code>.
+The video will be moved right under the active video or to the position specified.
 
 
 Remove Last Command

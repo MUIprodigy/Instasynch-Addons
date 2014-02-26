@@ -1,12 +1,32 @@
 function loadBumpCommand() {
-    commands.set('modCommands', "bump ", bump, 'Bumps a video right under the active video. Parameters: the user to bump.');
+    commands.set('modCommands', "bump ", bump, 'Bumps a video right under the active video. Parameters: the user to bump, the position to bump to.');
 }
 
 function bump(params) {
-    var user = params[1],
-        bumpIndex = -1,
-        i;
 
+    var user,
+        bumpIndex = -1,
+        bumpTo,
+        i;
+    if (params.length === 2) {
+        if (isUsername(params[1])) {
+            user = params[1];
+        }
+        bumpTo = getActiveVideoIndex() + 1;
+    } else {
+        for (i = 1; i < params.length; i++) {
+            if (isUsername(params[i])) {
+                user = params[i];
+            } else {
+                bumpTo = parseInt(params[i], 10);
+                if (isNaN(bumpTo)) {
+                    bumpTo = getActiveVideoIndex() + 1;
+                } else {
+                    bumpTo = min(bumpTo, unsafeWindow.playlist.length - 1);
+                }
+            }
+        }
+    }
     if (!user) {
         unsafeWindow.addMessage('', 'No user specified: \'bump [user]', '', 'hashtext');
         return;
@@ -22,7 +42,7 @@ function bump(params) {
     } else {
         unsafeWindow.sendcmd('move', {
             info: unsafeWindow.playlist[bumpIndex].info,
-            position: getActiveVideoIndex() + 1
+            position: bumpTo
         });
     }
 }

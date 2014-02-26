@@ -1,3 +1,8 @@
+1.33.8
+ • Opacity sliders for fullscreen
+ • 'bump accepts a position as parameter now
+ • When hovering over a video the time until the video gets played will be shown with a tooltip
+
 1.33.7.1
  • Fixed jquery.fullscreen not working with NoScript
 
