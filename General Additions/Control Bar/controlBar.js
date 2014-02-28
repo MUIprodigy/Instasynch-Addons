@@ -41,25 +41,37 @@ setField({
     'subsection': 'Fullscreen Opacity'
 });
 
+setField({
+    'name': 'button-animations',
+    'data': {
+        'label': 'Button Animations',
+        'type': 'checkbox',
+        'default': true
+    },
+    'section': 'General Additions'
+});
+
 function loadControlBar() {
     var skipRate = 0,
         skipText = $('#skipCounter').text(),
-        playlistLock = $('#toggleplaylistlock img').attr('src');
+        playlistLock = $('#toggleplaylistlock img').attr('src'),
+        oldDisplayAnimations = GM_config.get('button-animations');
 
     $('#resynch').remove();
     $('#reload').remove();
     GM_addStyle(GM_getResourceText('controlBarCSS'));
     setUpFullscreen();
+    onSettingsOpen.push(function() {
+        oldDisplayAnimations = GM_config.get('button-animations');
+    });
 
-    function addAnimation(child, cls) {
-        child.unbind('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration').addClass(cls);
-    }
+    onSettingsSave.push(function() {
+        if (oldDisplayAnimations !== GM_config.get('button-animations')) {
+            toggleAnimations();
+            oldDisplayAnimations = GM_config.get('button-animations');
+        }
+    });
 
-    function removeAnimation(child, cls) {
-        child.one('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration', function() {
-            child.removeClass(cls);
-        });
-    }
     onSkips.push({
         callback: function(skips, skipsNeeded) {
             $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
@@ -85,10 +97,6 @@ function loadControlBar() {
                 } else {
                     unsafeWindow.addMessage("", "You must be logged in to vote to skip.", "", "errortext");
                 }
-            }).hover(function() {
-                addAnimation($(this).children().eq(0), 'shake');
-            }, function() {
-                removeAnimation($(this).children().eq(0), 'shake');
             })
         ).append(
             $('<div>', {
@@ -123,10 +131,6 @@ function loadControlBar() {
                     });
                 }
                 $('#URLinput').val('');
-            }).hover(function() {
-                addAnimation($(this).children().eq(0), 'pulse');
-            }, function() {
-                removeAnimation($(this).children().eq(0), 'pulse');
             })
         )
     ).append(
@@ -149,10 +153,6 @@ function loadControlBar() {
         ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function() {
             unsafeWindow.video.destroyPlayer();
             unsafeWindow.sendcmd('reload', null);
-        }).hover(function() {
-            addAnimation($(this).children().eq(0), 'spiral');
-        }, function() {
-            removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
         $('<div>', {
@@ -163,10 +163,6 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function() {
             unsafeWindow.sendcmd('resynch', null);
-        }).hover(function() {
-            addAnimation($(this).children().eq(0), 'spiral');
-        }, function() {
-            removeAnimation($(this).children().eq(0), 'spiral');
         })
     ).append(
         $('<div>', {
@@ -175,10 +171,6 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function() {
             toggleMirrorPlayer();
-        }).hover(function() {
-            addAnimation($(this).children().eq(0), 'spinner');
-        }, function() {
-            removeAnimation($(this).children().eq(0), 'spinner');
         })
     ).append(
         $('<div>', {
@@ -187,11 +179,7 @@ function loadControlBar() {
             'class': 'controlIcon'
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
-        ).click(toggleFullscreen).hover(function() {
-            addAnimation($(this).children().eq(0), 'grow');
-        }, function() {
-            removeAnimation($(this).children().eq(0), 'grow');
-        })
+        ).click(toggleFullscreen)
     ).append(
         $('<div>', {
             'id': 'nnd-Mode',
@@ -202,12 +190,66 @@ function loadControlBar() {
         ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
             GM_config.save();
-        }).hover(function() {
+        })
+    );
+    toggleAnimations();
+}
+
+function addAnimation(child, cls) {
+    child.unbind('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration').addClass(cls);
+}
+
+function removeAnimation(child, cls) {
+    child.one('webkitAnimationIteration oanimationiteration MSAnimationIteration animationiteration', function() {
+        child.removeClass(cls);
+    });
+}
+
+function toggleAnimations() {
+    $('#skip').unbind('mouseenter mouseleave');
+    $('#addUrl').unbind('mouseenter mouseleave');
+    $('#reloadPlayer').unbind('mouseenter mouseleave');
+    $('#resynchPlayer').unbind('mouseenter mouseleave');
+    $('#mirrorPlayer').unbind('mouseenter mouseleave');
+    $('#fullscreen').unbind('mouseenter mouseleave');
+    $('#nnd-Mode').unbind('mouseenter mouseleave');
+    if (GM_config.get('button-animations')) {
+        $('#skip').hover(function() {
+            addAnimation($(this).children().eq(0), 'shake');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'shake');
+        })
+        $('#addUrl').hover(function() {
+            addAnimation($(this).children().eq(0), 'pulse');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'pulse');
+        })
+        $('#reloadPlayer').hover(function() {
+            addAnimation($(this).children().eq(0), 'spiral');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'spiral');
+        })
+        $('#resynchPlayer').hover(function() {
+            addAnimation($(this).children().eq(0), 'spiral');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'spiral');
+        })
+        $('#mirrorPlayer').hover(function() {
+            addAnimation($(this).children().eq(0), 'spinner');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'spinner');
+        })
+        $('#fullscreen').hover(function() {
+            addAnimation($(this).children().eq(0), 'grow');
+        }, function() {
+            removeAnimation($(this).children().eq(0), 'grow');
+        })
+        $('#nnd-Mode').hover(function() {
             addAnimation($(this).children().eq(0), 'marquee');
         }, function() {
             removeAnimation($(this).children().eq(0), 'marquee');
         })
-    );
+    }
 }
 
 function toggleFullscreen() {

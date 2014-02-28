@@ -19,7 +19,7 @@ function bump(params) {
                 user = params[i];
             } else {
                 bumpTo = parseInt(params[i], 10);
-                if (isNaN(bumpTo)) {
+                if (unsafeWindow.isNaN(bumpTo)) {
                     bumpTo = getActiveVideoIndex() + 1;
                 } else {
                     bumpTo = min(bumpTo, unsafeWindow.playlist.length - 1);
