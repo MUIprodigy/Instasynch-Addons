@@ -9,7 +9,7 @@ unsafeWindow.addEventListener('load', function() {
     executeOnce();
     loadStuff();
 
-    var oldLoadRoomObj = global.loadRoomObj;
+    var oldLoadRoomObj = unsafeWindow.global.loadRoomObj;
     unsafeWindow.global.loadRoomObj = function() {
         oldLoadRoomObj();
         loadStuff();

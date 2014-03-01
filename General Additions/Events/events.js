@@ -93,6 +93,7 @@ function loadEvents() {
 function loadPriorityEvents() {
     var oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
+        oldAddVideo = unsafeWindow.addVideo,
         i, oldPoll = {
             title: ''
         };;
@@ -138,6 +139,12 @@ function loadPriorityEvents() {
         }
         oldPoll = poll;
     };
+
+    unsafeWindow.addVideo = function addVideo(vidinfo) {
+        fireEvents(onAddVideo, [vidinfo], true);
+        oldAddVideo(vidinfo);
+        fireEvents(onAddVideo, [vidinfo], false);
+    }
 }
 
 function fireEvents(listeners, parameters, preOld) {
@@ -170,4 +177,5 @@ var currentPlayer = '',
     onSkips = [],
     onConnecting = [],
     onConnect = [],
-    onReconnecting = [];
+    onReconnecting = [],
+    onAddVideo = [];

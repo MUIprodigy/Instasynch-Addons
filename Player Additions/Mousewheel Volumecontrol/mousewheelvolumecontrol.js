@@ -25,7 +25,7 @@ setField({
 });
 
 function loadMouseWheelVolumecontrolOnce() {
-    GM_addStyle(GM_getResourceText(''));
+    GM_addStyle(GM_getResourceText('volumebarCSS'));
     //prevent the site from scrolling while over the player
     function preventScroll(event) {
         if (GM_config.get('MouseWheelVolumecontrol') && mouserOverPlayer) {

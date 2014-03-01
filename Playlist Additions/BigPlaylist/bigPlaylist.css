@@ -9,7 +9,6 @@
 #tablePlaylistBody td {
 	padding:3px;
 	border:solid #666 3px;
-	overflow: scroll;
 } 
 
 .active{

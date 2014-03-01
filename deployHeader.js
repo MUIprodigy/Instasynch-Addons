@@ -36,6 +36,7 @@
 // @resource    fullscreenCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Control%20Bar/fullscreen.css
 // @resource    youtubeSearchCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Youtube%20Search/youtubeSearch.css
 // @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Large%20Layout/largeLayout.css
+// @resource    largeLayoutSelectorCSS https://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Large%20Layout/largeLayoutSelector.css
 // @resource    settingsLoaderCSS https://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Settings%20Loader/settingsLoader.css
 // @resource    GM_configCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Settings%20Loader/GMconfig.css
 // @resource    volumebarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/Player%20Additions/Mousewheel%20Volumecontrol/volumebar.css

@@ -239,4 +239,4 @@ var filteredwords = {
 
 
 executeOnceFunctions.push(loadMessageFilter);
-preConnectFunctions.push(toggleNSFWEmotes);
+postConnectFunctions.push(toggleNSFWEmotes);
