@@ -45,7 +45,7 @@ function trimWall(params) {
         currentTime -= videos[i].duration;
         // rmVideo(i,videos[i].info);
         //delay via commandFloodProtect.js
-        unsafeWindow.sendcmd('remove', {
+        unsafeWindow.global.sendcmd('remove', {
             info: videos[i].info
         });
     }

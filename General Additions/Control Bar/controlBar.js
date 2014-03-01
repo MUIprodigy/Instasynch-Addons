@@ -77,7 +77,7 @@ function loadControlBar() {
                 $('<div>').css('background-image', 'url(http://i.imgur.com/ceHuy2q.png)').addClass('animationContainer')
             ).click(function() {
                 if (unsafeWindow.userInfo.loggedin) {
-                    unsafeWindow.sendcmd('skip', null);
+                    unsafeWindow.global.sendcmd('skip', null);
                 } else {
                     unsafeWindow.addMessage("", "You must be logged in to vote to skip.", "", "errortext");
                 }
@@ -110,7 +110,7 @@ function loadControlBar() {
             ).click(function() {
                 var url = $('#URLinput').val();
                 if ($('#URLinput').val().trim() !== '') {
-                    unsafeWindow.sendcmd('add', {
+                    unsafeWindow.global.sendcmd('add', {
                         URL: url
                     });
                 }
@@ -125,7 +125,7 @@ function loadControlBar() {
                 'src': playlistLock
             }).css('top', '3px').css('position', 'relative')
         ).click(function() {
-            unsafeWindow.sendcmd('toggleplaylistlock', null);
+            unsafeWindow.global.sendcmd('toggleplaylistlock', null);
         })
     ).append(
         $('<div>', {
@@ -136,7 +136,7 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function() {
             unsafeWindow.video.destroyPlayer();
-            unsafeWindow.sendcmd('reload', null);
+            unsafeWindow.global.sendcmd('reload', null);
         })
     ).append(
         $('<div>', {
@@ -146,7 +146,7 @@ function loadControlBar() {
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function() {
-            unsafeWindow.sendcmd('resynch', null);
+            unsafeWindow.global.sendcmd('resynch', null);
         })
     ).append(
         $('<div>', {

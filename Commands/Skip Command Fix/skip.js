@@ -3,7 +3,7 @@ function loadSkipCommand() {
 }
 
 function skip() {
-    unsafeWindow.sendcmd("skip", null);
+    unsafeWindow.global.sendcmd("skip", null);
 }
 
 executeOnceFunctions.push(loadSkipCommand);

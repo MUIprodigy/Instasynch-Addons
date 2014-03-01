@@ -28,12 +28,12 @@ function loadOnClickKickBanOnce() {
             unsafeWindow.addMessage('', String.format("Can't {0} a mod", action), '', 'hashtext');
         } else {
             if (userFound) {
-                unsafeWindow.sendcmd(action, {
+                unsafeWindow.global.sendcmd(action, {
                     userid: userId
                 });
             } else {
                 if (ban) {
-                    unsafeWindow.sendcmd('leaverban', {
+                    unsafeWindow.global.sendcmd('leaverban', {
                         username: user
                     });
                     unsafeWindow.addMessage('', 'Leaverb& user: ' + user, '', 'hashtext');

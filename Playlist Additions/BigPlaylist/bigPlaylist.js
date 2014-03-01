@@ -47,7 +47,7 @@ function loadBigPlaylistOnce() {
         if (GM_config.get('BigPlaylist')) {
             $("#tablePlaylistBody").sortable({
                 update: function(event, ui) {
-                    unsafeWindow.sendcmd('move', {
+                    unsafeWindow.global.sendcmd('move', {
                         info: ui.item.data("info"),
                         position: ui.item.index()
                     });
@@ -73,7 +73,7 @@ function loadBigPlaylistOnce() {
             //core.js, version 0.9.7
             $("#ulPlay").sortable({
                 update: function(event, ui) {
-                    unsafeWindow.sendcmd('move', {
+                    unsafeWindow.global.sendcmd('move', {
                         info: ui.item.data("info"),
                         position: ui.item.index()
                     });
@@ -146,7 +146,7 @@ function loadBigPlaylistOnce() {
             removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
                 'click': function() {
-                    unsafeWindow.sendcmd('remove', {
+                    unsafeWindow.global.sendcmd('remove', {
                         info: $(this).parent().parent().data('info')
                     });
                 }
@@ -182,7 +182,7 @@ function loadBigPlaylistOnce() {
                             $("#tablePlaylistBody").removeClass('noclick');
                         } else {
                             if (unsafeWindow.isLeader) {
-                                unsafeWindow.sendcmd('play', {
+                                unsafeWindow.global.sendcmd('play', {
                                     info: $(this).parent().data('info')
                                 });
                             } else {
@@ -330,7 +330,7 @@ function reloadPlaylist(activeIndex) {
     for (i = 0; i < temp.length; i += 1) {
         unsafeWindow.addVideo(temp[i]);
     }
-    unsafeWindow.sendcmd('reload', null);
+    unsafeWindow.global.sendcmd('reload', null);
 }
 
 function trimTitle(title, length) {

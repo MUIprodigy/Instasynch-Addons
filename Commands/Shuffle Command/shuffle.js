@@ -22,7 +22,7 @@ function shuffle(params) {
         randIndex = Math.floor(Math.random() * shuffleList.length);
         tempInfo = shuffleList[i].info;
         newPosition = shuffleList[randIndex].i;
-        unsafeWindow.sendcmd('move', {
+        unsafeWindow.global.sendcmd('move', {
             info: tempInfo,
             position: newPosition
         });

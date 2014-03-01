@@ -61,7 +61,7 @@ function togglePlayer() {
     if (!GM_config.get('PlayerActive')) {
         unsafeWindow.video.destroyPlayer();
     } else {
-        unsafeWindow.sendcmd('reload', null);
+        unsafeWindow.global.sendcmd('reload', null);
     }
 }
 

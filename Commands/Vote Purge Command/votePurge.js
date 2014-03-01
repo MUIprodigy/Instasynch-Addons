@@ -19,7 +19,7 @@ function votePurge(params) {
     option = "No !";
     poll.options.push(option);
 
-    unsafeWindow.sendcmd("poll-create", poll);
+    unsafeWindow.global.sendcmd("poll-create", poll);
 }
 
 executeOnceFunctions.push(loadVotePurgeCommand);

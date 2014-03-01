@@ -59,7 +59,7 @@ function loadPollMenu() {
                     poll.options.push($(this).val().trim());
                 }
             });
-            unsafeWindow.sendcmd("poll-create", poll);
+            unsafeWindow.global.sendcmd("poll-create", poll);
         })
     ).append(
         $('<br>')
