@@ -94,12 +94,6 @@ function loadPollMenu() {
         $('<br>')
     ).css('width', '400px');
 
-    onCreatePoll.push({
-        callback: function(poll) {
-            oldPoll = $.extend(true, {}, poll);
-        },
-        preOld: true
-    });
     if (isConnected()) {
         var poll = {};
         poll.title = $(".poll-title").text();
@@ -116,6 +110,20 @@ function loadPollMenu() {
         }
     }
 }
-var oldPoll = undefined;
 
+function loadPollMenuOnce() {
+    onCreatePoll.push({
+        callback: function(poll) {
+            oldPoll = $.extend(true, {}, poll);
+        },
+        preOld: true
+    });
+}
+
+var oldPoll = {};
+
+resetVariables.push(function() {
+    oldPoll = {};
+});
+executeOnceFunctions.push(loadPollMenuOnce);
 preConnectFunctions.push(loadPollMenu);

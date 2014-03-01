@@ -3,12 +3,14 @@ function loadSettingsLoader() {
     GM_addStyle(GM_getResourceText('settingsLoaderCSS'));
     //add the button
     $('#loginfrm > :first-child').before(
-        $('<div id="addonsMenu" />').append(
+        $('<div>', {
+            'id': 'addons-menu'
+        }).append(
             $('<div>').append(
                 $('<ul>').append(
                     $('<li>').append(
                         $('<a>', {
-                            'id': 'addonsClicker'
+                            'id': 'addons-clicker'
                         }).append(
                             $('<img>', {
                                 'src': 'http://i.imgur.com/V3vOIkS.png'
@@ -25,7 +27,7 @@ function loadSettingsLoader() {
             ).addClass('click-nav')
         )
     );
-
+    $('.friendsList').detach().appendTo('#loginfrm');
     var fields = {},
         firstMiddle = true,
         firstInner = true,

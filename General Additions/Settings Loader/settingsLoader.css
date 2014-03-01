@@ -1,16 +1,25 @@
-#addonsMenu {
+#addons-menu {
 	color: white;
 	float: left;
 	padding-top: 5px;
 	padding-right: 5px;
 }
-#addonsClicker {
+#addons-clicker {
 	background: #2eb6e6 !important;
 	color: #FFF !important;
 }
-#addonsClicker:hover {
+#addons-clicker:hover {
 	background: #2284B5 !important;
 }
 #loginfrm {
 	display: flex;
+	padding-right: 185px;
+}
+.friendList {
+	left: initial!important;
+	float: right;
+
+}
+#loggedInAs {
+	margin-right: 5px!important;
 }

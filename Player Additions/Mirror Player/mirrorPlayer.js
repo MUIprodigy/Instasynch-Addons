@@ -31,7 +31,7 @@ function loadMirrorPlayer() {
             if (unsafeWindow.playlist && unsafeWindow.playlist[getActiveVideoIndex()] && containsMirrored(unsafeWindow.playlist[getActiveVideoIndex()].title)) {
                 toggleMirrorPlayer();
             }
-        }, 2500);
+        }, 4000);
     }
 }
 
@@ -63,4 +63,7 @@ function toggleMirrorPlayer() {
     isPlayerMirrored = !isPlayerMirrored;
 }
 
-postConnectFunctions.push(loadMirrorPlayer);
+resetVariables.push(function() {
+    isPlayerMirrored = false;
+});
+executeFunctionsOnce.push(loadMirrorPlayer);
