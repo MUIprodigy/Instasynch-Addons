@@ -73,4 +73,4 @@ function printHistory() {
 }
 
 var history = [];
-preConnectFunctions.push(loadHistory);
+executeOnceFunctions.push(loadHistory);

@@ -24,24 +24,8 @@ setField({
     'subsection': 'Volume'
 });
 
-function loadMouseWheelVolumecontrol() {
-    var firefoxBlur = 'url("data:image/svg+xml;utf8,'.concat(
-        '<svg xmlns=\'http://www.w3.org/2000/svg\'>',
-        '<filter id=\'autocall\' x=\'-300%\' width=\'500%\'>',
-        '<feGaussianBlur stdDeviation=\'5\'/>',
-        '</filter>',
-        '</svg>#autocall")');
-    $('<div>', {
-        'id': 'volumebarContainer'
-    }).append(
-        $('<div>', {
-            'id': 'volumebar'
-        }).css('height', '0px').css('width', '5px').css('position', 'absolute').css('left', '-8px')
-        .css('background-color', 'lime').addClass('blur5').css('display', 'none').css('filter', firefoxBlur)
-    ).css('float', 'left').css('width', '0px').css('position', 'relative').insertBefore('#media');
-
-    //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
-
+function loadMouseWheelVolumecontrolOnce() {
+    GM_addStyle(GM_getResourceText(''));
     //prevent the site from scrolling while over the player
     function preventScroll(event) {
         if (GM_config.get('MouseWheelVolumecontrol') && mouserOverPlayer) {
@@ -63,15 +47,6 @@ function loadMouseWheelVolumecontrol() {
     if (unsafeWindow.addEventListener) {
         unsafeWindow.addEventListener('DOMMouseScroll', preventScroll, false);
     }
-    //add hover event to the player
-    $('#media').hover(
-        function() {
-            mouserOverPlayer = true;
-        },
-        function() {
-            mouserOverPlayer = false;
-        }
-    );
 
     //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
     //listen to volume change on the youtube player
@@ -104,6 +79,29 @@ function loadMouseWheelVolumecontrol() {
             }
         }
     });
+}
+
+function loadMouseWheelVolumecontrol() {
+    $('<div>', {
+        'id': 'volumebar-container'
+    }).append(
+        $('<div>', {
+            'id': 'volumebar'
+        }).addClass('blur5')
+    ).insertBefore('#media');
+
+    //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
+
+    //add hover event to the player
+    $('#media').hover(
+        function() {
+            mouserOverPlayer = true;
+        },
+        function() {
+            mouserOverPlayer = false;
+        }
+    );
+
 }
 
 var isPlayerReady = false,
@@ -175,4 +173,5 @@ function setVol(volume) {
     }
 }
 
+executeOnceFunctions.push(loadMouseWheelVolumecontrolOnce);
 preConnectFunctions.push(loadMouseWheelVolumecontrol);

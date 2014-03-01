@@ -13,6 +13,20 @@ setField({
 });
 
 function loadBigPlaylist() {
+
+    if (GM_config.get('BigPlaylist')) {
+        reloadPlaylistHTML();
+    }
+    if (isConnected()) {
+        if (GM_config.get('BigPlaylist')) {
+            reloadPlaylist();
+        } else {
+            setupTimeTo();
+        }
+    }
+}
+
+function loadBigPlaylistOnce() {
     var oldMakeLeader = unsafeWindow.makeLeader,
         oldAddVideo = unsafeWindow.addVideo,
         oldPlayVideo = unsafeWindow.playVideo,
@@ -24,6 +38,7 @@ function loadBigPlaylist() {
         $originals,
         $helper,
         i;
+    GM_addStyle(GM_getResourceText('bigPlaylistCSS'));
     onSettingsOpen.push(function() {
         oldBigPlaylistSetting = GM_config.get('BigPlaylist');
     });
@@ -83,9 +98,6 @@ function loadBigPlaylist() {
             }
         }
     });
-    if (GM_config.get('BigPlaylist')) {
-        reloadPlaylistHTML();
-    }
 
     unsafeWindow.makeLeader = function(userId) {
         oldIsLeader = unsafeWindow.isLeader;
@@ -149,21 +161,21 @@ function loadBigPlaylist() {
                         $('<a>', {
                             'href': vidurl,
                             'target': '_blank'
-                        }).css('position', 'relative').append(
+                        }).append(
                             $('<img>', {
                                 'src': vidinfo.info.thumbnail
-                            }).css('width', '45px')
+                            })
                         ).append( // overlay icon for youtube or vimeo, bottom right
                             $('<img>', {
                                 'src': vidicon
-                            }).css('width', '16').css('position', 'absolute').css('right', '0px').css('bottom', '0px')
+                            })
                         )
-                    ).css('padding', '0px').css('width', '45px')
+                    ).addClass('playlist-thumbnail')
                 ).append(
                     $('<td>', {
                         'title': vidinfo.title
                     }).append(
-                        $('<div>').text(trimTitle(vidinfo.title, 100)).css('overflow', 'hidden')
+                        $('<div>').text(trimTitle(vidinfo.title, 100))
                     ).on('click', function() {
                         //InstaSynch io.js, version 0.9.7
                         if ($("#tablePlaylistBody").hasClass("noclick")) {
@@ -178,17 +190,17 @@ function loadBigPlaylist() {
                                 $('#cin').focus();
                             }
                         }
-                    }).css('cursor', 'pointer').css('width', 'auto').css('word-break', 'break-all')
+                    }).addClass('playlist-title')
                 ).append(
-                    $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align', 'right').css('width', '100px')
+                    $('<td>').html(unsafeWindow.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).addClass('playlist-duration')
                 ).append(
-                    isUserMod() ? $('<td>').append(removeBtn).append($('<br>')).css('width', '15px') : undefined
+                    isUserMod() ? $('<td>').append(removeBtn).append($('<br>')).addClass('playlist-controls') : undefined
                 )
             );
             unsafeWindow.totalTime += vidinfo.duration;
             $('.total-videos').html(unsafeWindow.playlist.length + ' videos');
             $('.total-duration').html(unsafeWindow.secondsToTime(unsafeWindow.totalTime));
-            selector = '#tablePlaylistBody'
+            selector = '#tablePlaylistBody';
         }
         timeTo = unsafeWindow.totalTime - vidinfo.duration;
         for (i = 0; i < getActiveVideoIndex(); i += 1) {
@@ -262,13 +274,6 @@ function loadBigPlaylist() {
         }
         setupTimeTo();
     };
-    if (isConnected()) {
-        if (GM_config.get('BigPlaylist')) {
-            reloadPlaylist();
-        } else {
-            setupTimeTo();
-        }
-    }
 }
 
 function setupTimeTo() {
@@ -294,16 +299,14 @@ function reloadPlaylistHTML(oldPlaylist) {
         $('#playlist_items').css('width', '');
     } else {
         // change unsafeWindow.playlist to table based
-        $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
-        $('#ulPlay').replaceWith($('<table>', {
-            'id': 'tablePlaylist'
-        }));
-        $('#tablePlaylist').css('width', '100%');
-        $('#tablePlaylist td').css('overflow', 'scroll');
-        $('#tablePlaylist').append(
-            $('<tbody>', {
-                'id': 'tablePlaylistBody'
-            })
+        $('#ulPlay').replaceWith(
+            $('<table>', {
+                'id': 'tablePlaylist'
+            }).append(
+                $('<tbody>', {
+                    'id': 'tablePlaylistBody'
+                })
+            )
         );
         $('#playlist_items').css('width', 'calc(100% - 15px)');
     }

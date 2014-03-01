@@ -1,8 +1,6 @@
 function loadWallCounter() {
 
-    var oldAddVideo = unsafeWindow.addVideo,
-        //oldRemoveVideo = removeVideo,
-        oldAddMessage = unsafeWindow.addMessage,
+    var oldAddMessage = unsafeWindow.addMessage,
         value,
         output;
 
@@ -10,16 +8,24 @@ function loadWallCounter() {
     commands.set('regularCommands', "printWallCounter", printWallCounter, 'Prints the length of the walls for each user.');
     commands.set('regularCommands', "printMyWallCounter", printMyWallCounter, 'Prints the length of your own wall.');
 
-
     //overwrite InstaSynch's addVideo
-    unsafeWindow.addVideo = function(vidinfo) {
-        resetWallCounter();
-        value = wallCounter[vidinfo.addedby];
-        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
-            output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
-            unsafeWindow.addMessage('', output, '', 'hashtext');
+    onAddVideo.push({
+        callback: function(vidinfo) {
+            resetWallCounter();
+            value = wallCounter[vidinfo.addedby];
+            if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
+                output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
+                unsafeWindow.addMessage('', output, '', 'hashtext');
+            }
         }
-        oldAddVideo(vidinfo);
+    });
+
+    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
+        if (username === '' && message === 'Video added successfully.') {
+            resetWallCounter();
+            message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
+        }
+        oldAddMessage(username, message, userstyle, textstyle);
     };
 
     /*
@@ -40,17 +46,6 @@ function loadWallCounter() {
 
     //     oldRemoveVideo(vidinfo);
     // };    
-
-    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        if (username === '' && message === 'Video added successfully.') {
-            resetWallCounter();
-            message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
-        }
-        oldAddMessage(username, message, userstyle, textstyle);
-    };
-
-    //init the wallcounter
-    resetWallCounter();
 }
 var wallCounter = {};
 
@@ -100,4 +95,7 @@ function printMyWallCounter() {
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 
-postConnectFunctions.push(loadWallCounter);
+resetVariables.push(function() {
+    wallCounter = {};
+});
+executeOnceFunctions.push(loadWallCounter);

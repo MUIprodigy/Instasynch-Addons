@@ -36,6 +36,9 @@
 // @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayout.css
 // @resource    settingsLoaderCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/settingsLoader.css
 // @resource    GM_configCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
+// @resource    volumebarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Player%20Additions/Mousewheel%20Volumecontrol/volumebar.css
+// @resource    progressbarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Player%20Additions/Progress%20Bar/progressbar.css
+// @resource    bigPlaylistCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Playlist%20Additions/BigPlaylist/bigPlaylist.css
 // ==/UserScript==
 /*
     <InstaSynch - Watch Videos with friends.>

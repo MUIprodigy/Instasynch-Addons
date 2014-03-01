@@ -60,9 +60,8 @@ setField({
     'subsection': 'NicoNicoDouga-Mode'
 });
 
-function loadNNDMode() {
+function loadNNDModeOnce() {
     GM_addStyle(".text-shadow {text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }");
-    $('#media').css('position', 'relative');
     onAddMessage.push({
         callback: function(username, message, userstyle, textstyle) {
             if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
@@ -72,6 +71,10 @@ function loadNNDMode() {
             }
         }
     });
+}
+
+function loadNNDMode() {
+    $('#media').css('position', 'relative');
     playerWidth = $('#media').width();
     playerHeight = $('#media').height();
 }
@@ -223,4 +226,6 @@ function parseMessageForNND(message) {
     }
     return message;
 }
+
+executeOnceFunctions.push(loadNNDModeOnce);
 preConnectFunctions.push(loadNNDMode);

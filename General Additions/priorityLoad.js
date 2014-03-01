@@ -4,6 +4,7 @@ function loadExecuteOncePrePriorityScripts() {
         loadGeneralStuff,
         loadCommandLoader,
         loadSettingsLoader,
+        loadBigPlaylistOnce,
         loadEvents
     ]);
 }

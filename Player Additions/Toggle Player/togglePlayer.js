@@ -9,8 +9,15 @@ setField({
     'section': 'Player Additions'
 });
 
-function loadTogglePlayer() {
-    //add the command
+function loadTogglePlayerOnce() {
+    if (!GM_config.get('PlayerActive')) {
+        setTimeout(unsafeWindow.video.destroyPlayer, 3000);
+    }
+}
+
+function loadTogglePlayerOnce() {
+    var oldPlayerActive;
+
     commands.set('regularCommands', "togglePlayer", function() {
         togglePlayer();
         toggleSetting();
@@ -26,10 +33,6 @@ function loadTogglePlayer() {
             oldPlayerActive = GM_config.get('PlayerActive');
         }
     });
-    //toggle the player once if the stored setting was false
-    if (!GM_config.get('PlayerActive')) {
-        setTimeout(unsafeWindow.video.destroyPlayer, 1500);
-    }
 
     var oldPlayVideo = unsafeWindow.playVideo;
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
@@ -53,7 +56,6 @@ function loadTogglePlayer() {
         }
     };
 }
-var oldPlayerActive;
 
 function togglePlayer() {
     if (!GM_config.get('PlayerActive')) {
@@ -68,6 +70,5 @@ function toggleSetting() {
     GM_config.save();
 }
 
-var playerActive = true;
-
+executeOnceFuntions.push(loadTogglePlayerOnce);
 postConnectFunctions.push(loadTogglePlayer);

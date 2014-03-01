@@ -51,8 +51,6 @@ setField({
     'section': 'General Additions'
 });
 
-GM_addStyle(GM_getResourceText('controlBarCSS'));
-
 function loadControlBar() {
     var skipRate = 0,
         skipText = $('#skipCounter').text(),
@@ -182,6 +180,7 @@ function loadControlBar() {
 }
 
 function loadControlBarOnce() {
+    GM_addStyle(GM_getResourceText('controlBarCSS'));
     var oldDisplayAnimations = GM_config.get('button-animations');
 
     onSettingsOpen.push(function() {
