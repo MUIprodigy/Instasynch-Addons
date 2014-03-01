@@ -1,12 +1,25 @@
-function loadPreConnectionPrePriorityScripts() {
+function loadExecuteOncePrePriorityScripts() {
     executeFunctions([
         loadNewLoadUserlist,
         loadGeneralStuff,
         loadCommandLoader,
         loadSettingsLoader,
+        loadEvents
+    ]);
+}
+
+function loadExecuteOncePostPriorityScripts() {
+    if (executeOnceFunctions.lastIndexOf(loadExecuteOncePostPriorityScripts) !== executeOnceFunctions.length - 1) {
+        executeOnceFunctions.push(loadExecuteOncePostPriorityScripts);
+        return;
+    }
+    executeFunctions([loadPriorityEvents]);
+}
+
+function loadPreConnectionPrePriorityScripts() {
+    executeFunctions(resetVariables);
+    executeFunctions([
         loadBigPlaylist,
-        loadNewLoadUserlist,
-        loadEvents,
         loadControlBar
     ]);
 }
@@ -16,7 +29,7 @@ function loadPreConnectionPostPriorityScripts() {
         preConnectFunctions.push(loadPreConnectionPostPriorityScripts);
         return;
     }
-    executeFunctions([loadPriorityEvents]);
+    executeFunctions([]);
 }
 
 function loadPostConnectionPrePriorityScripts() {
@@ -35,3 +48,6 @@ preConnectFunctions.push(loadPreConnectionPostPriorityScripts);
 
 postConnectFunctions.splice(0, 0, loadPostConnectionPrePriorityScripts);
 postConnectFunctions.push(loadPostConnectionPostPriorityScripts);
+
+executeOnceFunctions.splice(0, 0, loadExecuteOncePrePriorityScripts);
+executeOnceFunctions.push(loadExecuteOncePostPriorityScripts);

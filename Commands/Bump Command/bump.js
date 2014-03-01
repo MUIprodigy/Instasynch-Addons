@@ -48,4 +48,4 @@ function bump(params) {
 }
 
 
-preConnectFunctions.push(loadBumpCommand);
+executeOnceFunctions.push(loadBumpCommand);

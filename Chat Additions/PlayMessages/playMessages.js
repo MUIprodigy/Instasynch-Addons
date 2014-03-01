@@ -22,4 +22,4 @@ function loadPlayMessages() {
     });
 }
 
-postConnectFunctions.push(loadPlayMessages);
+executeOnceFunctions.push(loadPlayMessages);

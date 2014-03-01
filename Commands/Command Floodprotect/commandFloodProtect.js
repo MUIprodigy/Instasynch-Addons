@@ -30,4 +30,8 @@ function loadCommandFloodProtect() {
 var sendcmdReady = true,
     commandCache = [];
 
-preConnectFunctions.push(loadCommandFloodProtect);
+resetVariables.push(function() {
+    sendcmdReady = true;
+    commandCache = [];
+});
+executeOnceFunctions.push(loadCommandFloodProtect);

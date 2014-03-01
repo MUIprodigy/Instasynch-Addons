@@ -26,4 +26,4 @@ function loadLogInOffMessages() {
     });
 }
 
-postConnectFunctions.push(loadLogInOffMessages);
+executeOnceFunctions.push(loadLogInOffMessages);

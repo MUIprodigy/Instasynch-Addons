@@ -62,6 +62,8 @@
 
 var preConnectFunctions = [],
     postConnectFunctions = [],
+    executeOnceFunctons = [],
+    resetVariables = [],
     settingsFields = {},
     $ = unsafeWindow.$,
     jQuery = $,
@@ -104,4 +106,8 @@ function postConnect() {
 
 function preConnect() {
     executeFunctions(preConnectFunctions);
+}
+
+function executeOnce() {
+    executeFunctions(executeOnceFunctons);
 }

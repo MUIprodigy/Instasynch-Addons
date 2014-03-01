@@ -55,5 +55,7 @@ function loadModSpy() {
     });
 }
 var bumpCheck = false;
-
+resetVariables.push(function() {
+    bumpCheck = false;
+});
 preConnectFunctions.push(loadModSpy);

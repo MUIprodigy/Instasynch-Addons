@@ -1,14 +1,53 @@
-function loadOnClickKickBan() {
-    if (!isUserMod()) {
-        return;
-    }
+function loadOnClickKickBanOnce() {
     var oldAddMessage = unsafeWindow.addMessage,
         chatCtrlDown = false;
-    //overwrite InstaSynch's  addMessage function
-    unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        oldAddMessage(username, message, userstyle, textstyle);
-        //only add the onclick events if the user is a mod and its not a system message
-        if (username !== '') {
+
+    function kickOrBan(kick, ban, text) {
+        if (!kick) {
+            return;
+        }
+        var user = text,
+            userFound = false,
+            isMod = false,
+            userId,
+            i,
+            action = (ban) ? 'ban' : 'kick';
+        user = user.match(/(\d\d:\d\d - )?([\w\-]+)/)[2];
+        for (i = 0; i < unsafeWindow.users.length; i += 1) {
+            if (unsafeWindow.users[i].username === user) {
+                if (unsafeWindow.users[i].permissions > 0) {
+                    isMod = true;
+                    break;
+                }
+                userId = unsafeWindow.users[i].id;
+                userFound = true;
+                break;
+            }
+        }
+        if (isMod) {
+            unsafeWindow.addMessage('', String.format("Can't {0} a mod", action), '', 'hashtext');
+        } else {
+            if (userFound) {
+                unsafeWindow.sendcmd(action, {
+                    userid: userId
+                });
+            } else {
+                if (ban) {
+                    unsafeWindow.sendcmd('leaverban', {
+                        username: user
+                    });
+                    unsafeWindow.addMessage('', 'Leaverb& user: ' + user, '', 'hashtext');
+                } else {
+                    unsafeWindow.addMessage('', "Didn't find the user", '', 'hashtext');
+                }
+            }
+        }
+    }
+    onAddMessage.push({
+        callback: function(username, message, userstyle, textstyle) {
+            if (username === '' || !isUserMod()) {
+                return;
+            }
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
@@ -27,53 +66,7 @@ function loadOnClickKickBan() {
             //add the events to the latest username in the chat list
             $('#chat_list > span:last-of-type').prev()
                 .on('click', function(event) {
-                    if (event.ctrlKey) {
-                        var user = $(this)[0].innerHTML,
-                            userFound = false,
-                            isMod = false,
-                            userId,
-                            i;
-                        user = user.match(/(\d\d:\d\d - )?([\w\-]+)/)[2];
-                        for (i = 0; i < unsafeWindow.users.length; i += 1) {
-                            if (unsafeWindow.users[i].username === user) {
-                                if (unsafeWindow.users[i].permissions > 0) {
-                                    isMod = true;
-                                    break;
-                                }
-                                userId = unsafeWindow.users[i].id;
-                                userFound = true;
-                                break;
-                            }
-                        }
-                        if (event.altKey) {
-                            if (isMod) {
-                                unsafeWindow.addMessage('', "Can't ban a mod", '', 'hashtext');
-                            } else {
-                                if (userFound) {
-                                    unsafeWindow.sendcmd('ban', {
-                                        userid: userId
-                                    });
-                                } else {
-                                    unsafeWindow.sendcmd('leaverban', {
-                                        username: user
-                                    });
-                                    unsafeWindow.addMessage('', 'Leaverb& user: ' + user, '', 'hashtext');
-                                }
-                            }
-                        } else {
-                            if (isMod) {
-                                unsafeWindow.addMessage('', "Can't kick a mod", '', 'hashtext');
-                            } else {
-                                if (userFound) {
-                                    unsafeWindow.sendcmd('kick', {
-                                        userid: userId
-                                    });
-                                } else {
-                                    unsafeWindow.addMessage('', "Didn't find the user", '', 'hashtext');
-                                }
-                            }
-                        }
-                    }
+                    kickOrBan(event.ctrlKey, event.altKey, $(this)[0].innerHTML);
                 })
                 .hover(function(event) {
                     currentElement = $(this);
@@ -86,8 +79,11 @@ function loadOnClickKickBan() {
                     $(document).unbind('keyup', keyUp);
                 });
         }
-    };
+    });
 
+}
+
+function loadOnClickKickBan() {
     function chatKeyDown(event) {
         if (!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
             unsafeWindow.autoscroll = false;
@@ -117,4 +113,5 @@ function loadOnClickKickBan() {
     );
 }
 
+executeOnceFunctions.push(loadOnClickKickBanOnce);
 postConnectFunctions.push(loadOnClickKickBan);

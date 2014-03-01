@@ -60,4 +60,7 @@ function setInputHistoryIndex(index) {
 var inputHistory = [''],
     inputHistoryIndex = 0;
 
+resetVariables.push(function() {
+    inputHistoryIndex = 0;
+});
 preConnectFunctions.push(loadInputHistory);

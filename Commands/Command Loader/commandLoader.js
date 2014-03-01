@@ -1,4 +1,4 @@
-function loadCommandLoader() {
+function loadCommandLoaderOnce() {
     var items = {};
     items.regularCommands = [
         "'reload",
@@ -98,7 +98,9 @@ function loadCommandLoader() {
             }
         }
     };
+}
 
+function loadCommandLoader() {
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
             var params = $(this).val().split(' ');
@@ -106,5 +108,8 @@ function loadCommandLoader() {
         }
     });
 }
+
 var commands,
     commandExecuted = false;
+
+preConnectionFunctions.push(loadCommandLoader);
