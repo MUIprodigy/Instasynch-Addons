@@ -51,4 +51,4 @@ function trimWall(params) {
     }
 }
 
-preConnectFunctions.push(loadTrimWallCommand);
+executeOnceFunctions.push(loadTrimWallCommand);

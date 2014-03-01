@@ -29,4 +29,4 @@ function purgeTooLong(params) {
     }
 }
 
-preConnectFunctions.push(loadPurgeTooLongCommand);
+executeOnceFunctions.push(loadPurgeTooLongCommand);

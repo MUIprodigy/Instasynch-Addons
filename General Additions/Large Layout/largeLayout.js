@@ -9,32 +9,7 @@ setField({
     'section': 'General Additions'
 });
 
-function loadLayout() {
-    $('head').append($('<style>', {
-        'id': 'layoutStyles'
-    }));
-
-    GM_addStyle(
-        ".layoutClickable {                       \
-            margin: 0 2px 0 2px;                  \
-            cursor: pointer;                      \
-            color: #ccc;                          \
-            text-decoration: underline;           \
-        }                                         \
-        .layoutNotClickable {                     \
-            color: white;                         \
-            text-decoration: none!important;      \
-            cursor: default;                      \
-        }                                         \
-        #layoutSelector {                         \
-            color: white;                         \
-            text-align: center;                   \
-            font-size: 13px;                      \
-            height: 20px;                         \
-            margin-top: 7px;                      \
-        }"
-    );
-
+function loadLayoutOnce() {
     var oldLayout = GM_config.get('Layout');
     onSettingsOpen.push(function() {
         oldLayout = GM_config.get('Layout');
@@ -45,9 +20,18 @@ function loadLayout() {
             oldLayout = GM_config.get('Layout');
         }
     });
+    GM_addStyle(GM_getResourceText('largeLayoutSelectorCSS'));
+    largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
+    $('head').append($('<style>', {
+        'id': 'layoutStyles'
+    }));
+}
+
+function loadLayout() {
     $('#playlistcontrols').css('width', '100%');
     $('.sliderContainer').css('width', '100%');
     $('.roomFooter ').css('margin-top', '0px');
+
     if (GM_config.get('Layout') !== 'normal') {
         changeLayout();
     }
@@ -77,7 +61,7 @@ function loadLayout() {
     }).text('layout:').insertBefore('#roomFooter');
     $('#layoutSelector').append(normal).append(large);
 }
-var largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
+var largeLayoutCSS;
 
 function changeLayout() {
     $('#layoutSelector').children().each(function() {
@@ -95,4 +79,5 @@ function changeLayout() {
     playerHeight = $('#media').height();
 }
 
+executeOnceFunctions.push(loadLayoutOnce);
 preConnectFunctions.push(loadLayout);

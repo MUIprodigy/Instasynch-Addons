@@ -29,4 +29,4 @@ function shuffle(params) {
     }
 }
 
-preConnectFunctions.push(loadShuffleCommand);
+executeOnceFunctions.push(loadShuffleCommand);

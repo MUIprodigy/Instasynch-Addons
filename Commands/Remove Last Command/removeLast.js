@@ -29,4 +29,4 @@ function removeLast(params) {
     }
 }
 
-preConnectFunctions.push(loadRemoveLast);
+executeOnceFunctions.push(loadRemoveLast);

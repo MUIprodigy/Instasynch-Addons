@@ -22,4 +22,4 @@ function votePurge(params) {
     unsafeWindow.sendcmd("poll-create", poll);
 }
 
-preConnectFunctions.push(loadVotePurgeCommand);
+executeOnceFunctions.push(loadVotePurgeCommand);

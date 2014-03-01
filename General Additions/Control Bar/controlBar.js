@@ -51,32 +51,18 @@ setField({
     'section': 'General Additions'
 });
 
+GM_addStyle(GM_getResourceText('controlBarCSS'));
+
 function loadControlBar() {
     var skipRate = 0,
         skipText = $('#skipCounter').text(),
-        playlistLock = $('#toggleplaylistlock img').attr('src'),
-        oldDisplayAnimations = GM_config.get('button-animations');
+        playlistLock = $('#toggleplaylistlock img').attr('src');
 
     $('#resynch').remove();
     $('#reload').remove();
-    GM_addStyle(GM_getResourceText('controlBarCSS'));
+
     setUpFullscreen();
-    onSettingsOpen.push(function() {
-        oldDisplayAnimations = GM_config.get('button-animations');
-    });
 
-    onSettingsSave.push(function() {
-        if (oldDisplayAnimations !== GM_config.get('button-animations')) {
-            toggleAnimations();
-            oldDisplayAnimations = GM_config.get('button-animations');
-        }
-    });
-
-    onSkips.push({
-        callback: function(skips, skipsNeeded) {
-            $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
-        }
-    });
     if (isConnected()) {
         skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
     }
@@ -193,6 +179,27 @@ function loadControlBar() {
         })
     );
     toggleAnimations();
+}
+
+function loadControlBarOnce() {
+    var oldDisplayAnimations = GM_config.get('button-animations');
+
+    onSettingsOpen.push(function() {
+        oldDisplayAnimations = GM_config.get('button-animations');
+    });
+
+    onSettingsSave.push(function() {
+        if (oldDisplayAnimations !== GM_config.get('button-animations')) {
+            toggleAnimations();
+            oldDisplayAnimations = GM_config.get('button-animations');
+        }
+    });
+
+    onSkips.push({
+        callback: function(skips, skipsNeeded) {
+            $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
+        }
+    });
 }
 
 function addAnimation(child, cls) {

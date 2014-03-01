@@ -20,4 +20,4 @@ function help(params) {
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 
-preConnectFunctions.push(loadHelpCommand);
+executeOnceFunctions.push(loadHelpCommand);

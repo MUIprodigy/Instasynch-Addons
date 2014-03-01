@@ -6,4 +6,4 @@ function skip() {
     unsafeWindow.sendcmd("skip", null);
 }
 
-preConnectFunctions.push(loadSkipCommand);
+executeOnceFunctions.push(loadSkipCommand);

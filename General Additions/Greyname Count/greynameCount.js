@@ -12,4 +12,4 @@ function loadGreynameCount() {
     setViewerCount();
 }
 
-preConnectFunctions.push(loadGreynameCount);
+executeOnceFunctions.push(loadGreynameCount);
