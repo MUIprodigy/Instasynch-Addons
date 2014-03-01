@@ -1,4 +1,4 @@
-function loadCommandLoader() {
+function loadCommandLoaderOnce() {
     var items = {};
     items.regularCommands = [
         "'reload",
@@ -77,7 +77,6 @@ function loadCommandLoader() {
             return items;
         },
         execute: function(funcName, params) {
-            commandExecuted = false;
             funcName = funcName.toLowerCase();
             if (funcName[0] === '$') {
                 return;
@@ -88,7 +87,6 @@ function loadCommandLoader() {
                 funcName = undefined;
             }
             if (funcName) {
-                commandExecuted = true;
                 params[0] = funcName;
                 //send the event to the site
                 unsafeWindow.postMessage(JSON.stringify({
@@ -98,13 +96,12 @@ function loadCommandLoader() {
             }
         }
     };
-
-    $("#chat input").bind("keypress", function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            var params = $(this).val().split(' ');
+    events.bind('onInputKeypress', function(event, message) {
+        if (event.keyCode === 13) {
+            var params = message.split(' ');
             commands.execute(params[0], params);
         }
     });
 }
-var commands,
-    commandExecuted = false;
+
+var commands;

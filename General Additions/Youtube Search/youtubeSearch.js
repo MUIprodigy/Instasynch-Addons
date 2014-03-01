@@ -16,8 +16,11 @@ var resultsPerPage = 9,
     nextButton,
     prevButton;
 
-function loadYoutubeSearch() {
+function loadYoutbeSearchOnce() {
     GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
+}
+
+function loadYoutubeSearch() {
     // Search results container
     divresults = $('<div id="search-results" />');
     // Close button container
@@ -260,4 +263,5 @@ function closeResults() {
     divresults.css('display', 'none');
 }
 
+executeOnceFunctions.push(loadYoutbeSearchOnce);
 preConnectFunctions.push(loadYoutubeSearch);

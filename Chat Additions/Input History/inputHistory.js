@@ -1,28 +1,24 @@
-function loadInputHistory() {
-    $("#chat input").bind('keypress', function(event) {
-        if (event.keyCode === 13) {
-            if ($(this).val() !== '') {
-                if (inputHistoryIndex !== 0) {
-                    //remove the string from the array
-                    inputHistory.splice(inputHistoryIndex, 1);
-                }
-                //add the string to the array at position 1
-                inputHistory.splice(1, 0, $(this).val());
-
-                //50 messages limit (for now)
-                if (inputHistory.length === 50) {
-                    //delete the last
-                    inputHistory.splice(inputHistory.length - 1, 1);
-                }
-                setInputHistoryIndex(0);
-                if (commandExecuted) {
-                    $(this).val('');
-                }
+function loadInputHistoryOnce() {
+    events.bind('onInputKeypress', function(event, message) {
+        if (event.keyCode === 13 && message !== '') {
+            if (inputHistoryIndex !== 0) {
+                //remove the string from the array
+                inputHistory.splice(inputHistoryIndex, 1);
             }
-        } else {
-            setInputHistoryIndex(0);
+            //add the string to the array at position 1
+            inputHistory.splice(1, 0, message);
+
+            //50 messages limit (for now)
+            if (inputHistory.length === 50) {
+                //delete the last
+                inputHistory.splice(inputHistory.length - 1, 1);
+            }
         }
+        setInputHistoryIndex(0);
     });
+}
+
+function loadInputHistory() {
     $("#chat input").bind('keydown', function(event) {
         if (isAutocompleteMenuActive && inputHistoryIndex === 0) {
             return;
@@ -60,4 +56,8 @@ function setInputHistoryIndex(index) {
 var inputHistory = [''],
     inputHistoryIndex = 0;
 
-preConnectFunctions.push(loadInputHistory);
+resetVariables.push(function() {
+    inputHistoryIndex = 0;
+});
+executeOnceFunctions.push(loadInputHistoryOnce);
+postConnectFunctions.push(loadInputHistory);

@@ -1,0 +1,17 @@
+#volumebar-container{
+	float:left;
+	width:0px;
+	position:relative;
+}
+
+#volumebar {
+	height:0px;
+	width:5px;
+	position:absolute;
+	left:-8px;
+    background-color:lime;
+    display:none;
+    /*copyright 2013, NeoLexx Fair License; http://opensource.org/licenses/Fair
+    http://userscripts.org/scripts/review/158749*/
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'autocall\' x=\'-300%\' width=\'500%\'><feGaussianBlur stdDeviation=\'5\'/></filter></svg>#autocall");
+}

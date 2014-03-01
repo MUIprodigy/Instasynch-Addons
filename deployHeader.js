@@ -2,8 +2,8 @@
 // @name        InstaSynch Addons
 // @namespace   Bibby
 // @description adds lots of features 
-// @include     http://*.instasynch.com/rooms/*
-// @include     http://instasynch.com/rooms/*
+// @include     http://*.instasynch.com/*
+// @include     http://instasynch.com/*
 // @version     @VERSION
 
 // @author      faqqq
@@ -30,12 +30,16 @@
 // @icon        http://i.imgur.com/bw2Zthys.jpg
 // @icon64      http://i.imgur.com/f3vYHNNs.jpg
 
-// @resource    controlBarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/controlBar.css
-// @resource    fullscreenCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/fullscreen.css
-// @resource    youtubeSearchCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Youtube%20Search/youtubeSearch.css
-// @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayout.css
-// @resource    settingsLoaderCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/settingsLoader.css
-// @resource    GM_configCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
+// @resource    controlBarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Control%20Bar/controlBar.css
+// @resource    fullscreenCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Control%20Bar/fullscreen.css
+// @resource    youtubeSearchCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Youtube%20Search/youtubeSearch.css
+// @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Large%20Layout/largeLayout.css
+// @resource    largeLayoutSelectorCSS https://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Large%20Layout/largeLayoutSelector.css
+// @resource    settingsLoaderCSS https://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Settings%20Loader/settingsLoader.css
+// @resource    GM_configCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/General%20Additions/Settings%20Loader/GMconfig.css
+// @resource    volumebarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/Player%20Additions/Mousewheel%20Volumecontrol/volumebar.css
+// @resource    progressbarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/Player%20Additions/Progress%20Bar/progressbar.css
+// @resource    bigPlaylistCSS http://raw.github.com/Bibbytube/Instasynch-Addons/Dev/Playlist%20Additions/BigPlaylist/bigPlaylist.css
 // ==/UserScript==
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -62,6 +66,8 @@
 
 var preConnectFunctions = [],
     postConnectFunctions = [],
+    executeOnceFunctions = [],
+    resetVariables = [],
     settingsFields = {},
     $ = unsafeWindow.$,
     jQuery = $,
@@ -85,7 +91,7 @@ function executeFunctions(funcArray) {
     var i;
     for (i = 0; i < funcArray.length; i += 1) {
         try {
-            funcArray[i]();
+            funcArray[i](i);
         } catch (err) {
             logError(funcArray[i].name, err);
         }
@@ -93,15 +99,14 @@ function executeFunctions(funcArray) {
 }
 
 function postConnect() {
-    if (unsafeWindow.messages < 4) {
-        setTimeout(function() {
-            postConnect();
-        }, 100);
-        return;
-    }
     executeFunctions(postConnectFunctions);
+    events.unbind('onConnect', postConnectFunctions);
 }
 
 function preConnect() {
     executeFunctions(preConnectFunctions);
+}
+
+function executeOnce() {
+    executeFunctions(executeOnceFunctions);
 }

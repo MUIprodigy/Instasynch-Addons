@@ -19,8 +19,6 @@ function loadGeneralStuff() {
     };
 
     thisUsername = $.cookie('username');
-    unsafeWindow.addMessage('', String.format('<strong>Script {0} loaded.<br>Changelog: {1}<br>Save&Close button in the settings currently doesnt work in Firefox.</strong>', GM_info.script.version, 'https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt'), '', 'hashtext');
-
 
     // unsafeWindow.addEventListener("message", 
     // function(event){
@@ -35,23 +33,35 @@ function loadGeneralStuff() {
     // function openInNewTab(url, options){
     //     GM_openInTab(url,options);
     // }
-
+    events.bind('onConnect', function() {
+        isConnected = true;
+    });
+    events.bind('onDisconnect', function() {
+        isConnected = true;
+    });
+    events.bind('onChangeRoom', function() {
+        isConnected = true;
+    });
+    //we are already connected
+    if (unsafeWindow.userInfo !== undefined) {
+        isConnected = true;
+        executeOnceFunctions.push(function() {
+            events.fire('onConnecting');
+        });
+    }
 }
 
 function htmlDecode(value) {
     return $('<div/>').html(value).text();
 }
-
-function isConnected() {
-    return unsafeWindow.userInfo;
-}
+var isConnected = false;
 
 function logError(origin, err) {
     unsafeWindow.console.log("Error in %s %o", origin, err);
 }
 
 function isUsername(username) {
-    return username.match(/^([A-Za-z0-9]|([-_](?![-_]))){5,16}$/) !== null;
+    return username.match(/^([A-Za-z0-9]|([\-_](?![\-_]))){5,16}$/) !== null;
 }
 
 function getUrlOfInfo(vidinfo) {
@@ -187,3 +197,19 @@ function pasteTextAtCaret(text) {
         document.selection.createRange().text = text;
     }
 }
+
+//http://stackoverflow.com/a/4742655
+$.fn.bindUp = function(type, fn) {
+
+    type = type.split(/\s+/);
+
+    this.each(function() {
+        var len = type.length;
+        while (len--) {
+            $(this).bind(type[len], fn);
+
+            var evt = $.data(this, 'events')[type[len]];
+            evt.splice(0, 0, evt.pop());
+        }
+    });
+};

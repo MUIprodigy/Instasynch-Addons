@@ -23,10 +23,10 @@ function purgeTooLong(params) {
     videos.sort(compareVideos);
 
     for (i = 0; i < videos.length; i += 1) {
-        unsafeWindow.sendcmd('remove', {
+        unsafeWindow.global.sendcmd('remove', {
             info: videos[i].info
         });
     }
 }
 
-preConnectFunctions.push(loadPurgeTooLongCommand);
+executeOnceFunctions.push(loadPurgeTooLongCommand);
