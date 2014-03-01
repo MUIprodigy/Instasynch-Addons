@@ -14,7 +14,7 @@ function bump(params) {
         }
         bumpTo = getActiveVideoIndex() + 1;
     } else {
-        for (i = 1; i < params.length; i++) {
+        for (i = 1; i < params.length; i += 1) {
             if (isUsername(params[i])) {
                 user = params[i];
             } else {

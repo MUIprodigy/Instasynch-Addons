@@ -65,7 +65,7 @@
 
 var preConnectFunctions = [],
     postConnectFunctions = [],
-    executeOnceFunctons = [],
+    executeOnceFunctions = [],
     resetVariables = [],
     settingsFields = {},
     $ = unsafeWindow.$,
@@ -99,9 +99,7 @@ function executeFunctions(funcArray) {
 
 function postConnect() {
     if (unsafeWindow.messages < 4) {
-        setTimeout(function() {
-            postConnect();
-        }, 100);
+        setTimeout(postConnect, 100);
         return;
     }
     executeFunctions(postConnectFunctions);
@@ -112,5 +110,5 @@ function preConnect() {
 }
 
 function executeOnce() {
-    executeFunctions(executeOnceFunctons);
+    executeFunctions(executeOnceFunctions);
 }

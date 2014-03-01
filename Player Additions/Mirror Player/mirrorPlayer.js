@@ -66,4 +66,4 @@ function toggleMirrorPlayer() {
 resetVariables.push(function() {
     isPlayerMirrored = false;
 });
-executeFunctionsOnce.push(loadMirrorPlayer);
+executeOnceFunctions.push(loadMirrorPlayer);

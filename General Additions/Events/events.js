@@ -42,7 +42,7 @@ function loadEvents() {
     };
 
     function countUser(user, increment) {
-        var val = (increment) ? 1 : -1;
+        var val = increment ? 1 : -1;
         if (user.loggedin) {
             if (parseInt(user.permissions, 10) > 0) {
                 modsCount += val;

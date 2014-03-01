@@ -80,7 +80,7 @@ function loadNNDMode() {
 }
 
 var marqueeMessages = [],
-    marqueeIntervalId = undefined,
+    marqueeIntervalId,
     playerHeight,
     playerWidth;
 

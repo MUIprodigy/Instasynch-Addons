@@ -1,6 +1,4 @@
 function loadOnClickKickBanOnce() {
-    var oldAddMessage = unsafeWindow.addMessage,
-        chatCtrlDown = false;
 
     function kickOrBan(kick, ban, text) {
         if (!kick) {
@@ -11,7 +9,7 @@ function loadOnClickKickBanOnce() {
             isMod = false,
             userId,
             i,
-            action = (ban) ? 'ban' : 'kick';
+            action = ban ? 'ban' : 'kick';
         user = user.match(/(\d\d:\d\d - )?([\w\-]+)/)[2];
         for (i = 0; i < unsafeWindow.users.length; i += 1) {
             if (unsafeWindow.users[i].username === user) {
@@ -44,7 +42,7 @@ function loadOnClickKickBanOnce() {
         }
     }
     onAddMessage.push({
-        callback: function(username, message, userstyle, textstyle) {
+        callback: function(username) {
             if (username === '' || !isUserMod()) {
                 return;
             }
@@ -68,7 +66,7 @@ function loadOnClickKickBanOnce() {
                 .on('click', function(event) {
                     kickOrBan(event.ctrlKey, event.altKey, $(this)[0].innerHTML);
                 })
-                .hover(function(event) {
+                .hover(function() {
                     currentElement = $(this);
                     $(document).bind('keydown', keyDown);
                     $(document).bind('keyup', keyUp);
@@ -84,6 +82,8 @@ function loadOnClickKickBanOnce() {
 }
 
 function loadOnClickKickBan() {
+    var chatCtrlDown = false;
+
     function chatKeyDown(event) {
         if (!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
             unsafeWindow.autoscroll = false;

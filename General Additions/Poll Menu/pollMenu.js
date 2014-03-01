@@ -31,7 +31,7 @@ function loadPollMenu() {
                     }
                 }
                 $('#create-poll > #title').val(htmlDecode(oldPoll.title));
-                $(".create-poll-option").each(function(index) {
+                $(".create-poll-option").each(function() {
                     $(this).val(htmlDecode(oldPoll.options[i].option));
                     i += 1;
                     if (i >= oldPoll.options.length) {
@@ -45,7 +45,7 @@ function loadPollMenu() {
             'id': 'clear-poll-options'
         }).text('Clear').click(function() {
             $('#create-poll > #title').val('');
-            $(".create-poll-option").each(function(index) {
+            $(".create-poll-option").each(function() {
                 $(this).val('');
             });
         })
@@ -54,8 +54,8 @@ function loadPollMenu() {
             var poll = {};
             poll.title = $("#title").val();
             poll.options = [];
-            $(".create-poll-option").each(function(index) {
-                if ($(this).val().trim() != "") {
+            $(".create-poll-option").each(function() {
+                if ($(this).val().trim() !== "") {
                     poll.options.push($(this).val().trim());
                 }
             });

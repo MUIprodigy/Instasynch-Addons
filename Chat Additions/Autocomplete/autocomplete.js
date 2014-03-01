@@ -54,14 +54,13 @@ setField({
 function loadAutoComplete() {
 
     var i,
-        emotes = (function() {
-            var temp = Object.keys(unsafeWindow.$codes);
-            for (i = 0; i < temp.length; i += 1) {
-                temp[i] = '/' + temp[i];
-            }
-            return temp;
-        }()),
+        emotes = [],
+        temp = Object.keys(unsafeWindow.$codes),
         tagKeys = Object.keys(tags);
+
+    for (i = 0; i < temp.length; i += 1) {
+        emotes.push('/' + temp[i]);
+    }
 
     for (i = 0; i < tagKeys.length; i += 1) {
         tagKeys[i] = tagKeys[i].replace(/\\/g, '');

@@ -11,7 +11,7 @@ setField({
 
 function loadLogInOffMessages() {
     onAddUser.push({
-        callback: function(user, css, sort) {
+        callback: function(user) {
             if (user.loggedin && GM_config.get('LogInOffMessages')) {
                 unsafeWindow.addMessage('', String.format('{0} logged on.', user.username), '', 'hashtext');
             }

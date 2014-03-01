@@ -9,7 +9,7 @@ function loadNameNotificationOnce() {
         found = false;
     onAddMessage.push({
         preOld: true,
-        callback: function(username, message, userstyle, textstyle) {
+        callback: function(username, message) {
             while (!end) {
                 nameStart = message.indexOf('@', nameStart + 1);
                 if (nameStart === -1) {

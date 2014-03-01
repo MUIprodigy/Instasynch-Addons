@@ -49,7 +49,7 @@ function logError(origin, err) {
 }
 
 function isUsername(username) {
-    return username.match(/^([A-Za-z0-9]|([-_](?![-_]))){5,16}$/) !== null;
+    return username.match(/^([A-Za-z0-9]|([\-_](?![\-_]))){5,16}$/) !== null;
 }
 
 function getUrlOfInfo(vidinfo) {

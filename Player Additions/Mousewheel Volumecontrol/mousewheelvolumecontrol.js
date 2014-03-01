@@ -108,7 +108,7 @@ var isPlayerReady = false,
     globalVolume = 50,
     oldGlobalVolume = 50,
     mouserOverPlayer = false,
-    vimeoVolumePollingIntervalId = undefined,
+    vimeoVolumePollingIntervalId,
     previousVolumeScrollTime = new Date().getTime(), // used to measure speed of scrolling
     volumebarFadeoutTimeout;
 

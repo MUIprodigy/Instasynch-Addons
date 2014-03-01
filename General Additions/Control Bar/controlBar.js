@@ -311,7 +311,7 @@ function setUpFullscreen() {
             })
         )
     );
-    $(document).bind('fscreenchange', function(e, state, elem) {
+    $(document).bind('fscreenchange', function() {
         if ($.fullscreen.isFullScreen()) {
             $('.NND-element').remove();
             oldLayoutCSS = $('#layoutStyles').text();

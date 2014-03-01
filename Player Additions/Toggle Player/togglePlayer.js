@@ -16,7 +16,8 @@ function loadTogglePlayerOnce() {
 }
 
 function loadTogglePlayerOnce() {
-    var oldPlayerActive;
+    var oldPlayerActive,
+        oldPlayVideo = unsafeWindow.playVideo;
 
     commands.set('regularCommands', "togglePlayer", function() {
         togglePlayer();
@@ -34,7 +35,6 @@ function loadTogglePlayerOnce() {
         }
     });
 
-    var oldPlayVideo = unsafeWindow.playVideo;
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
         if (GM_config.get('PlayerActive')) {
             oldPlayVideo(vidinfo, time, playing);
@@ -70,5 +70,5 @@ function toggleSetting() {
     GM_config.save();
 }
 
-executeOnceFuntions.push(loadTogglePlayerOnce);
+executeOnceFunctions.push(loadTogglePlayerOnce);
 postConnectFunctions.push(loadTogglePlayer);
