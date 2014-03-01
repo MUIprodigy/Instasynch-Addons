@@ -93,7 +93,9 @@ function loadEvents() {
 function loadPriorityEvents() {
     var oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
-        i;
+        i, oldPoll = {
+            title: ''
+        };;
 
     unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
@@ -113,9 +115,6 @@ function loadPriorityEvents() {
                 }
             }
         }
-    };
-    var oldPoll = {
-        title: ''
     };
 
     function pollEquals(oldPoll, newPoll) {

@@ -2,7 +2,7 @@ function loadExecuteOncePrePriorityScripts() {
     executeFunctions([
         loadNewLoadUserlist,
         loadGeneralStuff,
-        loadCommandLoader,
+        loadCommandLoaderOnce,
         loadSettingsLoader,
         loadBigPlaylistOnce,
         loadEvents

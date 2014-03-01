@@ -112,4 +112,4 @@ function loadCommandLoader() {
 var commands,
     commandExecuted = false;
 
-preConnectionFunctions.push(loadCommandLoader);
+preConnectFunctions.push(loadCommandLoader);

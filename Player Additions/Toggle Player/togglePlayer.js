@@ -15,7 +15,7 @@ function loadTogglePlayerOnce() {
     }
 }
 
-function loadTogglePlayerOnce() {
+function loadTogglePlayer() {
     var oldPlayerActive,
         oldPlayVideo = unsafeWindow.playVideo;
 
