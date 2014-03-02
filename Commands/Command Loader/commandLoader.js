@@ -98,12 +98,9 @@ function loadCommandLoaderOnce() {
             }
         }
     };
-}
-
-function loadCommandLoader() {
-    $("#chat input").bind("keypress", function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            var params = $(this).val().split(' ');
+    onInputEnterKey.splice(0, 0, {
+        callback: function(message) {
+            var params = message.split(' ');
             commands.execute(params[0], params);
         }
     });
@@ -111,5 +108,3 @@ function loadCommandLoader() {
 
 var commands,
     commandExecuted = false;
-
-preConnectFunctions.push(loadCommandLoader);

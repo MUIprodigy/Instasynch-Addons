@@ -1,6 +1,6 @@
-function loadInputHistory() {
-    $("#chat input").bind('keypress', function(event) {
-        if (event.keyCode === 13) {
+function loadInputHistoryOnce() {
+    onInputEnterKey.push({
+        callback: function() {
             if ($(this).val() !== '') {
                 if (inputHistoryIndex !== 0) {
                     //remove the string from the array
@@ -19,7 +19,13 @@ function loadInputHistory() {
                     $(this).val('');
                 }
             }
-        } else {
+        }
+    });
+}
+
+function loadInputHistory() {
+    $("#chat input").bindFirst('keypress', function(event) {
+        if (event.keyCode !== 13) {
             setInputHistoryIndex(0);
         }
     });
@@ -63,4 +69,5 @@ var inputHistory = [''],
 resetVariables.push(function() {
     inputHistoryIndex = 0;
 });
-preConnectFunctions.push(loadInputHistory);
+executeOnceFunctions.push(loadInputHistoryOnce);
+postConnectFunctions.push(loadInputHistory);

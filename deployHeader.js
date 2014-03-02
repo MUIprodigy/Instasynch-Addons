@@ -2,10 +2,8 @@
 // @name        InstaSynch Addons
 // @namespace   Bibby
 // @description adds lots of features 
-// @include     http://*.instasynch.com/rooms/*
-// @include     http://instasynch.com/rooms/*
-// @include     http://instasynch.com/
-// @include     http://*.instasynch.com/
+// @include     http://*.instasynch.com/*
+// @include     http://instasynch.com/*
 // @version     @VERSION
 
 // @author      faqqq

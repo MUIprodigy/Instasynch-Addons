@@ -143,6 +143,12 @@ function loadPriorityEvents() {
         oldAddVideo(vidinfo);
         fireEvents(onAddVideo, [vidinfo], false);
     };
+
+    $("#chat input").bindFirst('keypress', function(event) {
+        if (event.keyCode === $.ui.keyCode.ENTER) {
+            fireEvents(onInputEnterKey, [$(this).val()], false);
+        }
+    });
 }
 
 function loadEvents() {
@@ -189,7 +195,8 @@ var currentPlayer = '',
     onReconnecting = [],
     onDisconnect = [],
     onChangeRoom = [],
-    onAddVideo = [];
+    onAddVideo = [],
+    onInputEnterKey = [];
 
 resetVariables.push(function() {
     currentPlayer = '';

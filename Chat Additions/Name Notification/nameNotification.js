@@ -83,5 +83,6 @@ resetVariables.push(function() {
     $('head > link:first-of-type')[0].href = "http://i.imgur.com/BMpkAgE.png";
     notified = false;
 });
+
 preConnectFunctions.push(loadNameNotification);
 executeOnceFunctions.push(loadNameNotificationOnce);

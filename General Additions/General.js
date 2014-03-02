@@ -197,3 +197,19 @@ function pasteTextAtCaret(text) {
         document.selection.createRange().text = text;
     }
 }
+
+//http://stackoverflow.com/a/4742655
+$.fn.bindUp = function(type, fn) {
+
+    type = type.split(/\s+/);
+
+    this.each(function() {
+        var len = type.length;
+        while (len--) {
+            $(this).bind(type[len], fn);
+
+            var evt = $.data(this, 'events')[type[len]];
+            evt.splice(0, 0, evt.pop());
+        }
+    });
+};
