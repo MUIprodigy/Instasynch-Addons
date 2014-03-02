@@ -143,12 +143,6 @@ function loadPriorityEvents() {
         oldAddVideo(vidinfo);
         fireEvents(onAddVideo, [vidinfo], false);
     };
-
-    $("#chat input").bindFirst('keypress', function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            fireEvents(onInputEnterKey, [$(this).val()], false);
-        }
-    });
 }
 
 function loadEvents() {
@@ -160,6 +154,12 @@ function loadEvents() {
         fireEvents(onPlayerDestroy, [], false);
         currentPlayer = '';
     };
+
+    $("#chat input").bindFirst('keypress', function(event) {
+        if (event.keyCode === $.ui.keyCode.ENTER) {
+            fireEvents(onInputEnterKey, [$("#chat input").val()], false);
+        }
+    });
 }
 
 function fireEvents(listeners, parameters, preOld) {

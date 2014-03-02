@@ -1,13 +1,13 @@
 function loadInputHistoryOnce() {
     onInputEnterKey.push({
-        callback: function() {
-            if ($(this).val() !== '') {
+        callback: function(message) {
+            if (message !== '') {
                 if (inputHistoryIndex !== 0) {
                     //remove the string from the array
                     inputHistory.splice(inputHistoryIndex, 1);
                 }
                 //add the string to the array at position 1
-                inputHistory.splice(1, 0, $(this).val());
+                inputHistory.splice(1, 0, message);
 
                 //50 messages limit (for now)
                 if (inputHistory.length === 50) {
@@ -16,7 +16,7 @@ function loadInputHistoryOnce() {
                 }
                 setInputHistoryIndex(0);
                 if (commandExecuted) {
-                    $(this).val('');
+                    $("#chat input").val('');
                 }
             }
         }
