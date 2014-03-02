@@ -77,7 +77,6 @@ function loadCommandLoaderOnce() {
             return items;
         },
         execute: function(funcName, params) {
-            commandExecuted = false;
             funcName = funcName.toLowerCase();
             if (funcName[0] === '$') {
                 return;
@@ -88,7 +87,6 @@ function loadCommandLoaderOnce() {
                 funcName = undefined;
             }
             if (funcName) {
-                commandExecuted = true;
                 params[0] = funcName;
                 //send the event to the site
                 unsafeWindow.postMessage(JSON.stringify({
@@ -98,13 +96,14 @@ function loadCommandLoaderOnce() {
             }
         }
     };
-    onInputEnterKey.splice(0, 0, {
-        callback: function(message) {
-            var params = message.split(' ');
-            commands.execute(params[0], params);
+    onInputKeypress.splice(0, 0, {
+        callback: function(event, message) {
+            if (event.keyCode === 13) {
+                var params = message.split(' ');
+                commands.execute(params[0], params);
+            }
         }
     });
 }
 
-var commands,
-    commandExecuted = false;
+var commands;

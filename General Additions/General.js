@@ -49,6 +49,13 @@ function loadGeneralStuff() {
             isConnected = false;
         }
     });
+    //we are already connected
+    if (unsafeWindow.userInfo !== undefined) {
+        isConnected = true;
+        executeOnceFunctions.push(function() {
+            fireEvents(onConnecting, [], false);
+        });
+    }
 }
 
 function htmlDecode(value) {

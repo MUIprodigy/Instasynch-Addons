@@ -1,7 +1,7 @@
 function loadInputHistoryOnce() {
-    onInputEnterKey.push({
-        callback: function(message) {
-            if (message !== '') {
+    onInputKeypress.push({
+        callback: function(event, message) {
+            if (event.keyCode === 13 && message !== '') {
                 if (inputHistoryIndex !== 0) {
                     //remove the string from the array
                     inputHistory.splice(inputHistoryIndex, 1);
@@ -14,21 +14,13 @@ function loadInputHistoryOnce() {
                     //delete the last
                     inputHistory.splice(inputHistory.length - 1, 1);
                 }
-                setInputHistoryIndex(0);
-                if (commandExecuted) {
-                    $("#chat input").val('');
-                }
             }
+            setInputHistoryIndex(0);
         }
     });
 }
 
 function loadInputHistory() {
-    $("#chat input").bindFirst('keypress', function(event) {
-        if (event.keyCode !== 13) {
-            setInputHistoryIndex(0);
-        }
-    });
     $("#chat input").bind('keydown', function(event) {
         if (isAutocompleteMenuActive && inputHistoryIndex === 0) {
             return;

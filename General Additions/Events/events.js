@@ -156,9 +156,7 @@ function loadEvents() {
     };
 
     $("#chat input").bindFirst('keypress', function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            fireEvents(onInputEnterKey, [$("#chat input").val()], false);
-        }
+        fireEvents(onInputKeypress, [event, $("#chat input").val()], false);
     });
 }
 
@@ -196,7 +194,7 @@ var currentPlayer = '',
     onDisconnect = [],
     onChangeRoom = [],
     onAddVideo = [],
-    onInputEnterKey = [];
+    onInputKeypress = [];
 
 resetVariables.push(function() {
     currentPlayer = '';
