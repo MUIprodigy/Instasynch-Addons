@@ -94,7 +94,7 @@ function loadPollMenu() {
         $('<br>')
     ).css('width', '400px');
 
-    if (isConnected()) {
+    if (isConnected) {
         var poll = {};
         poll.title = $(".poll-title").text();
         poll.options = [];

@@ -61,7 +61,7 @@ function loadControlBar() {
 
     setUpFullscreen();
 
-    if (isConnected()) {
+    if (isConnected) {
         skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
     }
 
@@ -283,7 +283,7 @@ function setUpFullscreen() {
             GM_config.save();
         }, 5000);
     }
-    $('body').append($('<div>', {
+    $('#stage').append($('<div>', {
         'id': 'block-fullscreen'
     }).click(toggleFullscreen));
     onCreatePoll.push({

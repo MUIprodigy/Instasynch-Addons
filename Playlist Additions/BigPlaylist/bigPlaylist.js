@@ -16,11 +16,13 @@ function loadBigPlaylist() {
 
     if (GM_config.get('BigPlaylist')) {
         reloadPlaylistHTML();
-        if (isConnected()) {
+        if (isConnected) {
             reloadPlaylist();
         }
     }
-    setupTimeTo();
+    if (isConnected) {
+        setupTimeTo();
+    }
 }
 
 function loadBigPlaylistOnce() {

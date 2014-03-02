@@ -1,9 +1,8 @@
-function loadEvents() {
+function loadEventsOnce() {
     var oldPlayVideo = unsafeWindow.playVideo,
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
-        oldPlayerDestroy = unsafeWindow.video.destroyPlayer,
         oldSkips = unsafeWindow.skips,
         i;
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
@@ -77,12 +76,6 @@ function loadEvents() {
             $('#tablePlaylistBody').empty();
         }
     });
-    unsafeWindow.video.destroyPlayer = function() {
-        fireEvents(onPlayerDestroy, [], true);
-        oldPlayerDestroy();
-        fireEvents(onPlayerDestroy, [], false);
-        currentPlayer = '';
-    };
     unsafeWindow.skips = function(skips, skipsNeeded) {
         fireEvents(onSkips, [skips, skipsNeeded], true);
         oldSkips(skips, skipsNeeded);
@@ -94,28 +87,33 @@ function loadPriorityEvents() {
     var oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
         oldAddVideo = unsafeWindow.addVideo,
-        i, oldPoll = {
+        oldRequestPartialPage = unsafeWindow.global.requestPartialPage,
+        i,
+        oldPoll = {
             title: ''
-        };;
+        };
 
+    unsafeWindow.global.requestPartialPage = function(name, room, back) {
+        fireEvents(onChangeRoom, [name, room, back], true);
+        oldRequestPartialPage(name, room, back);
+        fireEvents(onChangeRoom, [name, room, back], false);
+    }
+    unsafeWindow.global.onConnecting = function() {
+        fireEvents(onConnecting, [], false);
+    };
+    unsafeWindow.global.onConnected = function() {
+        fireEvents(onConnect, [], false);
+    };
+    unsafeWindow.global.onReconnecting = function() {
+        fireEvents(onReconnecting, [], false);
+    };
+    unsafeWindow.global.onDisconnect = function() {
+        fireEvents(onDisconnect, [], false);
+    };
     unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
         oldAddMessage(username, message, userstyle, textstyle);
         fireEvents(onAddMessage, [username, message, userstyle, textstyle], false);
-
-        if (username === '') {
-            if (userstyle === '' && textstyle === 'hashtext') {
-                if (message === 'Connecting..') {
-                    fireEvents(onConnecting, [], false);
-                } else if (message === 'Connection Successful!') {
-                    fireEvents(onConnect, [], false);
-                }
-            } else if (userstyle === 'system-msg') {
-                if (message === 'Reconnecting...') {
-                    fireEvents(onReconnecting, [], false);
-                }
-            }
-        }
     };
 
     function pollEquals(oldPoll, newPoll) {
@@ -140,11 +138,22 @@ function loadPriorityEvents() {
         oldPoll = poll;
     };
 
-    unsafeWindow.addVideo = function addVideo(vidinfo) {
+    unsafeWindow.addVideo = function(vidinfo) {
         fireEvents(onAddVideo, [vidinfo], true);
         oldAddVideo(vidinfo);
         fireEvents(onAddVideo, [vidinfo], false);
-    }
+    };
+}
+
+function loadEvents() {
+    var oldPlayerDestroy = unsafeWindow.video.destroyPlayer;
+
+    unsafeWindow.video.destroyPlayer = function() {
+        fireEvents(onPlayerDestroy, [], true);
+        oldPlayerDestroy();
+        fireEvents(onPlayerDestroy, [], false);
+        currentPlayer = '';
+    };
 }
 
 function fireEvents(listeners, parameters, preOld) {
@@ -178,4 +187,6 @@ var currentPlayer = '',
     onConnecting = [],
     onConnect = [],
     onReconnecting = [],
+    onDisconnect = [],
+    onChangeRoom = [],
     onAddVideo = [];

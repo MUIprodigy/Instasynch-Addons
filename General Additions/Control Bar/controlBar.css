@@ -7,10 +7,28 @@
         transition: background-color 0.2s ease-in-out;
         -webkit-transition: background-color 0.2s ease-in-out;
         -moz-transition: background-color 0.2s ease-in-out;
-        background-color: #2eb6e6
+        background-color: #2eb6e6;
 }
 .controlIcon:hover {
-        background-color: #2284B5
+        background-color: #2284B5;
+}
+.friendsList .friendsList-expand {
+        transition: background-color 0.2s ease-in-out;
+        -webkit-transition: background-color 0.2s ease-in-out;
+        -moz-transition: background-color 0.2s ease-in-out;
+        background-color: #2eb6e6;
+}
+.friendsList .friendsList-expand:hover {
+        background-color: #2284B5;
+}
+.friendsList .friendsList-list .category {
+        transition: background-color 0.2s ease-in-out;
+        -webkit-transition: background-color 0.2s ease-in-out;
+        -moz-transition: background-color 0.2s ease-in-out;
+        background-color: #2eb6e6;
+}
+.friendsList .friendsList-list .category:hover {
+        background-color: #2284B5;
 }
 .click-nav ul .clicker {
         background: #2eb6e6;
@@ -19,6 +37,7 @@
 .click-nav ul .clicker:hover {
         background: #2284B5;
 }
+
 .spiral {
         -webkit-animation: spiral 1s linear 0s infinite reverse;
         -moz-animation: spiral 1s linear 0s infinite reverse;

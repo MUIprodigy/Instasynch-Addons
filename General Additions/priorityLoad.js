@@ -5,7 +5,7 @@ function loadExecuteOncePrePriorityScripts() {
         loadCommandLoaderOnce,
         loadSettingsLoader,
         loadBigPlaylistOnce,
-        loadEvents
+        loadEventsOnce
     ]);
 }
 
@@ -21,7 +21,8 @@ function loadPreConnectionPrePriorityScripts() {
     executeFunctions(resetVariables);
     executeFunctions([
         loadBigPlaylist,
-        loadControlBar
+        loadControlBar,
+        loadEvents
     ]);
 }
 

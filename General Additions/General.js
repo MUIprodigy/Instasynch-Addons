@@ -34,15 +34,27 @@ function loadGeneralStuff() {
     //     GM_openInTab(url,options);
     // }
 
+    onConnect.push({
+        callback: function() {
+            isConnected = true;
+        }
+    });
+    onDisconnect.push({
+        callback: function() {
+            isConnected = false;
+        }
+    });
+    onChangeRoom.push({
+        callback: function() {
+            isConnected = false;
+        }
+    });
 }
 
 function htmlDecode(value) {
     return $('<div/>').html(value).text();
 }
-
-function isConnected() {
-    return unsafeWindow.userInfo;
-}
+var isConnected = false;
 
 function logError(origin, err) {
     unsafeWindow.console.log("Error in %s %o", origin, err);

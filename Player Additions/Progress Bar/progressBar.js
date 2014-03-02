@@ -11,7 +11,8 @@ setField({
 function loadProgressbarOnce() {
     var maxTime = 0,
         progressbarInterval,
-        oldProgressBarSetting = GM_config.get('ProgressBar');
+        oldProgressBarSetting = GM_config.get('ProgressBar'),
+        eventObj;
 
     GM_addStyle(GM_getResourceText('progressbarCSS'));
     onSettingsOpen.push(function() {
@@ -42,22 +43,18 @@ function loadProgressbarOnce() {
             progressbarInterval = setUpInterval();
         }
     });
-    onPlayerChange.push({
+    eventObj = {
         callback: function() {
             if (progressbarInterval) {
                 clearInterval(progressbarInterval);
             }
         },
         preOld: true
-    });
-    onPlayerDestroy.push({
-        callback: function() {
-            if (progressbarInterval) {
-                clearInterval(progressbarInterval);
-            }
-        },
-        preOld: true
-    });
+    };
+    onPlayerChange.push(eventObj);
+    onPlayerDestroy.push(eventObj);
+    onDisconnect.push(eventObj);
+    onChangeRoom.push(eventObj);
 }
 
 function loadProgressbar() {

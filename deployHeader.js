@@ -101,11 +101,8 @@ function executeFunctions(funcArray) {
 }
 
 function postConnect() {
-    if (unsafeWindow.messages < 4) {
-        setTimeout(postConnect, 100);
-        return;
-    }
     executeFunctions(postConnectFunctions);
+    onConnect.splice(onConnect.indexOf(postConnect), 0);
 }
 
 function preConnect() {

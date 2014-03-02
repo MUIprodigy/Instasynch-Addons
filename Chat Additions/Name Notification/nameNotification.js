@@ -80,7 +80,7 @@ function toggleNotify() {
 }
 
 resetVariables.push(function() {
-    $('head > link:last-of-type')[0].href = "http://i.imgur.com/BMpkAgE.png";
+    $('head > link:first-of-type')[0].href = "http://i.imgur.com/BMpkAgE.png";
     notified = false;
 });
 preConnectFunctions.push(loadNameNotification);
