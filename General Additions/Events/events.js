@@ -190,3 +190,10 @@ var currentPlayer = '',
     onDisconnect = [],
     onChangeRoom = [],
     onAddVideo = [];
+
+resetVariables.push(function() {
+    currentPlayer = '';
+    blacknamesCount = 0;
+    greynamesCount = 0;
+    modsCount = 0;
+});

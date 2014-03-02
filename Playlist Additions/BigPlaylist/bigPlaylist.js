@@ -20,9 +20,6 @@ function loadBigPlaylist() {
             reloadPlaylist();
         }
     }
-    if (isConnected) {
-        setupTimeTo();
-    }
 }
 
 function loadBigPlaylistOnce() {

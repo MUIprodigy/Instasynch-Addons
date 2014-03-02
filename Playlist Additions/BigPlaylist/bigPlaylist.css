@@ -30,7 +30,7 @@
 }
 
 .playlist-thumbnail img:last-child{
-	width:16;
+	width:16px;
 	position:absolute;
 	right:0px;
 	bottom:0px;
