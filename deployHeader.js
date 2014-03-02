@@ -93,7 +93,7 @@ function executeFunctions(funcArray) {
     var i;
     for (i = 0; i < funcArray.length; i += 1) {
         try {
-            funcArray[i]();
+            funcArray[i](i);
         } catch (err) {
             logError(funcArray[i].name, err);
         }
