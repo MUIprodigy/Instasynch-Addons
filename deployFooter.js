@@ -1,6 +1,7 @@
 unsafeWindow.addEventListener('load', function() {
     function loadStuff() {
         if (unsafeWindow.global.page.name === 'room') {
+            executeFunctions(resetVariables);
             preConnect();
             onConnect.push({
                 callback: postConnect

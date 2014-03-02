@@ -10,7 +10,8 @@ function loadExecuteOncePrePriorityScripts() {
 }
 
 function loadExecuteOncePostPriorityScripts() {
-    if (executeOnceFunctions.lastIndexOf(loadExecuteOncePostPriorityScripts) !== executeOnceFunctions.length - 1) {
+    if (executeOnceFunctions.indexOf(loadExecuteOncePostPriorityScripts) !== executeOnceFunctions.length - 1) {
+        executeOnceFunctions.splice(executeOnceFunctions.indexOf(loadExecuteOncePostPriorityScripts), 1);
         executeOnceFunctions.push(loadExecuteOncePostPriorityScripts);
         return;
     }
@@ -18,7 +19,6 @@ function loadExecuteOncePostPriorityScripts() {
 }
 
 function loadPreConnectionPrePriorityScripts() {
-    executeFunctions(resetVariables);
     executeFunctions([
         loadBigPlaylist,
         loadControlBar,
@@ -27,7 +27,8 @@ function loadPreConnectionPrePriorityScripts() {
 }
 
 function loadPreConnectionPostPriorityScripts() {
-    if (preConnectFunctions.lastIndexOf(loadPreConnectionPostPriorityScripts) !== preConnectFunctions.length - 1) {
+    if (preConnectFunctions.indexOf(loadPreConnectionPostPriorityScripts) !== preConnectFunctions.length - 1) {
+        preConnectFunctions.splice(preConnectFunctions.indexOf(loadPreConnectionPostPriorityScripts), 1);
         preConnectFunctions.push(loadPreConnectionPostPriorityScripts);
         return;
     }
@@ -39,7 +40,8 @@ function loadPostConnectionPrePriorityScripts() {
 }
 
 function loadPostConnectionPostPriorityScripts() {
-    if (postConnectFunctions.lastIndexOf(loadPostConnectionPostPriorityScripts) !== postConnectFunctions.length - 1) {
+    if (postConnectFunctions.indexOf(loadPostConnectionPostPriorityScripts) !== postConnectFunctions.length - 1) {
+        postConnectFunctions.splice(postConnectFunctions.indexOf(loadPostConnectionPostPriorityScripts), 1);
         postConnectFunctions.push(loadPostConnectionPostPriorityScripts);
         return;
     }

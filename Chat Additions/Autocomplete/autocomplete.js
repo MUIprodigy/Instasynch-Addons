@@ -52,7 +52,6 @@ setField({
 
 
 function loadAutoComplete() {
-
     var i,
         emotes = [],
         temp = Object.keys(unsafeWindow.$codes),

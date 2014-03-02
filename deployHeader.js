@@ -102,7 +102,7 @@ function executeFunctions(funcArray) {
 
 function postConnect() {
     executeFunctions(postConnectFunctions);
-    onConnect.splice(onConnect.indexOf(postConnect), 0);
+    onConnect.splice(onConnect.indexOf(postConnect), 1);
 }
 
 function preConnect() {
