@@ -11,15 +11,16 @@ setField({
 
 function loadLayoutOnce() {
     var oldLayout = GM_config.get('Layout');
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldLayout = GM_config.get('Layout');
     });
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldLayout !== GM_config.get('Layout')) {
             changeLayout();
             oldLayout = GM_config.get('Layout');
         }
     });
+
     GM_addStyle(GM_getResourceText('largeLayoutSelectorCSS'));
     largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
     $('head').append($('<style>', {

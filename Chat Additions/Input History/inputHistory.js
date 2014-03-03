@@ -1,22 +1,20 @@
 function loadInputHistoryOnce() {
-    onInputKeypress.push({
-        callback: function(event, message) {
-            if (event.keyCode === 13 && message !== '') {
-                if (inputHistoryIndex !== 0) {
-                    //remove the string from the array
-                    inputHistory.splice(inputHistoryIndex, 1);
-                }
-                //add the string to the array at position 1
-                inputHistory.splice(1, 0, message);
-
-                //50 messages limit (for now)
-                if (inputHistory.length === 50) {
-                    //delete the last
-                    inputHistory.splice(inputHistory.length - 1, 1);
-                }
+    events.bind('onInputKeypress', function(event, message) {
+        if (event.keyCode === 13 && message !== '') {
+            if (inputHistoryIndex !== 0) {
+                //remove the string from the array
+                inputHistory.splice(inputHistoryIndex, 1);
             }
-            setInputHistoryIndex(0);
+            //add the string to the array at position 1
+            inputHistory.splice(1, 0, message);
+
+            //50 messages limit (for now)
+            if (inputHistory.length === 50) {
+                //delete the last
+                inputHistory.splice(inputHistory.length - 1, 1);
+            }
         }
+        setInputHistoryIndex(0);
     });
 }
 

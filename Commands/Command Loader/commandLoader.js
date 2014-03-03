@@ -96,12 +96,10 @@ function loadCommandLoaderOnce() {
             }
         }
     };
-    onInputKeypress.splice(0, 0, {
-        callback: function(event, message) {
-            if (event.keyCode === 13) {
-                var params = message.split(' ');
-                commands.execute(params[0], params);
-            }
+    events.bind('onInputKeypress', function(event, message) {
+        if (event.keyCode === 13) {
+            var params = message.split(' ');
+            commands.execute(params[0], params);
         }
     });
 }

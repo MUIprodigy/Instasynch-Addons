@@ -60,23 +60,21 @@ function loadMouseWheelVolumecontrolOnce() {
             } catch (ignore) {}
         }, false);
 
-    onPlayerReady.push({
-        'callback': function(oldPlayer, newPlayer) {
-            if (vimeoVolumePollingIntervalId) {
-                clearInterval(vimeoVolumePollingIntervalId);
-                vimeoVolumePollingIntervalId = undefined;
-            }
-            initGlobalVolume();
-            switch (newPlayer) {
-                case 'vimeo':
-                    //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
-                    vimeoVolumePollingIntervalId = setInterval(function() {
-                        $f($('#vimeo')[0]).api('getVolume', function(vol) {
-                            setGlobalVolume(vol * 100.0);
-                        });
-                    }, 500);
-                    break;
-            }
+    events.bind('onPlayerReady', function(oldPlayer, newPlayer) {
+        if (vimeoVolumePollingIntervalId) {
+            clearInterval(vimeoVolumePollingIntervalId);
+            vimeoVolumePollingIntervalId = undefined;
+        }
+        initGlobalVolume();
+        switch (newPlayer) {
+            case 'vimeo':
+                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+                vimeoVolumePollingIntervalId = setInterval(function() {
+                    $f($('#vimeo')[0]).api('getVolume', function(vol) {
+                        setGlobalVolume(vol * 100.0);
+                    });
+                }, 500);
+                break;
         }
     });
 }

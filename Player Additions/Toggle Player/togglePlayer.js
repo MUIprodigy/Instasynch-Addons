@@ -24,11 +24,11 @@ function loadTogglePlayerOnce() {
         toggleSetting();
     }, 'Turns the embedded player on and off.');
 
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldPlayerActive = GM_config.get('PlayerActive');
     });
 
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldPlayerActive !== GM_config.get('PlayerActive')) {
             togglePlayer();
             oldPlayerActive = GM_config.get('PlayerActive');

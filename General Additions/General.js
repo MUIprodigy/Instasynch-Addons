@@ -33,27 +33,20 @@ function loadGeneralStuff() {
     // function openInNewTab(url, options){
     //     GM_openInTab(url,options);
     // }
-
-    onConnect.push({
-        callback: function() {
-            isConnected = true;
-        }
+    events.bind('onConnect', function() {
+        isConnected = true;
     });
-    onDisconnect.push({
-        callback: function() {
-            isConnected = false;
-        }
+    events.bind('onDisconnect', function() {
+        isConnected = true;
     });
-    onChangeRoom.push({
-        callback: function() {
-            isConnected = false;
-        }
+    events.bind('onChangeRoom', function() {
+        isConnected = true;
     });
     //we are already connected
     if (unsafeWindow.userInfo !== undefined) {
         isConnected = true;
         executeOnceFunctions.push(function() {
-            fireEvents(onConnecting, [], false);
+            events.fire('onConnecting');
         });
     }
 }

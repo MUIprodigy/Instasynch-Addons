@@ -35,9 +35,6 @@ function loadBigPlaylistOnce() {
         $helper,
         i;
     GM_addStyle(GM_getResourceText('bigPlaylistCSS'));
-    onSettingsOpen.push(function() {
-        oldBigPlaylistSetting = GM_config.get('BigPlaylist');
-    });
 
     function enableSortable() {
         if (GM_config.get('BigPlaylist')) {
@@ -84,7 +81,11 @@ function loadBigPlaylistOnce() {
             $("#ulPlay").sortable("enable");
         }
     }
-    onSettingsSave.push(function() {
+    events.bind('onSettingsOpen', function() {
+        oldBigPlaylistSetting = GM_config.get('BigPlaylist');
+    });
+
+    events.bind('onSettingsSave', function() {
         if (oldBigPlaylistSetting !== GM_config.get('BigPlaylist')) {
             reloadPlaylistHTML(oldPlaylist);
             reloadPlaylist();
@@ -94,10 +95,10 @@ function loadBigPlaylistOnce() {
             }
         }
     });
-
-    unsafeWindow.makeLeader = function(userId) {
+    events.bind('onMakeLeader', function() {
         oldIsLeader = unsafeWindow.isLeader;
-        oldMakeLeader(userId);
+    }, true);
+    events.bind('onMakeLeader', function() {
         if (GM_config.get('BigPlaylist')) {
             //InstaSynch core.js, version 0.9.7
             if (userId === unsafeWindow.userInfo.id) {
@@ -106,8 +107,7 @@ function loadBigPlaylistOnce() {
                 $("#tablePlaylistBody").sortable("disable");
             }
         }
-    };
-
+    });
 
     // override functions from InstaSynch's io.js, version 0.9.7
     // overrides addVideo, removeVideo, moveVideo and playVideo

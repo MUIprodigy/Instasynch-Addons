@@ -62,12 +62,10 @@ setField({
 
 function loadNNDModeOnce() {
     GM_addStyle(".text-shadow {text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }");
-    onAddMessage.push({
-        callback: function(username, message, userstyle, textstyle) {
-            if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
-                if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
-                    addMarqueeMessage(message);
-                }
+    events.bind('onAddMessage', function(username, message, userstyle, textstyle) {
+        if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
+            if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
+                addMarqueeMessage(message);
             }
         }
     });

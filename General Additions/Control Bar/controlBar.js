@@ -183,21 +183,22 @@ function loadControlBarOnce() {
     GM_addStyle(GM_getResourceText('controlBarCSS'));
     var oldDisplayAnimations = GM_config.get('button-animations');
 
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldDisplayAnimations = GM_config.get('button-animations');
     });
-
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldDisplayAnimations !== GM_config.get('button-animations')) {
             toggleAnimations();
             oldDisplayAnimations = GM_config.get('button-animations');
         }
     });
+    events.bind('onSkips', function(skips, skipsNeeded) {
+        $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
+    });
 
-    onSkips.push({
-        callback: function(skips, skipsNeeded) {
-            $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
-        }
+    events.bind('onCreatePoll', function() {
+        $('.poll-container').removeClass('poll-container2');
+        $('#hide-poll').removeClass('hide-poll2');
     });
 }
 
@@ -286,12 +287,7 @@ function setUpFullscreen() {
     $('#stage').append($('<div>', {
         'id': 'block-fullscreen'
     }).click(toggleFullscreen));
-    onCreatePoll.push({
-        callback: function() {
-            $('.poll-container').removeClass('poll-container2');
-            $('#hide-poll').removeClass('hide-poll2');
-        }
-    });
+
     $('.playlist').prepend($('<div>', {
         'id': 'hide-playlist'
     }).append(

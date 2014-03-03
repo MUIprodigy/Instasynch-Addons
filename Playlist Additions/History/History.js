@@ -1,13 +1,11 @@
 function loadHistory() {
     commands.set('regularCommands', "history", printHistory, 'Shows the last 9 played videos on the YoutubeSearch panel.');
-    onPlayVideo.push({
-        callback: function(vidinfo, time, playing, indexOfVid) {
-            //Keep the last 9 videos
-            if (history.length === 9) {
-                history.shift();
-            }
-            history.push(unsafeWindow.playlist[indexOfVid]);
+    events.bind('onPlayVideo', function(vidinfo, time, playing, indexOfVid) {
+        //Keep the last 9 videos
+        if (history.length === 9) {
+            history.shift();
         }
+        history.push(unsafeWindow.playlist[indexOfVid]);
     });
 }
 

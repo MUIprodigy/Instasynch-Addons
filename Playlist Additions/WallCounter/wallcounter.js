@@ -8,15 +8,12 @@ function loadWallCounter() {
     commands.set('regularCommands', "printWallCounter", printWallCounter, 'Prints the length of the walls for each user.');
     commands.set('regularCommands', "printMyWallCounter", printMyWallCounter, 'Prints the length of your own wall.');
 
-    //overwrite InstaSynch's addVideo
-    onAddVideo.push({
-        callback: function(vidinfo) {
-            resetWallCounter();
-            value = wallCounter[vidinfo.addedby];
-            if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
-                output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
-                unsafeWindow.addMessage('', output, '', 'hashtext');
-            }
+    events.bind('onAddVideo', function(vidinfo) {
+        resetWallCounter();
+        value = wallCounter[vidinfo.addedby];
+        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
+            output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
+            unsafeWindow.addMessage('', output, '', 'hashtext');
         }
     });
 

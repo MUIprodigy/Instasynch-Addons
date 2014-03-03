@@ -4,8 +4,7 @@ function loadExecuteOncePrePriorityScripts() {
         loadGeneralStuff,
         loadCommandLoaderOnce,
         loadSettingsLoader,
-        loadBigPlaylistOnce,
-        loadEventsOnce
+        loadBigPlaylistOnce
     ]);
 }
 
@@ -17,7 +16,7 @@ function loadExecuteOncePostPriorityScripts(index) {
     if (executeOnceFunctions.indexOf(loadExecuteOncePostPriorityScripts) !== executeOnceFunctions.length - 1) {
         executeOnceFunctions.splice(executeOnceFunctions.indexOf(loadExecuteOncePostPriorityScripts), 1);
     }
-    executeFunctions([loadPriorityEvents]);
+    executeFunctions([loadEventsOnce]);
 }
 
 function loadPreConnectionPrePriorityScripts() {

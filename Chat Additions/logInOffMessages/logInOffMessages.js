@@ -10,18 +10,14 @@ setField({
 
 
 function loadLogInOffMessages() {
-    onAddUser.push({
-        callback: function(user) {
-            if (user.loggedin && GM_config.get('LogInOffMessages')) {
-                unsafeWindow.addMessage('', String.format('{0} logged on.', user.username), '', 'hashtext');
-            }
+    events.bind('onAddUser', function(user) {
+        if (user.loggedin && GM_config.get('LogInOffMessages')) {
+            unsafeWindow.addMessage('', String.format('{0} logged on.', user.username), '', 'hashtext');
         }
     });
-    onRemoveUser.push({
-        callback: function(id, user) {
-            if (user.loggedin && GM_config.get('LogInOffMessages')) {
-                unsafeWindow.addMessage('', String.format('{0} logged off.', user.username), '', 'hashtext');
-            }
+    events.bind('onRemoveUser', function(id, user) {
+        if (user.loggedin && GM_config.get('LogInOffMessages')) {
+            unsafeWindow.addMessage('', String.format('{0} logged off.', user.username), '', 'hashtext');
         }
     });
 }

@@ -13,11 +13,9 @@ setField({
 });
 
 function loadPlayMessages() {
-    onPlayVideo.push({
-        callback: function(vidinfo, time, playing, indexOfVid) {
-            if (GM_config.get('PlayMessages')) {
-                unsafeWindow.addMessage('', 'Now playing: ' + trimTitle(unsafeWindow.playlist[indexOfVid].title, 240), '', 'hashtext');
-            }
+    events.bind('onPlayVideo', function(vidinfo, time, playing, indexOfVid) {
+        if (GM_config.get('PlayMessages')) {
+            unsafeWindow.addMessage('', 'Now playing: ' + trimTitle(unsafeWindow.playlist[indexOfVid].title, 240), '', 'hashtext');
         }
     });
 }

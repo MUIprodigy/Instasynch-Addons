@@ -11,14 +11,14 @@ setField({
 function loadProgressbarOnce() {
     var maxTime = 0,
         progressbarInterval,
-        oldProgressBarSetting = GM_config.get('ProgressBar'),
-        eventObj;
+        oldProgressBarSetting = GM_config.get('ProgressBar');
 
     GM_addStyle(GM_getResourceText('progressbarCSS'));
-    onSettingsOpen.push(function() {
+
+    events.bind('onSettingsOpen', function() {
         oldProgressBarSetting = GM_config.get('ProgressBar');
     });
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldProgressBarSetting !== GM_config.get('ProgressBar')) {
             $("#progressbar-container").css('display', GM_config.get('ProgressBar') ? 'flex' : 'none');
             oldProgressBarSetting = GM_config.get('ProgressBar');
@@ -32,29 +32,23 @@ function loadProgressbarOnce() {
             });
         }, 200);
     }
-    onPlayVideo.push({
-        callback: function(vidinfo, time, playing, indexOfVid) {
-            maxTime = unsafeWindow.playlist[indexOfVid].duration;
-            $("#progressbar").css('width', '0px');
-        }
+    events.bind('onPlayVideo', function(vidinfo, time, playing, indexOfVid) {
+        maxTime = unsafeWindow.playlist[indexOfVid].duration;
+        $("#progressbar").css('width', '0px');
     });
-    onPlayerReady.push({
-        callback: function(oldPlayer, newPlayer) {
-            progressbarInterval = setUpInterval();
-        }
+    events.bind('onPlayerReady', function(oldPlayer, newPlayer) {
+        progressbarInterval = setUpInterval();
     });
-    eventObj = {
-        callback: function() {
-            if (progressbarInterval) {
-                clearInterval(progressbarInterval);
-            }
-        },
-        preOld: true
-    };
-    onPlayerChange.push(eventObj);
-    onPlayerDestroy.push(eventObj);
-    onDisconnect.push(eventObj);
-    onChangeRoom.push(eventObj);
+
+    function clearProgressbarInterval() {
+        if (progressbarInterval) {
+            clearInterval(progressbarInterval);
+        }
+    }
+    events.bind('onPlayerChange', clearProgressbarInterval);
+    events.bind('onPlayerDestroy', clearProgressbarInterval);
+    events.bind('onDisconnect', clearProgressbarInterval);
+    events.bind('onChangeRoom', clearProgressbarInterval);
 }
 
 function loadProgressbar() {

@@ -27,16 +27,16 @@ function loadMessageFilter() {
         oldCreatePoll = unsafeWindow.createPoll,
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
 
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
     });
-
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldNSFWEmotes !== GM_config.get('NSFWEmotes')) {
             toggleNSFWEmotes();
             oldNSFWEmotes = GM_config.get('NSFWEmotes');
         }
     });
+
     unsafeWindow.linkify = function(str, buildHashtagUrl, includeW3, target) {
         var emotes = [],
             index = -1;

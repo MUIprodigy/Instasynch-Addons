@@ -112,12 +112,9 @@ function loadPollMenu() {
 }
 
 function loadPollMenuOnce() {
-    onCreatePoll.push({
-        callback: function(poll) {
-            oldPoll = $.extend(true, {}, poll);
-        },
-        preOld: true
-    });
+    events.bind('onCreatePoll', function(poll) {
+        oldPoll = $.extend(true, {}, poll);
+    }, true);
 }
 
 var oldPoll = {};

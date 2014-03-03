@@ -19,9 +19,12 @@ function loadModSpy() {
         filter,
         i,
         lastUser;
-    onRemoveUser.push({
-        callback: function(id, user) {
-            lastUser = user;
+    events.bind('onRemoveUser', function(id, user) {
+        lastUser = user;
+    });
+    events.bind('onMoveVideo', function(vidinfo, position, oldPosition) {
+        if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
+            bumpCheck = true;
         }
     });
     unsafeWindow.console.log = function(message) {
@@ -46,13 +49,6 @@ function loadModSpy() {
         }
         oldLog.apply(unsafeWindow.console, arguments);
     };
-    onMoveVideo.push({
-        'callback': function(vidinfo, position, oldPosition) {
-            if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
-                bumpCheck = true;
-            }
-        }
-    });
 }
 var bumpCheck = false;
 resetVariables.push(function() {

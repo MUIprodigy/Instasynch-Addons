@@ -123,26 +123,15 @@ function loadSettingsLoader() {
 
                     $('#GM_config_buttons_holder > :last-child', this.contentWindow.document || this.contentDocument).before(saveAndCloseButton);
                 });
-                var i;
-                for (i = 0; i < onSettingsOpen.length; i += 1) {
-                    onSettingsOpen[i](args);
-                }
+
+                events.fire('onSettingsOpen');
             },
             'save': function(args) {
-                var i;
-                for (i = 0; i < onSettingsSave.length; i += 1) {
-                    onSettingsSave[i](args);
-                }
+                events.fire('onSettingsSave');
             },
             'reset': function(args) {
-                var i;
-                for (i = 0; i < onSettingsReset.length; i += 1) {
-                    onSettingsReset[i](args);
-                }
+                events.fire('onSettingsReset');
             }
         }
     });
 }
-var onSettingsSave = [],
-    onSettingsOpen = [],
-    onSettingsReset = [];

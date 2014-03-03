@@ -12,18 +12,15 @@ setField({
 function loadMirrorPlayer() {
     commands.set('regularCommands', "mirrorPlayer", toggleMirrorPlayer, 'Mirrors the embedded player.');
 
-    onPlayVideo.push({
-        callback: function(vidinfo, time, playing, indexOfVid) {
-            if (containsMirrored(unsafeWindow.playlist[indexOfVid].title)) {
-                if (!isPlayerMirrored) {
-                    toggleMirrorPlayer();
-                }
-            } else if (isPlayerMirrored) {
+    events.bind('onPlayVideo', function(vidinfo, time, playing, indexOfVid) {
+        if (containsMirrored(unsafeWindow.playlist[indexOfVid].title)) {
+            if (!isPlayerMirrored) {
                 toggleMirrorPlayer();
             }
-        },
-        preOld: true
-    });
+        } else if (isPlayerMirrored) {
+            toggleMirrorPlayer();
+        }
+    }, true);
 
     //checking the current video after loading the first time
     if (unsafeWindow.playlist.length !== 0) {
