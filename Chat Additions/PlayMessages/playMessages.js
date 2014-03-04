@@ -19,5 +19,4 @@ function loadPlayMessages() {
         }
     });
 }
-
-executeOnceFunctions.push(loadPlayMessages);
+events.bind('onExecuteOnce', loadPlayMessages);

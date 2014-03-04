@@ -33,21 +33,45 @@ function loadGeneralStuff() {
     // function openInNewTab(url, options){
     //     GM_openInTab(url,options);
     // }
-    events.bind('onConnect', function() {
+    events.bind('onUserlist', function() {
         isConnected = true;
     });
     events.bind('onDisconnect', function() {
-        isConnected = true;
+        isConnected = false;
     });
-    events.bind('onChangeRoom', function() {
-        isConnected = true;
+    events.bind('onRoomChange', function() {
+        isConnected = false;
+    });
+    events.bind('onResetVariables', function() {
+        if (!isConnected) {
+            unsafeWindow.users = new Array();
+            unsafeWindow.playlist = new Array();
+            unsafeWindow.playlist.move = function(old_index, new_index) //Code is property of Reid from stackoverflow
+            {
+                if (new_index >= this.length) {
+                    var k = new_index - this.length;
+                    while ((k--) + 1) {
+                        this.push(undefined);
+                    }
+                }
+                this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+            };
+            unsafeWindow.totalTime = 0;
+            unsafeWindow.messages = 0;
+            unsafeWindow.MAXMESSAGES = 175;
+            unsafeWindow.mouseOverBio = false;
+            unsafeWindow.autoscroll = true;
+            unsafeWindow.isMod = false;
+            unsafeWindow.isLeader = false;
+            unsafeWindow.sliderTimer = false;
+            unsafeWindow.mutedIps = new Array();
+            unsafeWindow.userInfo = null;
+            unsafeWindow.newMsg = false;
+        }
     });
     //we are already connected
-    if (unsafeWindow.userInfo !== undefined) {
+    if (unsafeWindow.userInfo) {
         isConnected = true;
-        executeOnceFunctions.push(function() {
-            events.fire('onConnecting');
-        });
     }
 }
 

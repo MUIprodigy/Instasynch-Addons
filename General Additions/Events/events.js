@@ -1,43 +1,4 @@
-var events = new(function() {
-    var listeners = {};
-
-    this.bind = function(eventName, callback, preOld) {
-        if (listeners[eventName] === undefined) {
-            listeners[eventName] = [];
-        }
-        listeners[eventName].push({
-            callback: callback,
-            preOld: preOld | false
-        });
-    };
-    this.unbind = function(eventName, callback) {
-        if (listeners[eventName] !== undefined) {
-            for (i = 0; i < listeners[eventName].length; i += 1) {
-                if (listeners[eventName][i].callback === callback) {
-                    listeners[eventName].splice(i, 1);
-                    i -= 1;
-                }
-            }
-        }
-    };
-    this.fire = function(eventName, parameters, preOld) {
-        var i;
-        preOld = preOld | false;
-        if (listeners[eventName] === undefined) {
-            return;
-        }
-        for (i = 0; i < listeners[eventName].length; i += 1) {
-            if (!(listeners[eventName][i].preOld ^ preOld)) {
-                try {
-                    listeners[eventName][i].callback.apply(this, parameters);
-                } catch (err) {
-                    logError(listeners[eventName][i].callback, err);
-                }
-            }
-        }
-    };
-})(),
-    currentPlayer = '',
+var currentPlayer = '',
     blacknamesCount = 0,
     greynamesCount = 0,
     modsCount = 0;
@@ -46,22 +7,29 @@ function loadEventsOnce() {
     var oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
         oldAddVideo = unsafeWindow.addVideo,
-        oldRequestPartialPage = unsafeWindow.global.requestPartialPage,
+        oldLoadRoomObj = unsafeWindow.global.loadRoomObj,
         oldPlayVideo = unsafeWindow.playVideo,
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
         oldSkips = unsafeWindow.skips,
         oldMakeLeader = unsafeWindow.makeLeader,
+        oldLoadUserlist = unsafeWindow.loadUserlist,
         i,
         oldPoll = {
             title: ''
         };
 
-    unsafeWindow.global.requestPartialPage = function(name, room, back) {
-        events.fire('onChangeRoom', [name, room, back], true);
-        oldRequestPartialPage(name, room, back);
-        events.fire('onChangeRoom', [name, room, back], false);
+    unsafeWindow.loadUserlist = function(userlist) {
+        events.fire('onUserlist', [userlist], true);
+        oldLoadUserlist(userlist);
+        events.fire('onUserlist', [userlist], false);
+    };
+
+    unsafeWindow.global.loadRoomObj = function() {
+        events.fire('onRoomChange', [], true);
+        oldLoadRoomObj();
+        events.fire('onRoomChange', [], false);
     };
     unsafeWindow.global.onConnecting = function() {
         events.fire('onConnecting', [], false);
@@ -83,7 +51,7 @@ function loadEventsOnce() {
         var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
         events.fire('onPlayVideo', [vidinfo, time, playing, indexOfVid], true);
         oldPlayVideo(vidinfo, time, playing);
-        if (currentPlayer !== vidinfo.provider) {
+        if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
             events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], false);
             switch (vidinfo.provider) {
                 case 'youtube':
@@ -111,22 +79,6 @@ function loadEventsOnce() {
         events.fire('onMoveVideo', [vidinfo, position, oldPosition], false);
     };
 
-    function countUser(user, increment) {
-        var val = increment ? 1 : -1;
-        if (user.loggedin) {
-            if (parseInt(user.permissions, 10) > 0) {
-                modsCount += val;
-            }
-            blacknamesCount += val;
-        } else {
-            greynamesCount += val;
-        }
-    }
-    if (isConnected) {
-        for (i = 0; i < unsafeWindow.users.length; i += 1) {
-            countUser(unsafeWindow.users[i], true);
-        }
-    }
     unsafeWindow.addUser = function(user, css, sort) {
         countUser(user, true);
         events.fire('onAddUser', [user, css, sort], true);
@@ -141,10 +93,6 @@ function loadEventsOnce() {
         oldRemoveUser(id);
         events.fire('onRemoveUser', [id, user], false);
     };
-    events.bind('onConnect', function() {
-        modsCount = blacknamesCount = greynamesCount = 0;
-        $('#tablePlaylistBody').empty();
-    });
     unsafeWindow.skips = function(skips, skipsNeeded) {
         events.fire('onSkips', [skips, skipsNeeded], true);
         oldSkips(skips, skipsNeeded);
@@ -176,10 +124,10 @@ function loadEventsOnce() {
     unsafeWindow.createPoll = function(poll) {
         if (!pollEquals(oldPoll, poll)) {
             events.fire('onCreatePoll', [poll], true);
-        }
-        oldCreatePoll(poll);
-        if (!pollEquals(oldPoll, poll)) {
+            oldCreatePoll(poll);
             events.fire('onCreatePoll', [poll], false);
+        } else {
+            oldCreatePoll(poll);
         }
         oldPoll = poll;
     };
@@ -189,6 +137,16 @@ function loadEventsOnce() {
         oldAddVideo(vidinfo);
         events.fire('onAddVideo', [vidinfo], false);
     };
+
+    //stuff that has to be executed in the scope of greasemonkey for the GM API to work
+    unsafeWindow.addEventListener("message", function(event) {
+        try {
+            var parsed = JSON.parse(event.data);
+            if (parsed.action) {
+                events.fire(parsed.action, [parsed.data], false);
+            }
+        } catch (ignore) {}
+    }, false);
 }
 
 function loadEvents() {
@@ -206,9 +164,18 @@ function loadEvents() {
     });
 }
 
-resetVariables.push(function() {
+function countUser(user, increment) {
+    var val = increment ? 1 : -1;
+    if (user.loggedin) {
+        if (parseInt(user.permissions, 10) > 0) {
+            modsCount += val;
+        }
+        blacknamesCount += val;
+    } else {
+        greynamesCount += val;
+    }
+}
+
+events.bind('onResetVariables', function() {
     currentPlayer = '';
-    blacknamesCount = 0;
-    greynamesCount = 0;
-    modsCount = 0;
 });

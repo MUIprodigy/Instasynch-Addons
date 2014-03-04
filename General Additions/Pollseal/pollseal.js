@@ -7,4 +7,4 @@ function loadPollSeal() {
     $('.st-poll').css('background-position', 'center');
 }
 
-preConnectFunctions.push(loadPollSeal);
+events.bind('onPreConnect', loadPollSeal);

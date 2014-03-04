@@ -117,8 +117,7 @@ function loadSettingsLoader() {
                         id: 'GM_config_save_closeBtn',
                         title: 'Save and close window'
                     }).text("Save and Close").click(function() {
-                        GM_config.save();
-                        GM_config.close();
+                        saveSettings(true);
                     });
 
                     $('#GM_config_buttons_holder > :last-child', this.contentWindow.document || this.contentDocument).before(saveAndCloseButton);
@@ -131,7 +130,26 @@ function loadSettingsLoader() {
             },
             'reset': function(args) {
                 events.fire('onSettingsReset');
+            },
+            'close': function(args) {
+                events.fire('onSettingsClose');
             }
+
         }
     });
+    events.bind('onSaveSettingsInternal', function(data) {
+        GM_config.save();
+        if (data.close) {
+            GM_config.close();
+        }
+    });
+}
+
+function saveSettings(close) {
+    unsafeWindow.postMessage(JSON.stringify({
+        action: 'onSaveSettingsInternal',
+        data: {
+            close: close
+        }
+    }), "*");
 }

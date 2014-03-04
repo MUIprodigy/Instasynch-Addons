@@ -71,4 +71,4 @@ function exportPlaylist(params) {
     unsafeWindow.addMessage('', 'Playlist has been copied to the clipboard', '', 'hashtext');
 }
 
-executeOnceFunctions.push(loadExportPlaylist);
+events.bind('onExecuteOnce', loadExportPlaylist);

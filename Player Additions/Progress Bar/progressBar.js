@@ -48,7 +48,7 @@ function loadProgressbarOnce() {
     events.bind('onPlayerChange', clearProgressbarInterval);
     events.bind('onPlayerDestroy', clearProgressbarInterval);
     events.bind('onDisconnect', clearProgressbarInterval);
-    events.bind('onChangeRoom', clearProgressbarInterval);
+    events.bind('onRoomChange', clearProgressbarInterval);
 }
 
 function loadProgressbar() {
@@ -67,5 +67,5 @@ function loadProgressbar() {
     );
 }
 
-executeOnceFunctions.push(loadProgressbarOnce);
-preConnectFunctions.push(loadProgressbar);
+events.bind('onExecuteOnce', loadProgressbarOnce);
+events.bind('onPreConnect', loadProgressbar);

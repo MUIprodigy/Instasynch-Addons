@@ -38,18 +38,10 @@ function loadCommandLoaderOnce() {
     ];
     items.commandFunctionMap = {};
     items.descriptionMap = {};
-    //listen to the sites message events
-    //some commands need to be executed in the scope of GM for the API to work
-    unsafeWindow.addEventListener("message",
-        function(event) {
-            try {
-                var parsed = JSON.parse(event.data);
-                if (parsed.commandParameters) {
-                    items.commandFunctionMap[parsed.commandParameters[0].toLowerCase()](parsed.commandParameters);
-                }
-            } catch (ignore) {}
-        }, false);
 
+    events.bind('onExecuteCommand', function(data) {
+        items.commandFunctionMap[data.parameters[0].toLowerCase()](data.parameters);
+    });
     commands = {
         set: function(arrayName, funcName, func, description) {
             if (funcName[0] !== '$') {
@@ -90,7 +82,10 @@ function loadCommandLoaderOnce() {
                 params[0] = funcName;
                 //send the event to the site
                 unsafeWindow.postMessage(JSON.stringify({
-                    commandParameters: params
+                    action: 'onExecuteCommand',
+                    data: {
+                        parameters: params
+                    }
                 }), "*");
                 //items.commandFunctionMap[funcName](params);
             }

@@ -71,4 +71,5 @@ function printHistory() {
 }
 
 var history = [];
-executeOnceFunctions.push(loadHistory);
+
+events.bind('onExecuteOnce', loadHistory);

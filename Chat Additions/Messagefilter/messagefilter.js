@@ -72,7 +72,7 @@ function toggleNSFWEmotes() {
     if (GM_config.get('NSFWEmotes')) {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-        if (autoCompleteData.length !== 0) {
+        if (autoCompleteData.length > 50) {
             autoCompleteData.push('/boobies');
             autoCompleteData.push('/meatspin');
             autoCompleteData.sort();
@@ -80,7 +80,7 @@ function toggleNSFWEmotes() {
     } else {
         delete unsafeWindow.$codes.boobies;
         delete unsafeWindow.$codes.meatspin;
-        if (autoCompleteData.length !== 0) {
+        if (autoCompleteData.length > 50) {
             autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
             autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
         }
@@ -237,6 +237,5 @@ var filteredwords = {
     "GAY": "HETERO"
 };
 
-
-executeOnceFunctions.push(loadMessageFilter);
-postConnectFunctions.push(toggleNSFWEmotes);
+events.bind('onExecuteOnce', loadMessageFilter);
+events.bind('onPostConnect', toggleNSFWEmotes);

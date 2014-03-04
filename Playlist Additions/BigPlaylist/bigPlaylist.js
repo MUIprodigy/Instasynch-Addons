@@ -36,6 +36,10 @@ function loadBigPlaylistOnce() {
         i;
     GM_addStyle(GM_getResourceText('bigPlaylistCSS'));
 
+    events.bind('onConnect', function() {
+        $('#tablePlaylistBody').empty();
+    });
+
     function enableSortable() {
         if (GM_config.get('BigPlaylist')) {
             $("#tablePlaylistBody").sortable({
@@ -98,7 +102,7 @@ function loadBigPlaylistOnce() {
     events.bind('onMakeLeader', function() {
         oldIsLeader = unsafeWindow.isLeader;
     }, true);
-    events.bind('onMakeLeader', function() {
+    events.bind('onMakeLeader', function(userId) {
         if (GM_config.get('BigPlaylist')) {
             //InstaSynch core.js, version 0.9.7
             if (userId === unsafeWindow.userInfo.id) {

@@ -225,5 +225,5 @@ function parseMessageForNND(message) {
     return message;
 }
 
-executeOnceFunctions.push(loadNNDModeOnce);
-preConnectFunctions.push(loadNNDMode);
+events.bind('onExecuteOnce', loadNNDModeOnce);
+events.bind('onPreConnect', loadNNDMode);

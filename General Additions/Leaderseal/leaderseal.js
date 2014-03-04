@@ -6,4 +6,4 @@ function loadLeaderSeal() {
     };
 }
 
-preConnectFunctions.push(loadLeaderSeal);
+events.bind('onPreConnect', loadLeaderSeal);

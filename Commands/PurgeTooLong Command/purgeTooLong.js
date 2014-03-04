@@ -29,4 +29,4 @@ function purgeTooLong(params) {
     }
 }
 
-executeOnceFunctions.push(loadPurgeTooLongCommand);
+events.bind('onExecuteOnce', loadPurgeTooLongCommand);

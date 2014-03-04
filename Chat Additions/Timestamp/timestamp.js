@@ -33,4 +33,4 @@ function loadTimestamp() {
     };
 }
 
-executeOnceFunctions.push(loadTimestamp);
+events.bind('onExecuteOnce', loadTimestamp);

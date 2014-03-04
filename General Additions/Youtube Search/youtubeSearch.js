@@ -263,5 +263,5 @@ function closeResults() {
     divresults.css('display', 'none');
 }
 
-executeOnceFunctions.push(loadYoutbeSearchOnce);
-preConnectFunctions.push(loadYoutubeSearch);
+events.bind('onPreConnect', loadYoutubeSearch);
+events.bind('onExecuteOnce', loadYoutbeSearchOnce);

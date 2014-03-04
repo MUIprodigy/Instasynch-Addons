@@ -51,7 +51,7 @@ function loadModSpy() {
     };
 }
 var bumpCheck = false;
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     bumpCheck = false;
 });
-executeOnceFunctions.push(loadModSpy);
+//events.bind('onExecuteOnce', loadModSpy);

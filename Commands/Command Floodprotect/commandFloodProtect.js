@@ -30,8 +30,8 @@ function loadCommandFloodProtect() {
 var sendcmdReady = true,
     commandCache = [];
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     sendcmdReady = true;
     commandCache = [];
 });
-executeOnceFunctions.push(loadCommandFloodProtect);
+events.bind('onExecuteOnce', loadCommandFloodProtect);

@@ -47,5 +47,4 @@ function bump(params) {
     }
 }
 
-
-executeOnceFunctions.push(loadBumpCommand);
+events.bind('onExecuteOnce', loadBumpCommand);

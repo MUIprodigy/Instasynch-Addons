@@ -22,4 +22,4 @@ function loadLogInOffMessages() {
     });
 }
 
-executeOnceFunctions.push(loadLogInOffMessages);
+events.bind('onExecuteOnce', loadLogInOffMessages);

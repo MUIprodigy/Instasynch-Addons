@@ -173,7 +173,7 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
         ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
-            GM_config.save();
+            saveSettings();
         })
     );
     toggleAnimations();
@@ -181,7 +181,9 @@ function loadControlBar() {
 
 function loadControlBarOnce() {
     GM_addStyle(GM_getResourceText('controlBarCSS'));
-    var oldDisplayAnimations = GM_config.get('button-animations');
+    var oldDisplayAnimations = GM_config.get('button-animations'),
+        oldLayoutCSS = '',
+        fullscreenCSS = GM_getResourceText('fullscreenCSS');
 
     events.bind('onSettingsOpen', function() {
         oldDisplayAnimations = GM_config.get('button-animations');
@@ -199,6 +201,26 @@ function loadControlBarOnce() {
     events.bind('onCreatePoll', function() {
         $('.poll-container').removeClass('poll-container2');
         $('#hide-poll').removeClass('hide-poll2');
+    });
+
+    $(document).bind('fscreenchange', function() {
+        if ($.fullscreen.isFullScreen()) {
+            $('.NND-element').remove();
+            oldLayoutCSS = $('#layoutStyles').text();
+            $('#layoutStyles').text(fullscreenCSS);
+            $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
+            $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
+            $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
+            $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
+            $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
+            $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
+        } else {
+            $('#layoutStyles').text(oldLayoutCSS);
+            $('#chat').css('opacity', '1');
+            $('#playlist').css('opacity', '1');
+            $('.poll-container').css('opacity', '1');
+        }
+        $('#state').text($.fullscreen.isFullScreen() ? '' : 'not');
     });
 }
 
@@ -268,9 +290,7 @@ function toggleFullscreen() {
 }
 
 function setUpFullscreen() {
-    var oldLayoutCSS = '',
-        fullscreenCSS = GM_getResourceText('fullscreenCSS'),
-        opacitySaveTimer;
+    var opacitySaveTimer;
 
     function saveOpacity() {
         $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
@@ -281,7 +301,7 @@ function setUpFullscreen() {
             opacitySaveTimer = undefined;
         }
         opacitySaveTimer = setTimeout(function() {
-            GM_config.save();
+            saveSettings();
         }, 5000);
     }
     $('#stage').append($('<div>', {
@@ -307,26 +327,7 @@ function setUpFullscreen() {
             })
         )
     );
-    $(document).bind('fscreenchange', function() {
-        if ($.fullscreen.isFullScreen()) {
-            $('.NND-element').remove();
-            oldLayoutCSS = $('#layoutStyles').text();
-            $('#layoutStyles').text(fullscreenCSS);
-            $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
-            $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
-            $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
-            $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
-            $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
-            $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
-        } else {
-            $('#layoutStyles').text(oldLayoutCSS);
-            $('#chat').css('opacity', '1');
-            $('#playlist').css('opacity', '1');
-            $('.poll-container').css('opacity', '1');
-        }
 
-        $('#state').text($.fullscreen.isFullScreen() ? '' : 'not');
-    });
     $('#playlistcontrols').append(
         $('<div>', {
             'id': 'opacity-sliders'
@@ -381,4 +382,4 @@ function setUpFullscreen() {
     );
 }
 
-executeOnceFunctions.push(loadControlBarOnce);
+events.bind('onExecuteOnce', loadControlBarOnce);

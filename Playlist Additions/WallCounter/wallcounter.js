@@ -91,7 +91,7 @@ function printMyWallCounter() {
     unsafeWindow.addMessage('', output, '', 'hashtext');
 }
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     wallCounter = {};
 });
-executeOnceFunctions.push(loadWallCounter);
+events.bind('onExecuteOnce', loadWallCounter);
