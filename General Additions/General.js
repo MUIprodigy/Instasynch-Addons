@@ -33,19 +33,19 @@ function loadGeneralStuff() {
     // function openInNewTab(url, options){
     //     GM_openInTab(url,options);
     // }
-    events.bind('onConnect', function() {
+    events.bind('onuserlist', function() {
         isConnected = true;
     });
     events.bind('onDisconnect', function() {
-        isConnected = true;
+        isConnected = false;
     });
     events.bind('onChangeRoom', function() {
-        isConnected = true;
+        isConnected = false;
     });
     //we are already connected
     if (unsafeWindow.userInfo !== undefined) {
         isConnected = true;
-        executeOnceFunctions.push(function() {
+        events.bind('onExecuteOnce', function() {
             events.fire('onConnecting');
         });
     }

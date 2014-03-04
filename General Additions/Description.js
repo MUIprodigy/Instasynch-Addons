@@ -51,5 +51,4 @@ function loadDescription() {
     $('#roomFooter >').html(descr);
 }
 
-
-preConnectFunctions.push(loadDescription);
+events.bind('onPreConnect', loadDescription);

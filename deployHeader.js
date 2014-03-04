@@ -64,14 +64,50 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-var preConnectFunctions = [],
-    postConnectFunctions = [],
-    executeOnceFunctions = [],
-    resetVariables = [],
-    settingsFields = {},
+var settingsFields = {},
     $ = unsafeWindow.$,
     jQuery = $,
-    $f = unsafeWindow.$f;
+    $f = unsafeWindow.$f,
+    events = new(function() {
+        var listeners = {};
+
+        this.bind = function(eventName, callback, preOld) {
+            if (listeners[eventName] === undefined) {
+                listeners[eventName] = [];
+            }
+            listeners[eventName].push({
+                callback: callback,
+                preOld: preOld | false
+            });
+        };
+        this.unbind = function(eventName, callback) {
+            var i;
+            if (listeners[eventName] !== undefined) {
+                for (i = 0; i < listeners[eventName].length; i += 1) {
+                    if (listeners[eventName][i].callback === callback) {
+                        listeners[eventName].splice(i, 1);
+                        i -= 1;
+                    }
+                }
+            }
+        };
+        this.fire = function(eventName, parameters, preOld) {
+            var i;
+            preOld = preOld | false;
+            if (listeners[eventName] === undefined) {
+                return;
+            }
+            for (i = 0; i < listeners[eventName].length; i += 1) {
+                if (!(listeners[eventName][i].preOld ^ preOld)) {
+                    try {
+                        listeners[eventName][i].callback.apply(this, parameters);
+                    } catch (err) {
+                        logError(listeners[eventName][i].callback, err);
+                    }
+                }
+            }
+        };
+    })();
 
 function setField(field) {
     if (field.section) {
@@ -87,26 +123,19 @@ function setField(field) {
     }
 }
 
-function executeFunctions(funcArray) {
-    var i;
-    for (i = 0; i < funcArray.length; i += 1) {
-        try {
-            funcArray[i](i);
-        } catch (err) {
-            logError(funcArray[i].name, err);
-        }
-    }
-}
-
 function postConnect() {
-    executeFunctions(postConnectFunctions);
+    events.fire('onPostConnect');
     events.unbind('onUserlist', postConnect);
 }
 
-function preConnect() {
-    executeFunctions(preConnectFunctions);
-}
+events.bind('onExecuteOnce', loadNewLoadUserlist);
+events.bind('onExecuteOnce', loadGeneralStuff);
+events.bind('onExecuteOnce', loadCommandLoaderOnce);
+events.bind('onExecuteOnce', loadSettingsLoader);
+events.bind('onExecuteOnce', loadBigPlaylistOnce);
 
-function executeOnce() {
-    executeFunctions(executeOnceFunctions);
-}
+events.bind('onPreConnect', loadBigPlaylist);
+events.bind('onPreConnect', loadControlBar);
+events.bind('onPreConnect', loadEvents);
+
+//events.bind('onPostConnect', );

@@ -80,5 +80,6 @@ function changeLayout() {
     playerHeight = $('#media').height();
 }
 
-executeOnceFunctions.push(loadLayoutOnce);
-preConnectFunctions.push(loadLayout);
+
+events.bind('onPreConnect', loadLayout);
+events.bind('onExecuteOnce', loadLayoutOnce);

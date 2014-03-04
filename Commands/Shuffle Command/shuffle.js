@@ -29,4 +29,4 @@ function shuffle(params) {
     }
 }
 
-executeOnceFunctions.push(loadShuffleCommand);
+events.bind('onExecuteOnce', loadShuffleCommand);

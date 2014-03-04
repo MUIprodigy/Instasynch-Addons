@@ -6,4 +6,4 @@ function skip() {
     unsafeWindow.global.sendcmd("skip", null);
 }
 
-executeOnceFunctions.push(loadSkipCommand);
+events.bind('onExecuteOnce', loadSkipCommand);

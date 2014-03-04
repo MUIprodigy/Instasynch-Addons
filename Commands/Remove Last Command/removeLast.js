@@ -29,4 +29,4 @@ function removeLast(params) {
     }
 }
 
-executeOnceFunctions.push(loadRemoveLast);
+events.bind('onExecuteOnce', loadRemoveLast);

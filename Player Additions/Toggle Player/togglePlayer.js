@@ -71,5 +71,5 @@ function togglePlayer() {
     }
 }
 
-executeOnceFunctions.push(loadTogglePlayerOnce);
-postConnectFunctions.push(loadTogglePlayer);
+events.bind('onExecuteOnce', loadTogglePlayerOnce);
+events.bind('onPostConnect', loadTogglePlayer);

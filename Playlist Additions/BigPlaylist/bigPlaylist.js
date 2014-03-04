@@ -36,6 +36,10 @@ function loadBigPlaylistOnce() {
         i;
     GM_addStyle(GM_getResourceText('bigPlaylistCSS'));
 
+    events.bind('onConnect', function() {
+        $('#tablePlaylistBody').empty();
+    });
+
     function enableSortable() {
         if (GM_config.get('BigPlaylist')) {
             $("#tablePlaylistBody").sortable({

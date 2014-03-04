@@ -1,44 +1,4 @@
-var events = new(function() {
-    var listeners = {};
-
-    this.bind = function(eventName, callback, preOld) {
-        if (listeners[eventName] === undefined) {
-            listeners[eventName] = [];
-        }
-        listeners[eventName].push({
-            callback: callback,
-            preOld: preOld | false
-        });
-    };
-    this.unbind = function(eventName, callback) {
-        var i;
-        if (listeners[eventName] !== undefined) {
-            for (i = 0; i < listeners[eventName].length; i += 1) {
-                if (listeners[eventName][i].callback === callback) {
-                    listeners[eventName].splice(i, 1);
-                    i -= 1;
-                }
-            }
-        }
-    };
-    this.fire = function(eventName, parameters, preOld) {
-        var i;
-        preOld = preOld | false;
-        if (listeners[eventName] === undefined) {
-            return;
-        }
-        for (i = 0; i < listeners[eventName].length; i += 1) {
-            if (!(listeners[eventName][i].preOld ^ preOld)) {
-                try {
-                    listeners[eventName][i].callback.apply(this, parameters);
-                } catch (err) {
-                    logError(listeners[eventName][i].callback, err);
-                }
-            }
-        }
-    };
-})(),
-    currentPlayer = '',
+var currentPlayer = '',
     blacknamesCount = 0,
     greynamesCount = 0,
     modsCount = 0;
@@ -119,22 +79,6 @@ function loadEventsOnce() {
         events.fire('onMoveVideo', [vidinfo, position, oldPosition], false);
     };
 
-    function countUser(user, increment) {
-        var val = increment ? 1 : -1;
-        if (user.loggedin) {
-            if (parseInt(user.permissions, 10) > 0) {
-                modsCount += val;
-            }
-            blacknamesCount += val;
-        } else {
-            greynamesCount += val;
-        }
-    }
-    if (isConnected) {
-        for (i = 0; i < unsafeWindow.users.length; i += 1) {
-            countUser(unsafeWindow.users[i], true);
-        }
-    }
     unsafeWindow.addUser = function(user, css, sort) {
         countUser(user, true);
         events.fire('onAddUser', [user, css, sort], true);
@@ -149,10 +93,6 @@ function loadEventsOnce() {
         oldRemoveUser(id);
         events.fire('onRemoveUser', [id, user], false);
     };
-    events.bind('onConnect', function() {
-        modsCount = blacknamesCount = greynamesCount = 0;
-        $('#tablePlaylistBody').empty();
-    });
     unsafeWindow.skips = function(skips, skipsNeeded) {
         events.fire('onSkips', [skips, skipsNeeded], true);
         oldSkips(skips, skipsNeeded);
@@ -184,10 +124,10 @@ function loadEventsOnce() {
     unsafeWindow.createPoll = function(poll) {
         if (!pollEquals(oldPoll, poll)) {
             events.fire('onCreatePoll', [poll], true);
-        }
-        oldCreatePoll(poll);
-        if (!pollEquals(oldPoll, poll)) {
+            oldCreatePoll(poll);
             events.fire('onCreatePoll', [poll], false);
+        } else {
+            oldCreatePoll(poll);
         }
         oldPoll = poll;
     };
@@ -214,9 +154,18 @@ function loadEvents() {
     });
 }
 
-resetVariables.push(function() {
+function countUser(user, increment) {
+    var val = increment ? 1 : -1;
+    if (user.loggedin) {
+        if (parseInt(user.permissions, 10) > 0) {
+            modsCount += val;
+        }
+        blacknamesCount += val;
+    } else {
+        greynamesCount += val;
+    }
+}
+
+events.bind('onVariablesReset', function() {
     currentPlayer = '';
-    blacknamesCount = 0;
-    greynamesCount = 0;
-    modsCount = 0;
 });

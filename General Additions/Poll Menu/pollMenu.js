@@ -119,8 +119,8 @@ function loadPollMenuOnce() {
 
 var oldPoll = {};
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     oldPoll = {};
 });
-executeOnceFunctions.push(loadPollMenuOnce);
-preConnectFunctions.push(loadPollMenu);
+events.bind('onPreConnect', loadPollMenu);
+events.bind('onExecuteOnce', loadPollMenuOnce);

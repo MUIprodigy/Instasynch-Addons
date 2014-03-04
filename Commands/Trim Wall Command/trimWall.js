@@ -51,4 +51,4 @@ function trimWall(params) {
     }
 }
 
-executeOnceFunctions.push(loadTrimWallCommand);
+events.bind('onExecuteOnce', loadTrimWallCommand);

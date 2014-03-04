@@ -55,9 +55,8 @@ function setInputHistoryIndex(index) {
 
 var inputHistory = [''],
     inputHistoryIndex = 0;
-
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     inputHistoryIndex = 0;
 });
-executeOnceFunctions.push(loadInputHistoryOnce);
-postConnectFunctions.push(loadInputHistory);
+events.bind('onPostConnect', loadInputHistory);
+events.bind('onExecuteOnce', loadInputHistoryOnce);

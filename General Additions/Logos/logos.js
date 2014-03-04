@@ -15,4 +15,4 @@ function loadLogos() {
     }
 }
 
-preConnectFunctions.push(loadLogos);
+events.bind('onPreConnect', loadLogos);

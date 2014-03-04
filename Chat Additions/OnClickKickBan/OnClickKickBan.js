@@ -111,5 +111,6 @@ function loadOnClickKickBan() {
     );
 }
 
-executeOnceFunctions.push(loadOnClickKickBanOnce);
-postConnectFunctions.push(loadOnClickKickBan);
+
+events.bind('onPostConnect', loadOnClickKickBan);
+events.bind('onExecuteOnce', loadOnClickKickBanOnce);

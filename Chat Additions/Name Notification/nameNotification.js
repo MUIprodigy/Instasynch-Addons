@@ -74,10 +74,9 @@ function toggleNotify() {
     }
 }
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     $('head > link:first-of-type')[0].href = "http://i.imgur.com/BMpkAgE.png";
     notified = false;
 });
-
-preConnectFunctions.push(loadNameNotification);
-executeOnceFunctions.push(loadNameNotificationOnce);
+events.bind('onPreConnect', loadNameNotification);
+events.bind('onExecuteOnce', loadNameNotificationOnce);

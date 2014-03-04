@@ -237,6 +237,5 @@ var filteredwords = {
     "GAY": "HETERO"
 };
 
-
-executeOnceFunctions.push(loadMessageFilter);
-postConnectFunctions.push(toggleNSFWEmotes);
+events.bind('onExecuteOnce', loadMessageFilter);
+events.bind('onPostConnect', toggleNSFWEmotes);

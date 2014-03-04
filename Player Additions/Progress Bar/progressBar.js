@@ -67,5 +67,5 @@ function loadProgressbar() {
     );
 }
 
-executeOnceFunctions.push(loadProgressbarOnce);
-preConnectFunctions.push(loadProgressbar);
+events.bind('onExecuteOnce', loadProgressbarOnce);
+events.bind('onPreConnect', loadProgressbar);

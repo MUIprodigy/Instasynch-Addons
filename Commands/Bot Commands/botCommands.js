@@ -35,4 +35,4 @@ function loadBotCommands() {
     commands.set('regularCommands', "$rustle ", emptyFunc);
 }
 
-executeOnceFunctions.push(loadBotCommands);
+events.bind('onExecuteOnce', loadBotCommands);

@@ -60,7 +60,7 @@ function toggleMirrorPlayer() {
     isPlayerMirrored = !isPlayerMirrored;
 }
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     isPlayerMirrored = false;
 });
-executeOnceFunctions.push(loadMirrorPlayer);
+events.bind('onExecuteOnce', loadMirrorPlayer);

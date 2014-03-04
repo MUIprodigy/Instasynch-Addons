@@ -13,6 +13,5 @@ function loadMeOnce() {
         }
     };
 }
-
-executeOnceFunctions.push(loadMeOnce);
-preConnectFunctions.push(loadMe);
+events.bind('onExecuteOnce', loadMeOnce);
+events.bind('onPreConnect', loadMe);

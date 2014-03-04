@@ -190,7 +190,7 @@ var isAutocompleteMenuActive = false,
     autocomplete = true,
     autoCompleteData = [];
 
-resetVariables.push(function() {
+events.bind('onResetVariables', function() {
     isAutocompleteMenuActive = false;
     autocomplete = true;
     autoCompleteData = [];

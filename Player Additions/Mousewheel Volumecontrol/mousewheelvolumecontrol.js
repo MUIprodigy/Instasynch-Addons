@@ -171,5 +171,5 @@ function setVol(volume) {
     }
 }
 
-executeOnceFunctions.push(loadMouseWheelVolumecontrolOnce);
-preConnectFunctions.push(loadMouseWheelVolumecontrol);
+events.bind('onExecuteOnce', loadMouseWheelVolumecontrolOnce);
+events.bind('onPreConnect', loadMouseWheelVolumecontrol);
