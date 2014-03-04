@@ -98,7 +98,7 @@ function loadBigPlaylistOnce() {
     events.bind('onMakeLeader', function() {
         oldIsLeader = unsafeWindow.isLeader;
     }, true);
-    events.bind('onMakeLeader', function() {
+    events.bind('onMakeLeader', function(userId) {
         if (GM_config.get('BigPlaylist')) {
             //InstaSynch core.js, version 0.9.7
             if (userId === unsafeWindow.userInfo.id) {

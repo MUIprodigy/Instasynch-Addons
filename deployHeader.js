@@ -100,7 +100,7 @@ function executeFunctions(funcArray) {
 
 function postConnect() {
     executeFunctions(postConnectFunctions);
-    events.unbind('onConnect', postConnectFunctions);
+    events.unbind('onUserlist', postConnect);
 }
 
 function preConnect() {

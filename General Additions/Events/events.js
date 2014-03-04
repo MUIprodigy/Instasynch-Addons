@@ -11,6 +11,7 @@ var events = new(function() {
         });
     };
     this.unbind = function(eventName, callback) {
+        var i;
         if (listeners[eventName] !== undefined) {
             for (i = 0; i < listeners[eventName].length; i += 1) {
                 if (listeners[eventName][i].callback === callback) {
@@ -53,10 +54,17 @@ function loadEventsOnce() {
         oldRemoveUser = unsafeWindow.removeUser,
         oldSkips = unsafeWindow.skips,
         oldMakeLeader = unsafeWindow.makeLeader,
+        oldLoadUserlist = unsafeWindow.loadUserlist,
         i,
         oldPoll = {
             title: ''
         };
+
+    unsafeWindow.loadUserlist = function(userlist) {
+        events.fire('onUserlist', [userlist], true);
+        oldLoadUserlist(userlist);
+        events.fire('onUserlist', [userlist], false);
+    };
 
     unsafeWindow.global.requestPartialPage = function(name, room, back) {
         events.fire('onChangeRoom', [name, room, back], true);
