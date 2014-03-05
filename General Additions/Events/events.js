@@ -51,7 +51,7 @@ function loadEventsOnce() {
         var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
         events.fire('onPlayVideo', [vidinfo, time, playing, indexOfVid], true);
         oldPlayVideo(vidinfo, time, playing);
-        if (currentPlayer !== vidinfo.provider) {
+        if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
             events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], false);
             switch (vidinfo.provider) {
                 case 'youtube':

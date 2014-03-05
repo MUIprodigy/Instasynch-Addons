@@ -4,6 +4,7 @@ unsafeWindow.addEventListener('load', function() {
             events.fire('onResetVariables');
             //events.bind('onPreConnect',);
             events.fire('onPreConnect');
+            events.unbind('onPostConnect', loadAutoComplete);
             events.bind('onPostConnect', loadAutoComplete);
             if (isConnected) {
                 events.fire('onPostConnect');
