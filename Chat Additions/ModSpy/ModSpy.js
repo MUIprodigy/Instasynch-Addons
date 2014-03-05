@@ -54,4 +54,4 @@ var bumpCheck = false;
 events.bind('onResetVariables', function() {
     bumpCheck = false;
 });
-//events.bind('onExecuteOnce', loadModSpy);
+events.bind('onExecuteOnce', loadModSpy);

@@ -92,7 +92,6 @@ var settingsFields = {},
             }
         };
         this.fire = function(eventName, parameters, preOld) {
-            unsafeWindow.console.log(eventName);
             var i;
             preOld = preOld | false;
             if (listeners[eventName] === undefined) {
@@ -136,7 +135,7 @@ events.bind('onExecuteOnce', loadSettingsLoader);
 events.bind('onExecuteOnce', loadBigPlaylistOnce);
 
 events.bind('onPreConnect', loadBigPlaylist);
-events.bind('onPreConnect', loadControlBar);
 events.bind('onPreConnect', loadEvents);
+events.bind('onPreConnect', loadControlBar);
 
 //events.bind('onPostConnect', );

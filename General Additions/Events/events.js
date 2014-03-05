@@ -143,8 +143,11 @@ function loadEventsOnce() {
         try {
             var parsed = JSON.parse(event.data);
             if (parsed.action) {
+                //own events
                 events.fire(parsed.action, [parsed.data], false);
             }
+            //all
+            events.fire('onPageMessage', [parsed], false);
         } catch (ignore) {}
     }, false);
 }
