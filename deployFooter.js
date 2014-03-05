@@ -16,10 +16,6 @@ unsafeWindow.addEventListener('load', function() {
     events.bind('onExecuteOnce', loadEventsOnce);
     events.fire('onExecuteOnce');
     loadStuff();
-    var oldLoadRoomObj = unsafeWindow.global.loadRoomObj;
-    unsafeWindow.global.loadRoomObj = function() {
-        oldLoadRoomObj();
-        loadStuff();
-    };
+    events.bind('onRoomChange', loadStuff);
 
 }, false);

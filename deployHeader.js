@@ -92,6 +92,7 @@ var settingsFields = {},
             }
         };
         this.fire = function(eventName, parameters, preOld) {
+            unsafeWindow.console.log(eventName);
             var i;
             preOld = preOld | false;
             if (listeners[eventName] === undefined) {

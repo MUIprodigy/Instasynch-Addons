@@ -7,7 +7,7 @@ function loadEventsOnce() {
     var oldAddMessage = unsafeWindow.addMessage,
         oldCreatePoll = unsafeWindow.createPoll,
         oldAddVideo = unsafeWindow.addVideo,
-        oldRequestPartialPage = unsafeWindow.global.requestPartialPage,
+        oldLoadRoomObj = unsafeWindow.global.loadRoomObj,
         oldPlayVideo = unsafeWindow.playVideo,
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
@@ -26,10 +26,10 @@ function loadEventsOnce() {
         events.fire('onUserlist', [userlist], false);
     };
 
-    unsafeWindow.global.requestPartialPage = function(name, room, back) {
-        events.fire('onChangeRoom', [name, room, back], true);
-        oldRequestPartialPage(name, room, back);
-        events.fire('onChangeRoom', [name, room, back], false);
+    unsafeWindow.global.loadRoomObj = function() {
+        events.fire('onRoomChange', [], true);
+        oldLoadRoomObj();
+        events.fire('onRoomChange', [], false);
     };
     unsafeWindow.global.onConnecting = function() {
         events.fire('onConnecting', [], false);
