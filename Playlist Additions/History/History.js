@@ -5,7 +5,9 @@ function loadHistory() {
         if (history.length === 9) {
             history.shift();
         }
-        history.push(unsafeWindow.playlist[indexOfVid]);
+        if (history[history.length - 1] !== unsafeWindow.playlist[indexOfVid]) {
+            history.push(unsafeWindow.playlist[indexOfVid]);
+        }
     });
 }
 
