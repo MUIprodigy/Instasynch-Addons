@@ -137,6 +137,16 @@ function loadEventsOnce() {
         oldAddVideo(vidinfo);
         events.fire('onAddVideo', [vidinfo], false);
     };
+
+    //stuff that has to be executed in the scope of greasemonkey for the GM API to work
+    unsafeWindow.addEventListener("message", function(event) {
+        try {
+            var parsed = JSON.parse(event.data);
+            if (parsed.action) {
+                events.fire(parsed.action, [parsed.data], false);
+            }
+        } catch (ignore) {}
+    }, false);
 }
 
 function loadEvents() {
@@ -166,6 +176,6 @@ function countUser(user, increment) {
     }
 }
 
-events.bind('onVariablesReset', function() {
+events.bind('onResetVariables', function() {
     currentPlayer = '';
 });

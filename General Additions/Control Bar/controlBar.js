@@ -173,7 +173,7 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
         ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
-            GM_config.save();
+            saveSettings();
         })
     );
     toggleAnimations();
@@ -301,7 +301,7 @@ function setUpFullscreen() {
             opacitySaveTimer = undefined;
         }
         opacitySaveTimer = setTimeout(function() {
-            GM_config.save();
+            saveSettings();
         }, 5000);
     }
     $('#stage').append($('<div>', {

@@ -40,7 +40,7 @@ function loadLayout() {
     function setLayout() {
         if (GM_config.get('Layout') !== $(this).text()) {
             GM_config.set('Layout', $(this).text());
-            GM_config.save();
+            saveSettings();
         }
     }
     var normal = $('<a>', {

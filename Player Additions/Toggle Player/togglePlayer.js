@@ -59,7 +59,7 @@ function loadTogglePlayerOnce() {
     function toggleSetting() {
         oldPlayerActive = !GM_config.get('PlayerActive');
         GM_config.set('PlayerActive', !GM_config.get('PlayerActive'));
-        GM_config.save();
+        saveSettings();
     }
 }
 
