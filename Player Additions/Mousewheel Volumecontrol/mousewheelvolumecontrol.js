@@ -50,15 +50,11 @@ function loadMouseWheelVolumecontrolOnce() {
 
     //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
     //listen to volume change on the youtube player
-    unsafeWindow.addEventListener("message",
-        function(event) {
-            try {
-                var parsed = JSON.parse(event.data);
-                if (parsed.event && parsed.event === 'infoDelivery' && parsed.info && parsed.info.volume) {
-                    setGlobalVolume(parsed.info.volume);
-                }
-            } catch (ignore) {}
-        }, false);
+    events.bind('onPageMessage', function(data) {
+        if (data.event && data.event === 'infoDelivery' && data.info && data.info.volume) {
+            setGlobalVolume(data.info.volume);
+        }
+    });
 
     events.bind('onPlayerReady', function(oldPlayer, newPlayer) {
         if (vimeoVolumePollingIntervalId) {

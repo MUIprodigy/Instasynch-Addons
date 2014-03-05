@@ -137,7 +137,7 @@ function loadSettingsLoader() {
 
         }
     });
-    events.bind('onSaveSettingsInternal', function(data) {
+    events.bind('onSettingsSaveInternal', function(data) {
         GM_config.save();
         if (data.close) {
             GM_config.close();
@@ -147,7 +147,7 @@ function loadSettingsLoader() {
 
 function saveSettings(close) {
     unsafeWindow.postMessage(JSON.stringify({
-        action: 'onSaveSettingsInternal',
+        action: 'onSettingsSaveInternal',
         data: {
             close: close
         }

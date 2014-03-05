@@ -205,22 +205,26 @@ function loadControlBarOnce() {
 
     $(document).bind('fscreenchange', function() {
         if ($.fullscreen.isFullScreen()) {
-            $('.NND-element').remove();
-            oldLayoutCSS = $('#layoutStyles').text();
-            $('#layoutStyles').text(fullscreenCSS);
-            $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
-            $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
-            $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
-            $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
-            $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
-            $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
+            if (userFullscreenToggle) {
+                $('.NND-element').remove();
+                oldLayoutCSS = $('#layoutStyles').text();
+                $('#layoutStyles').text(fullscreenCSS);
+                $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
+                $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
+                $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
+                $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
+                $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
+                $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
+            }
         } else {
-            $('#layoutStyles').text(oldLayoutCSS);
-            $('#chat').css('opacity', '1');
-            $('#playlist').css('opacity', '1');
-            $('.poll-container').css('opacity', '1');
+            if (userFullscreenToggle) {
+                $('#layoutStyles').text(oldLayoutCSS);
+                $('#chat').css('opacity', '1');
+                $('#playlist').css('opacity', '1');
+                $('.poll-container').css('opacity', '1');
+            }
+            userFullscreenToggle = false;
         }
-        $('#state').text($.fullscreen.isFullScreen() ? '' : 'not');
     });
 }
 
@@ -280,9 +284,11 @@ function toggleAnimations() {
         });
     }
 }
+var userFullscreenToggle = false;
 
 function toggleFullscreen() {
     if (!$.fullscreen.isFullScreen()) {
+        userFullscreenToggle = true;
         $('body').fullscreen();
     } else {
         $.fullscreen.exit();
