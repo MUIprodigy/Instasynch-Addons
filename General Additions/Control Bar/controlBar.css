@@ -13,18 +13,12 @@
         background-color: #2284B5;
 }
 .friendsList .friendsList-expand {
-        transition: background-color 0.2s ease-in-out;
-        -webkit-transition: background-color 0.2s ease-in-out;
-        -moz-transition: background-color 0.2s ease-in-out;
         background-color: #2eb6e6;
 }
 .friendsList .friendsList-expand:hover {
         background-color: #2284B5;
 }
 .friendsList .friendsList-list .category {
-        transition: background-color 0.2s ease-in-out;
-        -webkit-transition: background-color 0.2s ease-in-out;
-        -moz-transition: background-color 0.2s ease-in-out;
         background-color: #2eb6e6;
 }
 .friendsList .friendsList-list .category:hover {

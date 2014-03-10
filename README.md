@@ -136,7 +136,7 @@ To print your own wall length use <code>'printMyWallCounter</code> and too see i
 YouTube Search
 --------------
 
-Searching a YouTube video can be done directly from the site. Simply start typing in the add video url text field and the results will pop up in the poll section. By clicking on the thumbnail of the video the url will be added to the text field.
+Searching a YouTube video can be done directly from the site. Simply start typing in the add video url text field and the results will pop up in the poll section. 
 To browse a playlist simply paste the playlist link into the input field.
 
 Click <a href="General Additions/Youtube Search/youtubesearchexample.gif" >here</a> for the example.

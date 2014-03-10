@@ -1,3 +1,10 @@
+1.35.0.5
+ • Rewrote playlist browser / youtubesearch / history
+
+1.34.0.4
+ • Fixed 'togglePlayer
+ • Fixed name notification
+
 1.34.0.3
  • ..More bug fixes?
  • Changed how the scripts get loaded to the new event system
