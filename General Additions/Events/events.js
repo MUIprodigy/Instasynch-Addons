@@ -15,10 +15,7 @@ function loadEventsOnce() {
         oldSkips = unsafeWindow.skips,
         oldMakeLeader = unsafeWindow.makeLeader,
         oldLoadUserlist = unsafeWindow.loadUserlist,
-        i,
-        oldPoll = {
-            title: ''
-        };
+        i;
 
     unsafeWindow.loadUserlist = function(userlist) {
         events.fire('onUserlist', [userlist], true);
@@ -45,7 +42,7 @@ function loadEventsOnce() {
     };
 
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
-        if (currentPlayer !== vidinfo.provider) {
+        if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
             events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], true);
         }
         var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
@@ -129,7 +126,6 @@ function loadEventsOnce() {
         } else {
             oldCreatePoll(poll);
         }
-        oldPoll = poll;
     };
 
     unsafeWindow.addVideo = function(vidinfo) {

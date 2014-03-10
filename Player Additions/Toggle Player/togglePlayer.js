@@ -20,8 +20,8 @@ function loadTogglePlayerOnce() {
         oldPlayVideo = unsafeWindow.playVideo;
 
     commands.set('regularCommands', "togglePlayer", function() {
-        togglePlayer();
         toggleSetting();
+        togglePlayer();
     }, 'Turns the embedded player on and off.');
 
     events.bind('onSettingsOpen', function() {
@@ -64,7 +64,7 @@ function loadTogglePlayerOnce() {
 }
 
 function togglePlayer() {
-    if (GM_config.get('PlayerActive')) {
+    if (!GM_config.get('PlayerActive')) {
         unsafeWindow.video.destroyPlayer();
     } else {
         unsafeWindow.global.sendcmd('reload', null);

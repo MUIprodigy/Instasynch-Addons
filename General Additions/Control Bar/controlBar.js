@@ -387,5 +387,3 @@ function setUpFullscreen() {
         )
     );
 }
-
-events.bind('onExecuteOnce', loadControlBarOnce);

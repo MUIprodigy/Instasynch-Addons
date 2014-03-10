@@ -49,6 +49,10 @@ function loadProgressbarOnce() {
     events.bind('onPlayerDestroy', clearProgressbarInterval);
     events.bind('onDisconnect', clearProgressbarInterval);
     events.bind('onRoomChange', clearProgressbarInterval);
+
+    events.bind('onDisconnect', function() {
+        currentPlayer = '';
+    });
 }
 
 function loadProgressbar() {

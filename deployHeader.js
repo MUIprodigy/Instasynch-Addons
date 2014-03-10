@@ -133,9 +133,10 @@ events.bind('onExecuteOnce', loadGeneralStuff);
 events.bind('onExecuteOnce', loadCommandLoaderOnce);
 events.bind('onExecuteOnce', loadSettingsLoader);
 events.bind('onExecuteOnce', loadBigPlaylistOnce);
+events.bind('onExecuteOnce', loadControlBarOnce)
 
 events.bind('onPreConnect', loadBigPlaylist);
-events.bind('onPreConnect', loadEvents);
 events.bind('onPreConnect', loadControlBar);
+events.bind('onPreConnect', loadEvents);
 
 //events.bind('onPostConnect', );
