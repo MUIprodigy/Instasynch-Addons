@@ -33,7 +33,28 @@
 	margin: 1px;
 	z-index: 2;
 }
-
+.search-result-thumbnail {
+	height: 90px;
+	width: 120px;
+}
+.search-result-duration {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+.search-result-inf {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	opacity: 0.7;
+}
+.search-result-add{
+	margin: 0px;
+	float: left;
+}
+.search-result-title {
+	color: white;
+}
 .opacity0 {
 	opacity: 0!important;
 }

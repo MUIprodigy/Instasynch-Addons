@@ -42,6 +42,10 @@ function loadEventsOnce() {
     };
 
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
+        if (!vidinfo) {
+            return;
+        }
+
         if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
             events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], true);
         }

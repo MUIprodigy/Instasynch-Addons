@@ -3,36 +3,46 @@ function loadYoutbeSearchOnce() {
     searchResultTemplate = $('<a>', {
         'target': '_blank'
     }).append(
-        $('<img>')
+        $('<img>').addClass('search-result-thumbnail')
     ).append(
         $('<p>').append(
-            $('<span>').css('color', 'white').addClass('text-shadow')
-        ).css('position', 'absolute').css('top', '5px').css('left', '5px').css('opacity', '0.7').addClass('opacity0')
+            $('<span>').addClass('text-shadow')
+        ).addClass('search-result-duration')
     ).append(
-        $('<p>').append(
-            $('<span>').css('background', 'rgba(0, 0, 0, 0.7')
-        ).css('position', 'absolute').css('bottom', '0px').css('right', '0px')
-    ).append(
-        $('<div>', {
-            'class': 'controlIcon',
-            'title': 'Add Video'
-        }).append(
-            $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
-        ).css('position', 'absolute').css('top', '0px').css('left', '0px').css('margin', 'initital').css('opacity', '0.7').addClass('opacity0')
+        $('<div>').append(
+            $('<div>', {
+                'class': 'controlIcon',
+                'title': 'Add Video'
+            }).append(
+                $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
+            ).addClass('search-result-add')
+        ).append(
+            $('<span>').addClass('text-shadow').addClass('search-result-title')
+        ).addClass('opacity0').addClass('search-result-inf')
     ).addClass('search-result');
 }
 
 function loadYoutubeSearch() {
     //insert search result container
     $('.poll-container').before(
-        $('<div id="search-results" />').append(
-            $('<div id="divmore" />').append(
-                $('<input id="prevButton" />').prop('disabled', true).prop('type', 'button').val('<< Prev').click(prevPage)
+        $('<div>', {
+            'id': 'search-results'
+        }).append(
+            $('<div>', {
+                'id': 'divmore'
+            }).append(
+                $('<input>', {
+                    'id': 'prevButton'
+                }).prop('disabled', true).prop('type', 'button').val('<< Prev').click(prevPage)
             ).append(
-                $('<input id="nextButton" />').prop('disabled', true).prop('type', 'button').val('Next >>').click(nextPage)
+                $('<input>', {
+                    'id': 'nextButton'
+                }).prop('disabled', true).prop('type', 'button').val('Next >>').click(nextPage)
             )
         ).append(
-            $('<div id="divclosesearch" />').addClass('x').click(closeResults)
+            $('<div>', {
+                'id': 'divclosesearch'
+            }).addClass('x').click(closeResults)
         )
     );
 
@@ -61,37 +71,39 @@ function searchFirst() {
         urlInfo = parseUrl(query);
         entriesHistory = [];
         page = 0;
-        $('#nextButton').css('display', 'initial');
-        $('#prevButton').css('display', 'initial');
-        search(0);
+        $('#divmore').css('display', 'block');
+        search(0, true, true);
     }
 }
 
 function prevPage() {
     page--;
-    showResults(entriesHistory.slice(page * 9, 9), page !== 0, true);
+    showResults(entriesHistory[page], page !== 0);
+    $('#nextButton').prop('disabled', false);
 }
 
 function nextPage() {
     page++;
-    if (entriesHistory.length <= page * 9) {
-        search(page * 9);
+    showResults(entriesHistory[page], true);
+    if (page === entriesHistory.length - 1) {
+        if (entriesHistory[page].length === 9) {
+            search((page + 1) * 9, false, false);
+        }
     } else {
-        showResults(entriesHistory.slice(page * 9, 9), true, true);
+        $('#nextButton').prop('disabled', false);
     }
 }
 
-function search(startIndex) {
+function search(startIndex, show, nextResults) {
     startIndex = startIndex + 1;
     var entries,
         url,
-        nextButtonActive,
         prevButtonActive = startIndex !== 1;
     if (!urlInfo) {
-        url = String.format("https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=10&q={0}&start-index={1}", query, startIndex);
+        url = String.format("https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=9&q={0}&start-index={1}&safeSearch=none", query, startIndex);
     } else { // is a link
         if (urlInfo.playlistId) {
-            url = String.format("https://gdata.youtube.com/feeds/api/playlists/{0}?v=2&alt=json&max-results=10&start-index=", urlInfo.playlistId, startIndex);
+            url = String.format("https://gdata.youtube.com/feeds/api/playlists/{0}?v=2&alt=json&max-results=9&start-index={1}&safeSearch=none", urlInfo.playlistId, startIndex);
         }
     }
     if (!url) {
@@ -99,32 +111,37 @@ function search(startIndex) {
     }
     $.getJSON(url, function(data) {
         entries = data.feed.entry;
-        if (entries.length <= 9) {
-            nextButtonActive = false;
-        } else if (entries.length > 9) {
-            entries.pop();
-            nextButtonActive = true;
-        }
-        if (entries.length !== 0) {
+        if (entries && entries.length !== 0) {
             entriesHistory.push(entries);
-            showResults(entries, nextButtonActive, prevButtonActive);
+            if (show) {
+                showResults(entries, prevButtonActive);
+            }
+            $('#nextButton').prop('disabled', false);
+            if (nextResults) {
+                search(startIndex + 9, false, false);
+            }
+        } else {
+            $('#nextButton').prop('disabled', true);
         }
     });
 }
 
-function showResults(entries, nextButtonActive, prevButtonActive) {
-    $('#nextButton').prop('disabled', nextButtonActive);
-    $('#prevButton').prop('disabled', prevButtonActive);
+function showResults(entries, prevButtonActive) {
+    $('#prevButton').prop('disabled', !prevButtonActive);
+    $('#nextButton').prop('disabled', true);
     $('.search-result').remove();
     $('#search-results').css('display', 'initial');
 
     var i;
+    for (i = 0; i < 9 - entries.length; i += 1) {
+        $('#search-results').prepend(
+            $('<div>').css('cursor', 'default').addClass('search-result')
+        );
+    }
     for (i = entries.length - 1; i >= 0; i -= 1) {
         addEntry(entries[i]);
     }
-    if (entries.length % 3 !== 0) {
 
-    }
 }
 
 function addEntry(entry) {
@@ -143,17 +160,17 @@ function addEntry(entry) {
 
         searchResult.attr('href', getUrlOfInfo(parseUrl(entry.link[1].href))).hover(toggleElements, toggleElements);
         searchResult.find('>:eq(0)').attr('src', entry.media$group.media$thumbnail[0].url);
-        searchResult.find('>:eq(1)>:eq(0)').text(entry.title.$t);
-        searchResult.find('>:eq(2)>:eq(0)>').text(formatTime(seconds)).css('color', getDurationColor(seconds));
+        searchResult.find('>:eq(1)>:eq(0)').text(formatTime(seconds)).css('color', getDurationColor(seconds));
+        searchResult.find('>:eq(2)>:eq(1)').text(entry.title.$t);
 
         if (GM_config.get('button-animations')) {
-            searchResult.find('>:eq(3)').hover(function() {
+            searchResult.find('>:eq(2)>:eq(0)').hover(function() {
                 addAnimation($(this).children().eq(0), 'pulse');
             }, function() {
                 removeAnimation($(this).children().eq(0), 'pulse');
             }).click(addSearchResultToPl);
         } else {
-            searchResult.find('>:eq(3)').click(addSearchResultToPl);
+            searchResult.find('>:eq(2)>:eq(0)').click(addSearchResultToPl);
         }
 
         $('#search-results').prepend(searchResult);
@@ -163,7 +180,8 @@ function addEntry(entry) {
 function getDurationColor(seconds) {
     if (seconds < 60 * 15) {
         return 'white';
-    } else if (seconds < 60 * 25) {
+    }
+    if (seconds < 60 * 25) {
         return 'orange';
     }
     return 'red';
@@ -189,15 +207,15 @@ function closeResults() {
     $('#search-results').css('display', 'none');
 }
 
-function toggleElements(element) {
-    $(element).find('>:eq(1)').toggleClass('opacity0');
-    $(element).find('>:eq(3)').toggleClass('opacity0');
+function toggleElements() {
+    $(this).find('>:eq(2)').toggleClass('opacity0');
 }
 
-function addSearchResultToPl(element) {
+function addSearchResultToPl(event) {
     unsafeWindow.global.sendcmd('add', {
-        URL: $(element).parent().attr('href')
+        URL: $(this).parent().parent().attr('href')
     });
+    return false;
 }
 var page = 0,
     query,
