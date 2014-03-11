@@ -1,3 +1,25 @@
+1.35.0.5
+ • Rewrote playlist browser / youtubesearch / history
+
+1.34.0.4
+ • Fixed 'togglePlayer
+ • Fixed name notification
+
+1.34.0.3
+ • ..More bug fixes?
+ • Changed how the scripts get loaded to the new event system
+ • Fixed settings not getting saved due to being executed in the wrong scope
+ 
+1.34.0.2
+ • Improved internal event system
+ • More bug fixes
+
+1.34.0.1
+ • Fixed a LOT of bugs caused by the new partial page system
+
+1.34
+ • Adaption to the new partial page system
+
 1.33.8.1
  • Fixed issue with 'bump [position]
  • Added a setting to turn off the button animations

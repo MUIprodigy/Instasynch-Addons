@@ -3,12 +3,14 @@ function loadSettingsLoader() {
     GM_addStyle(GM_getResourceText('settingsLoaderCSS'));
     //add the button
     $('#loginfrm > :first-child').before(
-        $('<div id="addonsMenu" />').append(
+        $('<div>', {
+            'id': 'addons-menu'
+        }).append(
             $('<div>').append(
                 $('<ul>').append(
                     $('<li>').append(
                         $('<a>', {
-                            'id': 'addonsClicker'
+                            'id': 'addons-clicker'
                         }).append(
                             $('<img>', {
                                 'src': 'http://i.imgur.com/V3vOIkS.png'
@@ -25,7 +27,7 @@ function loadSettingsLoader() {
             ).addClass('click-nav')
         )
     );
-
+    $('.friendsList').detach().appendTo('#loginfrm');
     var fields = {},
         firstMiddle = true,
         firstInner = true,
@@ -115,32 +117,39 @@ function loadSettingsLoader() {
                         id: 'GM_config_save_closeBtn',
                         title: 'Save and close window'
                     }).text("Save and Close").click(function() {
-                        GM_config.save();
-                        GM_config.close();
+                        saveSettings(true);
                     });
 
                     $('#GM_config_buttons_holder > :last-child', this.contentWindow.document || this.contentDocument).before(saveAndCloseButton);
                 });
-                var i;
-                for (i = 0; i < onSettingsOpen.length; i += 1) {
-                    onSettingsOpen[i](args);
-                }
+
+                events.fire('onSettingsOpen');
             },
             'save': function(args) {
-                var i;
-                for (i = 0; i < onSettingsSave.length; i += 1) {
-                    onSettingsSave[i](args);
-                }
+                events.fire('onSettingsSave');
             },
             'reset': function(args) {
-                var i;
-                for (i = 0; i < onSettingsReset.length; i += 1) {
-                    onSettingsReset[i](args);
-                }
+                events.fire('onSettingsReset');
+            },
+            'close': function(args) {
+                events.fire('onSettingsClose');
             }
+
+        }
+    });
+    events.bind('onSettingsSaveInternal', function(data) {
+        GM_config.save();
+        if (data.close) {
+            GM_config.close();
         }
     });
 }
-var onSettingsSave = [],
-    onSettingsOpen = [],
-    onSettingsReset = [];
+
+function saveSettings(close) {
+    unsafeWindow.postMessage(JSON.stringify({
+        action: 'onSettingsSaveInternal',
+        data: {
+            close: close
+        }
+    }), "*");
+}

@@ -10,28 +10,31 @@ setField({
 });
 
 function loadTogglePlayer() {
-    //add the command
+    if (!GM_config.get('PlayerActive')) {
+        setTimeout(unsafeWindow.video.destroyPlayer, 3000);
+    }
+}
+
+function loadTogglePlayerOnce() {
+    var oldPlayerActive = GM_config.get('PlayerActive'),
+        oldPlayVideo = unsafeWindow.playVideo;
+
     commands.set('regularCommands', "togglePlayer", function() {
-        togglePlayer();
         toggleSetting();
+        togglePlayer();
     }, 'Turns the embedded player on and off.');
 
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldPlayerActive = GM_config.get('PlayerActive');
     });
 
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldPlayerActive !== GM_config.get('PlayerActive')) {
             togglePlayer();
             oldPlayerActive = GM_config.get('PlayerActive');
         }
     });
-    //toggle the player once if the stored setting was false
-    if (!GM_config.get('PlayerActive')) {
-        setTimeout(unsafeWindow.video.destroyPlayer, 1500);
-    }
 
-    var oldPlayVideo = unsafeWindow.playVideo;
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
         if (GM_config.get('PlayerActive')) {
             oldPlayVideo(vidinfo, time, playing);
@@ -52,22 +55,21 @@ function loadTogglePlayer() {
             }
         }
     };
+
+    function toggleSetting() {
+        oldPlayerActive = !GM_config.get('PlayerActive');
+        GM_config.set('PlayerActive', !GM_config.get('PlayerActive'));
+        saveSettings();
+    }
 }
-var oldPlayerActive;
 
 function togglePlayer() {
     if (!GM_config.get('PlayerActive')) {
         unsafeWindow.video.destroyPlayer();
     } else {
-        unsafeWindow.sendcmd('reload', null);
+        unsafeWindow.global.sendcmd('reload', null);
     }
 }
 
-function toggleSetting() {
-    GM_config.set('PlayerActive', !GM_config.get('PlayerActive'));
-    GM_config.save();
-}
-
-var playerActive = true;
-
-postConnectFunctions.push(loadTogglePlayer);
+events.bind('onExecuteOnce', loadTogglePlayerOnce);
+events.bind('onPostConnect', loadTogglePlayer);

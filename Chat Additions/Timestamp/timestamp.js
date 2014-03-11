@@ -33,4 +33,4 @@ function loadTimestamp() {
     };
 }
 
-preConnectFunctions.push(loadTimestamp);
+events.bind('onExecuteOnce', loadTimestamp);

@@ -60,24 +60,25 @@ setField({
     'subsection': 'NicoNicoDouga-Mode'
 });
 
-function loadNNDMode() {
+function loadNNDModeOnce() {
     GM_addStyle(".text-shadow {text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; }");
-    $('#media').css('position', 'relative');
-    onAddMessage.push({
-        callback: function(username, message, userstyle, textstyle) {
-            if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
-                if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
-                    addMarqueeMessage(message);
-                }
+    events.bind('onAddMessage', function(username, message, userstyle, textstyle) {
+        if (GM_config.get('NNDMode') && username !== '' && message[0] !== '$' && !$.fullscreen.isFullScreen()) {
+            if (GM_config.get('NNDModeLimit') < 0 || marqueeMessages.length < GM_config.get('NNDModeLimit')) {
+                addMarqueeMessage(message);
             }
         }
     });
+}
+
+function loadNNDMode() {
+    $('#media').css('position', 'relative');
     playerWidth = $('#media').width();
     playerHeight = $('#media').height();
 }
 
 var marqueeMessages = [],
-    marqueeIntervalId = undefined,
+    marqueeIntervalId,
     playerHeight,
     playerWidth;
 
@@ -223,4 +224,6 @@ function parseMessageForNND(message) {
     }
     return message;
 }
-preConnectFunctions.push(loadNNDMode);
+
+events.bind('onExecuteOnce', loadNNDModeOnce);
+events.bind('onPreConnect', loadNNDMode);

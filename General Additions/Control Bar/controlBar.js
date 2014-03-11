@@ -54,30 +54,14 @@ setField({
 function loadControlBar() {
     var skipRate = 0,
         skipText = $('#skipCounter').text(),
-        playlistLock = $('#toggleplaylistlock img').attr('src'),
-        oldDisplayAnimations = GM_config.get('button-animations');
+        playlistLock = $('#toggleplaylistlock img').attr('src');
 
     $('#resynch').remove();
     $('#reload').remove();
-    GM_addStyle(GM_getResourceText('controlBarCSS'));
+
     setUpFullscreen();
-    onSettingsOpen.push(function() {
-        oldDisplayAnimations = GM_config.get('button-animations');
-    });
 
-    onSettingsSave.push(function() {
-        if (oldDisplayAnimations !== GM_config.get('button-animations')) {
-            toggleAnimations();
-            oldDisplayAnimations = GM_config.get('button-animations');
-        }
-    });
-
-    onSkips.push({
-        callback: function(skips, skipsNeeded) {
-            $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
-        }
-    });
-    if (isConnected()) {
+    if (isConnected) {
         skipRate = Math.round(parseInt(skipText.split('/')[1], 10) / blacknamesCount * 100 * 100) / 100;
     }
 
@@ -93,7 +77,7 @@ function loadControlBar() {
                 $('<div>').css('background-image', 'url(http://i.imgur.com/ceHuy2q.png)').addClass('animationContainer')
             ).click(function() {
                 if (unsafeWindow.userInfo.loggedin) {
-                    unsafeWindow.sendcmd('skip', null);
+                    unsafeWindow.global.sendcmd('skip', null);
                 } else {
                     unsafeWindow.addMessage("", "You must be logged in to vote to skip.", "", "errortext");
                 }
@@ -126,7 +110,7 @@ function loadControlBar() {
             ).click(function() {
                 var url = $('#URLinput').val();
                 if ($('#URLinput').val().trim() !== '') {
-                    unsafeWindow.sendcmd('add', {
+                    unsafeWindow.global.sendcmd('add', {
                         URL: url
                     });
                 }
@@ -141,7 +125,7 @@ function loadControlBar() {
                 'src': playlistLock
             }).css('top', '3px').css('position', 'relative')
         ).click(function() {
-            unsafeWindow.sendcmd('toggleplaylistlock', null);
+            unsafeWindow.global.sendcmd('toggleplaylistlock', null);
         })
     ).append(
         $('<div>', {
@@ -152,7 +136,7 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function() {
             unsafeWindow.video.destroyPlayer();
-            unsafeWindow.sendcmd('reload', null);
+            unsafeWindow.global.sendcmd('reload', null);
         })
     ).append(
         $('<div>', {
@@ -162,7 +146,7 @@ function loadControlBar() {
         }).append(
             $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
         ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function() {
-            unsafeWindow.sendcmd('resynch', null);
+            unsafeWindow.global.sendcmd('resynch', null);
         })
     ).append(
         $('<div>', {
@@ -189,10 +173,59 @@ function loadControlBar() {
             $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
         ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
-            GM_config.save();
+            saveSettings();
         })
     );
     toggleAnimations();
+}
+
+function loadControlBarOnce() {
+    GM_addStyle(GM_getResourceText('controlBarCSS'));
+    var oldDisplayAnimations = GM_config.get('button-animations'),
+        oldLayoutCSS = '',
+        fullscreenCSS = GM_getResourceText('fullscreenCSS');
+
+    events.bind('onSettingsOpen', function() {
+        oldDisplayAnimations = GM_config.get('button-animations');
+    });
+    events.bind('onSettingsSave', function() {
+        if (oldDisplayAnimations !== GM_config.get('button-animations')) {
+            toggleAnimations();
+            oldDisplayAnimations = GM_config.get('button-animations');
+        }
+    });
+    events.bind('onSkips', function(skips, skipsNeeded) {
+        $('#skipCounter').attr('title', String.format('{0}%', Math.round(skipsNeeded / blacknamesCount * 100 * 100) / 100));
+    });
+
+    events.bind('onCreatePoll', function() {
+        $('.poll-container').removeClass('poll-container2');
+        $('#hide-poll').removeClass('hide-poll2');
+    });
+
+    $(document).bind('fscreenchange', function() {
+        if ($.fullscreen.isFullScreen()) {
+            if (userFullscreenToggle) {
+                $('.NND-element').remove();
+                oldLayoutCSS = $('#layoutStyles').text();
+                $('#layoutStyles').text(fullscreenCSS);
+                $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
+                $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
+                $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
+                $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
+                $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
+                $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
+            }
+        } else {
+            if (userFullscreenToggle) {
+                $('#layoutStyles').text(oldLayoutCSS);
+                $('#chat').css('opacity', '1');
+                $('#playlist').css('opacity', '1');
+                $('.poll-container').css('opacity', '1');
+            }
+            userFullscreenToggle = false;
+        }
+    });
 }
 
 function addAnimation(child, cls) {
@@ -251,9 +284,11 @@ function toggleAnimations() {
         });
     }
 }
+var userFullscreenToggle = false;
 
 function toggleFullscreen() {
     if (!$.fullscreen.isFullScreen()) {
+        userFullscreenToggle = true;
         $('body').fullscreen();
     } else {
         $.fullscreen.exit();
@@ -261,9 +296,7 @@ function toggleFullscreen() {
 }
 
 function setUpFullscreen() {
-    var oldLayoutCSS = '',
-        fullscreenCSS = GM_getResourceText('fullscreenCSS'),
-        opacitySaveTimer;
+    var opacitySaveTimer;
 
     function saveOpacity() {
         $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
@@ -274,18 +307,13 @@ function setUpFullscreen() {
             opacitySaveTimer = undefined;
         }
         opacitySaveTimer = setTimeout(function() {
-            GM_config.save();
+            saveSettings();
         }, 5000);
     }
-    $('body').append($('<div>', {
+    $('#stage').append($('<div>', {
         'id': 'block-fullscreen'
     }).click(toggleFullscreen));
-    onCreatePoll.push({
-        callback: function() {
-            $('.poll-container').removeClass('poll-container2');
-            $('#hide-poll').removeClass('hide-poll2');
-        }
-    });
+
     $('.playlist').prepend($('<div>', {
         'id': 'hide-playlist'
     }).append(
@@ -305,26 +333,7 @@ function setUpFullscreen() {
             })
         )
     );
-    $(document).bind('fscreenchange', function(e, state, elem) {
-        if ($.fullscreen.isFullScreen()) {
-            $('.NND-element').remove();
-            oldLayoutCSS = $('#layoutStyles').text();
-            $('#layoutStyles').text(fullscreenCSS);
-            $('#chat').css('opacity', GM_config.get('chat-opacity') / 100.0);
-            $('#playlist').css('opacity', GM_config.get('playlist-opacity') / 100.0);
-            $('.poll-container').css('opacity', GM_config.get('poll-opacity') / 100.0);
-            $('#chat-slider').slider('option', 'value', GM_config.get('chat-opacity'));
-            $('#poll-slider').slider('option', 'value', GM_config.get('poll-opacity'));
-            $('#playlist-slider').slider('option', 'value', GM_config.get('playlist-opacity'));
-        } else {
-            $('#layoutStyles').text(oldLayoutCSS);
-            $('#chat').css('opacity', '1');
-            $('#playlist').css('opacity', '1');
-            $('.poll-container').css('opacity', '1');
-        }
 
-        $('#state').text($.fullscreen.isFullScreen() ? '' : 'not');
-    });
     $('#playlistcontrols').append(
         $('<div>', {
             'id': 'opacity-sliders'
@@ -378,3 +387,5 @@ function setUpFullscreen() {
         )
     );
 }
+
+events.bind('onExecuteOnce', loadControlBarOnce);

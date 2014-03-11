@@ -18,6 +18,8 @@ setField({
     'section': 'Chat Additions'
 });
 
+
+
 function loadMessageFilter() {
 
     var oldLinkify = unsafeWindow.linkify,
@@ -25,22 +27,16 @@ function loadMessageFilter() {
         oldCreatePoll = unsafeWindow.createPoll,
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
 
-    onSettingsOpen.push(function() {
+    events.bind('onSettingsOpen', function() {
         oldNSFWEmotes = GM_config.get('NSFWEmotes');
     });
-
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldNSFWEmotes !== GM_config.get('NSFWEmotes')) {
             toggleNSFWEmotes();
             oldNSFWEmotes = GM_config.get('NSFWEmotes');
         }
     });
 
-    //init
-    if (GM_config.get('NSFWEmotes')) {
-        unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-    }
     unsafeWindow.linkify = function(str, buildHashtagUrl, includeW3, target) {
         var emotes = [],
             index = -1;
@@ -76,14 +72,18 @@ function toggleNSFWEmotes() {
     if (GM_config.get('NSFWEmotes')) {
         unsafeWindow.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
         unsafeWindow.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-        autoCompleteData.push('/boobies');
-        autoCompleteData.push('/meatspin');
-        autoCompleteData.sort();
+        if (autoCompleteData.length > 50) {
+            autoCompleteData.push('/boobies');
+            autoCompleteData.push('/meatspin');
+            autoCompleteData.sort();
+        }
     } else {
         delete unsafeWindow.$codes.boobies;
         delete unsafeWindow.$codes.meatspin;
-        autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
-        autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
+        if (autoCompleteData.length > 50) {
+            autoCompleteData.splice(autoCompleteData.indexOf('/boobies'), 1);
+            autoCompleteData.splice(autoCompleteData.indexOf('/meatspin'), 1);
+        }
     }
 }
 
@@ -237,5 +237,5 @@ var filteredwords = {
     "GAY": "HETERO"
 };
 
-
-preConnectFunctions.push(loadMessageFilter);
+events.bind('onExecuteOnce', loadMessageFilter);
+events.bind('onPostConnect', toggleNSFWEmotes);

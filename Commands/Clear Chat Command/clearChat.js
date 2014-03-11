@@ -7,4 +7,4 @@ function clearChat() {
     unsafeWindow.messages = 0;
 }
 
-preConnectFunctions.push(loadClearChatCommand);
+events.bind('onExecuteOnce', loadClearChatCommand);

@@ -1,4 +1,4 @@
-function loadCommandLoader() {
+function loadCommandLoaderOnce() {
     var items = {};
     items.regularCommands = [
         "'reload",
@@ -38,18 +38,10 @@ function loadCommandLoader() {
     ];
     items.commandFunctionMap = {};
     items.descriptionMap = {};
-    //listen to the sites message events
-    //some commands need to be executed in the scope of GM for the API to work
-    unsafeWindow.addEventListener("message",
-        function(event) {
-            try {
-                var parsed = JSON.parse(event.data);
-                if (parsed.commandParameters) {
-                    items.commandFunctionMap[parsed.commandParameters[0].toLowerCase()](parsed.commandParameters);
-                }
-            } catch (ignore) {}
-        }, false);
 
+    events.bind('onExecuteCommand', function(data) {
+        items.commandFunctionMap[data.parameters[0].toLowerCase()](data.parameters);
+    });
     commands = {
         set: function(arrayName, funcName, func, description) {
             if (funcName[0] !== '$') {
@@ -77,7 +69,6 @@ function loadCommandLoader() {
             return items;
         },
         execute: function(funcName, params) {
-            commandExecuted = false;
             funcName = funcName.toLowerCase();
             if (funcName[0] === '$') {
                 return;
@@ -88,23 +79,24 @@ function loadCommandLoader() {
                 funcName = undefined;
             }
             if (funcName) {
-                commandExecuted = true;
                 params[0] = funcName;
                 //send the event to the site
                 unsafeWindow.postMessage(JSON.stringify({
-                    commandParameters: params
+                    action: 'onExecuteCommand',
+                    data: {
+                        parameters: params
+                    }
                 }), "*");
                 //items.commandFunctionMap[funcName](params);
             }
         }
     };
-
-    $("#chat input").bind("keypress", function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            var params = $(this).val().split(' ');
+    events.bind('onInputKeypress', function(event, message) {
+        if (event.keyCode === 13) {
+            var params = message.split(' ');
             commands.execute(params[0], params);
         }
     });
 }
-var commands,
-    commandExecuted = false;
+
+var commands;

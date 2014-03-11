@@ -31,7 +31,7 @@ function loadPollMenu() {
                     }
                 }
                 $('#create-poll > #title').val(htmlDecode(oldPoll.title));
-                $(".create-poll-option").each(function(index) {
+                $(".create-poll-option").each(function() {
                     $(this).val(htmlDecode(oldPoll.options[i].option));
                     i += 1;
                     if (i >= oldPoll.options.length) {
@@ -45,7 +45,7 @@ function loadPollMenu() {
             'id': 'clear-poll-options'
         }).text('Clear').click(function() {
             $('#create-poll > #title').val('');
-            $(".create-poll-option").each(function(index) {
+            $(".create-poll-option").each(function() {
                 $(this).val('');
             });
         })
@@ -54,12 +54,12 @@ function loadPollMenu() {
             var poll = {};
             poll.title = $("#title").val();
             poll.options = [];
-            $(".create-poll-option").each(function(index) {
-                if ($(this).val().trim() != "") {
+            $(".create-poll-option").each(function() {
+                if ($(this).val().trim() !== "") {
                     poll.options.push($(this).val().trim());
                 }
             });
-            unsafeWindow.sendcmd("poll-create", poll);
+            unsafeWindow.global.sendcmd("poll-create", poll);
         })
     ).append(
         $('<br>')
@@ -94,13 +94,7 @@ function loadPollMenu() {
         $('<br>')
     ).css('width', '400px');
 
-    onCreatePoll.push({
-        callback: function(poll) {
-            oldPoll = $.extend(true, {}, poll);
-        },
-        preOld: true
-    });
-    if (isConnected()) {
+    if (isConnected) {
         var poll = {};
         poll.title = $(".poll-title").text();
         poll.options = [];
@@ -116,6 +110,17 @@ function loadPollMenu() {
         }
     }
 }
-var oldPoll = undefined;
 
-preConnectFunctions.push(loadPollMenu);
+function loadPollMenuOnce() {
+    events.bind('onCreatePoll', function(poll) {
+        oldPoll = $.extend(true, {}, poll);
+    }, true);
+}
+
+var oldPoll = {};
+
+events.bind('onResetVariables', function() {
+    oldPoll = {};
+});
+events.bind('onPreConnect', loadPollMenu);
+events.bind('onExecuteOnce', loadPollMenuOnce);

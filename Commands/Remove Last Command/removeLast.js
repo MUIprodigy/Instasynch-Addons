@@ -23,10 +23,10 @@ function removeLast(params) {
     if (removeIndex === -1) {
         unsafeWindow.addMessage('', "The user didn't add any video", '', 'hashtext');
     } else {
-        unsafeWindow.sendcmd('remove', {
+        unsafeWindow.global.sendcmd('remove', {
             info: unsafeWindow.playlist[removeIndex].info
         });
     }
 }
 
-preConnectFunctions.push(loadRemoveLast);
+events.bind('onExecuteOnce', loadRemoveLast);

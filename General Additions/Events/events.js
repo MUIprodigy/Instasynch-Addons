@@ -1,125 +1,118 @@
-function loadEvents() {
-    var oldPlayVideo = unsafeWindow.playVideo,
+var currentPlayer = '',
+    blacknamesCount = 0,
+    greynamesCount = 0,
+    modsCount = 0;
+
+function loadEventsOnce() {
+    var oldAddMessage = unsafeWindow.addMessage,
+        oldCreatePoll = unsafeWindow.createPoll,
+        oldAddVideo = unsafeWindow.addVideo,
+        oldLoadRoomObj = unsafeWindow.global.loadRoomObj,
+        oldPlayVideo = unsafeWindow.playVideo,
         oldMoveVideo = unsafeWindow.moveVideo,
         oldAddUser = unsafeWindow.addUser,
         oldRemoveUser = unsafeWindow.removeUser,
-        oldPlayerDestroy = unsafeWindow.video.destroyPlayer,
         oldSkips = unsafeWindow.skips,
+        oldMakeLeader = unsafeWindow.makeLeader,
+        oldLoadUserlist = unsafeWindow.loadUserlist,
         i;
+
+    unsafeWindow.loadUserlist = function(userlist) {
+        events.fire('onUserlist', [userlist], true);
+        oldLoadUserlist(userlist);
+        events.fire('onUserlist', [userlist], false);
+    };
+
+    unsafeWindow.global.loadRoomObj = function() {
+        events.fire('onRoomChange', [], true);
+        oldLoadRoomObj();
+        events.fire('onRoomChange', [], false);
+    };
+    unsafeWindow.global.onConnecting = function() {
+        events.fire('onConnecting', [], false);
+    };
+    unsafeWindow.global.onConnected = function() {
+        events.fire('onConnect', [], false);
+    };
+    unsafeWindow.global.onReconnecting = function() {
+        events.fire('onReconnecting', [], false);
+    };
+    unsafeWindow.global.onDisconnect = function() {
+        events.fire('onDisconnect', [], false);
+    };
+
     unsafeWindow.playVideo = function(vidinfo, time, playing) {
-        if (currentPlayer !== vidinfo.provider) {
-            fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], true);
+        if (!vidinfo) {
+            return;
+        }
+
+        if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
+            events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], true);
         }
         var indexOfVid = unsafeWindow.getVideoIndex(vidinfo);
-        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], true);
+        events.fire('onPlayVideo', [vidinfo, time, playing, indexOfVid], true);
         oldPlayVideo(vidinfo, time, playing);
-        if (currentPlayer !== vidinfo.provider) {
-            fireEvents(onPlayerChange, [currentPlayer, vidinfo.provider], false);
+        if (GM_config.get('PlayerActive') && currentPlayer !== vidinfo.provider) {
+            events.fire('onPlayerChange', [currentPlayer, vidinfo.provider], false);
             switch (vidinfo.provider) {
                 case 'youtube':
                     var oldAfterReady = $.tubeplayer.defaults.afterReady;
                     $.tubeplayer.defaults.afterReady = function(k3) {
-                        fireEvents(onPlayerReady, [currentPlayer, vidinfo.provider], false);
+                        events.fire('onPlayerReady', [currentPlayer, vidinfo.provider], false);
                         oldAfterReady(k3);
                     };
                     break;
                 case 'vimeo':
                     $f($('#vimeo')[0]).addEvent('ready', function() {
-                        fireEvents(onPlayerReady, [currentPlayer, vidinfo.provider], false);
+                        events.fire('onPlayerReady', [currentPlayer, vidinfo.provider], false);
                     });
                     break;
             }
             currentPlayer = vidinfo.provider;
         }
-        fireEvents(onPlayVideo, [vidinfo, time, playing, indexOfVid], false);
+        events.fire('onPlayVideo', [vidinfo, time, playing, indexOfVid], false);
     };
 
     unsafeWindow.moveVideo = function(vidinfo, position) {
         var oldPosition = unsafeWindow.getVideoIndex(vidinfo);
-        fireEvents(onMoveVideo, [vidinfo, position, oldPosition], true);
+        events.fire('onMoveVideo', [vidinfo, position, oldPosition], true);
         oldMoveVideo(vidinfo, position);
-        fireEvents(onMoveVideo, [vidinfo, position, oldPosition], false);
+        events.fire('onMoveVideo', [vidinfo, position, oldPosition], false);
     };
 
-    function countUser(user, increment) {
-        var val = (increment) ? 1 : -1;
-        if (user.loggedin) {
-            if (parseInt(user.permissions, 10) > 0) {
-                modsCount += val;
-            }
-            blacknamesCount += val;
-        } else {
-            greynamesCount += val;
-        }
-    }
-    if (isConnected) {
-        for (i = 0; i < unsafeWindow.users.length; i += 1) {
-            countUser(unsafeWindow.users[i], true);
-        }
-    }
     unsafeWindow.addUser = function(user, css, sort) {
         countUser(user, true);
-        fireEvents(onAddUser, [user, css, sort], true);
+        events.fire('onAddUser', [user, css, sort], true);
         oldAddUser(user, css, sort);
-        fireEvents(onAddUser, [user, css, sort], false);
+        events.fire('onAddUser', [user, css, sort], false);
     };
 
     unsafeWindow.removeUser = function(id) {
         var user = unsafeWindow.users[getIndexOfUser(id)];
         countUser(user, false);
-        fireEvents(onRemoveUser, [id, user], true);
+        events.fire('onRemoveUser', [id, user], true);
         oldRemoveUser(id);
-        fireEvents(onRemoveUser, [id, user], false);
-    };
-    onConnect.push({
-        callback: function() {
-            modsCount = blacknamesCount = greynamesCount = 0;
-            $('#tablePlaylistBody').empty();
-        }
-    });
-    unsafeWindow.video.destroyPlayer = function() {
-        fireEvents(onPlayerDestroy, [], true);
-        oldPlayerDestroy();
-        fireEvents(onPlayerDestroy, [], false);
-        currentPlayer = '';
+        events.fire('onRemoveUser', [id, user], false);
     };
     unsafeWindow.skips = function(skips, skipsNeeded) {
-        fireEvents(onSkips, [skips, skipsNeeded], true);
+        events.fire('onSkips', [skips, skipsNeeded], true);
         oldSkips(skips, skipsNeeded);
-        fireEvents(onSkips, [skips, skipsNeeded], false);
+        events.fire('onSkips', [skips, skipsNeeded], false);
     };
-}
-
-function loadPriorityEvents() {
-    var oldAddMessage = unsafeWindow.addMessage,
-        oldCreatePoll = unsafeWindow.createPoll,
-        i;
+    unsafeWindow.makeLeader = function(userId) {
+        events.fire('onMakeLeader', [userId], true);
+        oldMakeLeader(userId);
+        events.fire('onMakeLeader', [userId], false);
+    };
 
     unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        fireEvents(onAddMessage, [username, message, userstyle, textstyle], true);
+        events.fire('onAddMessage', [username, message, userstyle, textstyle], true);
         oldAddMessage(username, message, userstyle, textstyle);
-        fireEvents(onAddMessage, [username, message, userstyle, textstyle], false);
-
-        if (username === '') {
-            if (userstyle === '' && textstyle === 'hashtext') {
-                if (message === 'Connecting..') {
-                    fireEvents(onConnecting, [], false);
-                } else if (message === 'Connection Successful!') {
-                    fireEvents(onConnect, [], false);
-                }
-            } else if (userstyle === 'system-msg') {
-                if (message === 'Reconnecting...') {
-                    fireEvents(onReconnecting, [], false);
-                }
-            }
-        }
-    };
-    var oldPoll = {
-        title: ''
+        events.fire('onAddMessage', [username, message, userstyle, textstyle], false);
     };
 
     function pollEquals(oldPoll, newPoll) {
-        if (oldPoll.title === newPoll.title) {
+        if (oldPoll.title === newPoll.title && oldPoll.options.length === newPoll.options.length) {
             for (i = 0; i < newPoll.options.length; i += 1) {
                 if (oldPoll.options[i].option !== newPoll.options[i].option) {
                     return false;
@@ -131,44 +124,61 @@ function loadPriorityEvents() {
     }
     unsafeWindow.createPoll = function(poll) {
         if (!pollEquals(oldPoll, poll)) {
-            fireEvents(onCreatePoll, [poll], true);
+            events.fire('onCreatePoll', [poll], true);
+            oldCreatePoll(poll);
+            events.fire('onCreatePoll', [poll], false);
+        } else {
+            oldCreatePoll(poll);
         }
-        oldCreatePoll(poll);
-        if (!pollEquals(oldPoll, poll)) {
-            fireEvents(onCreatePoll, [poll], false);
-        }
-        oldPoll = poll;
     };
+
+    unsafeWindow.addVideo = function(vidinfo) {
+        events.fire('onAddVideo', [vidinfo], true);
+        oldAddVideo(vidinfo);
+        events.fire('onAddVideo', [vidinfo], false);
+    };
+
+    //stuff that has to be executed in the scope of greasemonkey for the GM API to work
+    unsafeWindow.addEventListener("message", function(event) {
+        try {
+            var parsed = JSON.parse(event.data);
+            if (parsed.action) {
+                //own events
+                events.fire(parsed.action, [parsed.data], false);
+            }
+            //all
+            events.fire('onPageMessage', [parsed], false);
+        } catch (ignore) {}
+    }, false);
 }
 
-function fireEvents(listeners, parameters, preOld) {
-    var i;
-    for (i = 0; i < listeners.length; i += 1) {
-        //listeners[i].preOld = listeners[i].preOld || false;
-        if (!(listeners[i].preOld ^ preOld)) {
-            try {
-                listeners[i].callback.apply(this, parameters);
-            } catch (err) {
-                logError(listeners[i].callback.name, err);
-            }
+function loadEvents() {
+    var oldPlayerDestroy = unsafeWindow.video.destroyPlayer;
+
+    unsafeWindow.video.destroyPlayer = function() {
+        events.fire('onPlayerDestroy', [], true);
+        oldPlayerDestroy();
+        events.fire('onPlayerDestroy', [], false);
+        currentPlayer = '';
+    };
+
+    $("#chat input").bindFirst('keypress', function(event) {
+        events.fire('onInputKeypress', [event, $("#chat input").val()], false);
+    });
+}
+
+function countUser(user, increment) {
+    var val = increment ? 1 : -1;
+    if (user.loggedin) {
+        if (parseInt(user.permissions, 10) > 0) {
+            modsCount += val;
         }
+        blacknamesCount += val;
+    } else {
+        greynamesCount += val;
     }
 }
 
-var currentPlayer = '',
-    blacknamesCount = 0,
-    greynamesCount = 0,
-    modsCount = 0,
-    onMoveVideo = [],
-    onPlayerChange = [],
-    onPlayVideo = [],
-    onAddMessage = [],
-    onPlayerReady = [],
-    onRemoveUser = [],
-    onAddUser = [],
-    onCreatePoll = [],
-    onPlayerDestroy = [],
-    onSkips = [],
-    onConnecting = [],
-    onConnect = [],
-    onReconnecting = [];
+events.bind('onResetVariables', function() {
+    currentPlayer = '';
+});

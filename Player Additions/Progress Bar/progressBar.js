@@ -8,49 +8,22 @@ setField({
     'section': 'Player Additions'
 });
 
-function loadProgressBar() {
+function loadProgressbarOnce() {
     var maxTime = 0,
         progressbarInterval,
-        //copyright 2013, NeoLexx Fair License; http://opensource.org/licenses/Fair
-        //http://userscripts.org/scripts/review/158749
-        firefoxBlur = 'url("data:image/svg+xml;utf8,'.concat(
-            '<svg xmlns=\'http://www.w3.org/2000/svg\'>',
-            '<filter id=\'autocall\' y=\'-100%\' height=\'300%\'>',
-            '<feGaussianBlur stdDeviation=\'5\'/>',
-            '</filter>',
-            '</svg>#autocall")'),
         oldProgressBarSetting = GM_config.get('ProgressBar');
 
-    GM_addStyle(".blur5 {\
-            -webkit-filter: blur(5px);\
-            -moz-filter: blur(5px);\
-            -ms-filter: blur(5px);\
-            -o-filter: blur(5px);\
-        }");
-    onSettingsOpen.push(function() {
+    GM_addStyle(GM_getResourceText('progressbarCSS'));
+
+    events.bind('onSettingsOpen', function() {
         oldProgressBarSetting = GM_config.get('ProgressBar');
     });
-    onSettingsSave.push(function() {
+    events.bind('onSettingsSave', function() {
         if (oldProgressBarSetting !== GM_config.get('ProgressBar')) {
-            $("#progressbarContainer").css('display', GM_config.get('ProgressBar') ? 'flex' : 'none');
+            $("#progressbar-container").css('display', GM_config.get('ProgressBar') ? 'flex' : 'none');
             oldProgressBarSetting = GM_config.get('ProgressBar');
         }
     });
-
-    $('.stage').prepend(
-        $('<div>', {
-            'id': 'progressbarContainer'
-        }).append(
-            $('<hr>', {
-                'id': 'progressbar'
-            }).css('margin', '10px 0px 0px 0px').css('width', '0px').css('float', 'left').css('background-color', '#2284B5').css('height', '10px')
-            .css('border-width', '0px 0px 0px 0px').css('position', 'relative').addClass('blur5').css('filter', firefoxBlur)
-        ).append(
-            $('<img>', {
-                'src': 'http://i.imgur.com/GiBiY.png'
-            }).css('width', '30').css('height', '21').addClass('mirror').css('position', 'relative').css('top', '1px').css('left', '-25px')
-        ).css('height', '20px').css('display', GM_config.get('ProgressBar') ? 'flex' : 'none')
-    );
 
     function setUpInterval() {
         return setInterval(function() {
@@ -59,34 +32,44 @@ function loadProgressBar() {
             });
         }, 200);
     }
-    onPlayVideo.push({
-        callback: function(vidinfo, time, playing, indexOfVid) {
-            maxTime = unsafeWindow.playlist[indexOfVid].duration;
-            $("#progressbar").css('width', '0px');
+    events.bind('onPlayVideo', function(vidinfo, time, playing, indexOfVid) {
+        maxTime = unsafeWindow.playlist[indexOfVid].duration;
+        $("#progressbar").css('width', '0px');
+    });
+    events.bind('onPlayerReady', function(oldPlayer, newPlayer) {
+        progressbarInterval = setUpInterval();
+    });
+
+    function clearProgressbarInterval() {
+        if (progressbarInterval) {
+            clearInterval(progressbarInterval);
         }
-    });
-    onPlayerReady.push({
-        callback: function(oldPlayer, newPlayer) {
-            progressbarInterval = setUpInterval();
-        }
-    });
-    onPlayerChange.push({
-        callback: function() {
-            if (progressbarInterval) {
-                clearInterval(progressbarInterval);
-            }
-        },
-        preOld: true
-    });
-    onPlayerDestroy.push({
-        callback: function() {
-            if (progressbarInterval) {
-                clearInterval(progressbarInterval);
-            }
-        },
-        preOld: true
+    }
+    events.bind('onPlayerChange', clearProgressbarInterval);
+    events.bind('onPlayerDestroy', clearProgressbarInterval);
+    events.bind('onDisconnect', clearProgressbarInterval);
+    events.bind('onRoomChange', clearProgressbarInterval);
+
+    events.bind('onDisconnect', function() {
+        currentPlayer = '';
     });
 }
 
+function loadProgressbar() {
+    $('.stage').prepend(
+        $('<div>', {
+            'id': 'progressbar-container'
+        }).append(
+            $('<hr>', {
+                'id': 'progressbar'
+            }).addClass('blur5')
+        ).append(
+            $('<img>', {
+                'src': 'http://i.imgur.com/GiBiY.png'
+            }).addClass('mirror')
+        ).css('display', GM_config.get('ProgressBar') ? 'flex' : 'none')
+    );
+}
 
-preConnectFunctions.push(loadProgressBar);
+events.bind('onExecuteOnce', loadProgressbarOnce);
+events.bind('onPreConnect', loadProgressbar);

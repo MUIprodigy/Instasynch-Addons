@@ -48,5 +48,4 @@ function loadNameAutocomplete() {
         }
     });
 }
-
-preConnectFunctions.push(loadNameAutocomplete);
+events.bind('onPreConnect', loadNameAutocomplete);

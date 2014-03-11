@@ -1,6 +1,6 @@
 function loadCommandFloodProtect() {
-    var oldsendcmd = unsafeWindow.sendcmd;
-    unsafeWindow.sendcmd = function(command, data) {
+    var oldsendcmd = unsafeWindow.global.sendcmd;
+    unsafeWindow.global.sendcmd = function(command, data) {
         if (command) {
             //add the command to the cache
             commandCache.push({
@@ -20,7 +20,7 @@ function loadCommandFloodProtect() {
                 //after 400ms send the next command
                 setTimeout(function() {
                     sendcmdReady = true;
-                    unsafeWindow.sendcmd();
+                    unsafeWindow.global.sendcmd();
                 }, 400);
             }
         }
@@ -30,4 +30,8 @@ function loadCommandFloodProtect() {
 var sendcmdReady = true,
     commandCache = [];
 
-preConnectFunctions.push(loadCommandFloodProtect);
+events.bind('onResetVariables', function() {
+    sendcmdReady = true;
+    commandCache = [];
+});
+events.bind('onExecuteOnce', loadCommandFloodProtect);

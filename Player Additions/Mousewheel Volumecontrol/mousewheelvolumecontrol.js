@@ -24,24 +24,8 @@ setField({
     'subsection': 'Volume'
 });
 
-function loadMouseWheelVolumecontrol() {
-    var firefoxBlur = 'url("data:image/svg+xml;utf8,'.concat(
-        '<svg xmlns=\'http://www.w3.org/2000/svg\'>',
-        '<filter id=\'autocall\' x=\'-300%\' width=\'500%\'>',
-        '<feGaussianBlur stdDeviation=\'5\'/>',
-        '</filter>',
-        '</svg>#autocall")');
-    $('<div>', {
-        'id': 'volumebarContainer'
-    }).append(
-        $('<div>', {
-            'id': 'volumebar'
-        }).css('height', '0px').css('width', '5px').css('position', 'absolute').css('left', '-8px')
-        .css('background-color', 'lime').addClass('blur5').css('display', 'none').css('filter', firefoxBlur)
-    ).css('float', 'left').css('width', '0px').css('position', 'relative').insertBefore('#media');
-
-    //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
-
+function loadMouseWheelVolumecontrolOnce() {
+    GM_addStyle(GM_getResourceText('volumebarCSS'));
     //prevent the site from scrolling while over the player
     function preventScroll(event) {
         if (GM_config.get('MouseWheelVolumecontrol') && mouserOverPlayer) {
@@ -63,6 +47,45 @@ function loadMouseWheelVolumecontrol() {
     if (unsafeWindow.addEventListener) {
         unsafeWindow.addEventListener('DOMMouseScroll', preventScroll, false);
     }
+
+    //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
+    //listen to volume change on the youtube player
+    events.bind('onPageMessage', function(data) {
+        if (data.event && data.event === 'infoDelivery' && data.info && data.info.volume) {
+            setGlobalVolume(data.info.volume);
+        }
+    });
+
+    events.bind('onPlayerReady', function(oldPlayer, newPlayer) {
+        if (vimeoVolumePollingIntervalId) {
+            clearInterval(vimeoVolumePollingIntervalId);
+            vimeoVolumePollingIntervalId = undefined;
+        }
+        initGlobalVolume();
+        switch (newPlayer) {
+            case 'vimeo':
+                //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
+                vimeoVolumePollingIntervalId = setInterval(function() {
+                    $f($('#vimeo')[0]).api('getVolume', function(vol) {
+                        setGlobalVolume(vol * 100.0);
+                    });
+                }, 500);
+                break;
+        }
+    });
+}
+
+function loadMouseWheelVolumecontrol() {
+    $('<div>', {
+        'id': 'volumebar-container'
+    }).append(
+        $('<div>', {
+            'id': 'volumebar'
+        }).addClass('blur5')
+    ).insertBefore('#media');
+
+    //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
+
     //add hover event to the player
     $('#media').hover(
         function() {
@@ -73,44 +96,13 @@ function loadMouseWheelVolumecontrol() {
         }
     );
 
-    //message origin = http: //www.youtube.com, data={"event":"infoDelivery","info":{"muted":false,"volume":0},"id":1}
-    //listen to volume change on the youtube player
-    unsafeWindow.addEventListener("message",
-        function(event) {
-            try {
-                var parsed = JSON.parse(event.data);
-                if (parsed.event && parsed.event === 'infoDelivery' && parsed.info && parsed.info.volume) {
-                    setGlobalVolume(parsed.info.volume);
-                }
-            } catch (ignore) {}
-        }, false);
-
-    onPlayerReady.push({
-        'callback': function(oldPlayer, newPlayer) {
-            if (vimeoVolumePollingIntervalId) {
-                clearInterval(vimeoVolumePollingIntervalId);
-                vimeoVolumePollingIntervalId = undefined;
-            }
-            initGlobalVolume();
-            switch (newPlayer) {
-                case 'vimeo':
-                    //since I didn't find a way to listen to volume change on the vimeo player we have to use polling here
-                    vimeoVolumePollingIntervalId = setInterval(function() {
-                        $f($('#vimeo')[0]).api('getVolume', function(vol) {
-                            setGlobalVolume(vol * 100.0);
-                        });
-                    }, 500);
-                    break;
-            }
-        }
-    });
 }
 
 var isPlayerReady = false,
     globalVolume = 50,
     oldGlobalVolume = 50,
     mouserOverPlayer = false,
-    vimeoVolumePollingIntervalId = undefined,
+    vimeoVolumePollingIntervalId,
     previousVolumeScrollTime = new Date().getTime(), // used to measure speed of scrolling
     volumebarFadeoutTimeout;
 
@@ -175,4 +167,5 @@ function setVol(volume) {
     }
 }
 
-preConnectFunctions.push(loadMouseWheelVolumecontrol);
+events.bind('onExecuteOnce', loadMouseWheelVolumecontrolOnce);
+events.bind('onPreConnect', loadMouseWheelVolumecontrol);

@@ -14,7 +14,7 @@ function bump(params) {
         }
         bumpTo = getActiveVideoIndex() + 1;
     } else {
-        for (i = 1; i < params.length; i++) {
+        for (i = 1; i < params.length; i += 1) {
             if (isUsername(params[i])) {
                 user = params[i];
             } else {
@@ -40,12 +40,11 @@ function bump(params) {
     if (bumpIndex === -1) {
         unsafeWindow.addMessage('', "The user didn't add any videos", '', 'hashtext');
     } else {
-        unsafeWindow.sendcmd('move', {
+        unsafeWindow.global.sendcmd('move', {
             info: unsafeWindow.playlist[bumpIndex].info,
             position: bumpTo
         });
     }
 }
 
-
-preConnectFunctions.push(loadBumpCommand);
+events.bind('onExecuteOnce', loadBumpCommand);

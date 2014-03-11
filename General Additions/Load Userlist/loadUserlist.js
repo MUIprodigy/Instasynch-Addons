@@ -1,5 +1,5 @@
 function loadNewLoadUserlist() {
-    unsafeWindow.addUser = function(user, css, sort) {
+    unsafeWindow.addUser = function(user, css) {
         user.css = css;
         var muted = unsafeWindow.isMuted(user.ip) ? "muted" : "",
             index = unsafeWindow.users.length,
@@ -14,8 +14,8 @@ function loadNewLoadUserlist() {
                 css: css
             },
             "click": function() {
-                $('#cin')['val']($('#cin')['val']() + $(this).data('username'));
-                $('#cin')['focus']();
+                $('#cin').val($('#cin').val() + $(this).data('username'));
+                $('#cin').focus();
             },
             "css": {
                 "cursor": 'default'
@@ -35,7 +35,7 @@ function loadNewLoadUserlist() {
                 $('#bio .avatar img').attr('src', '');
                 $('#bio .userinfo').html('');
                 $('#bio').show();
-                if (thisElement.data('css').indexOf('b') != -1) {
+                if (thisElement.data('css').indexOf('b') !== -1) {
                     unsafeWindow.getUserInfo(thisElement.data('username'), function(avatar, bio) {
                         $('#bio .avatar img').attr('src', avatar);
                         $('#bio .userinfo').html(bio);
@@ -43,8 +43,8 @@ function loadNewLoadUserlist() {
                 } else {
                     $('#bio .userinfo').html('<span style=\'color: grey;\'>Unregistered</span>');
                 }
-                $('#ban').data('id', user['id']);
-                $('#kick').data('id', user['id']);
+                $('#ban').data('id', user.id);
+                $('#kick').data('id', user.id);
                 $('#mute').data('ip', user.ip);
                 $('#unmute').data('ip', user.ip);
                 //show or hide mute/unmute buttons
@@ -84,14 +84,17 @@ function loadNewLoadUserlist() {
 
 
     unsafeWindow.loadUserlist = function(userlist) {
-        unsafeWindow.users = new Array();
+        unsafeWindow.users = [];
         $('#chat_users').html('');
-        for (var i = 0; i < userlist.length; i++) {
-            var user = userlist[i];
-            var css = '';
-            if (user['loggedin']) {
+        var i,
+            user,
+            css;
+        for (i = 0; i < userlist.length; i += 1) {
+            user = userlist[i];
+            css = '';
+            if (user.loggedin) {
                 css += 'b ';
-                if (user['permissions'] > 0) {
+                if (user.permissions > 0) {
                     css += 'm ';
                 }
             }
@@ -102,7 +105,7 @@ function loadNewLoadUserlist() {
         var user,
             i;
         //start from the end since unnamed will be at the end of the list
-        for (i = unsafeWindow.users.length - 1; i >= 0; i--) {
+        for (i = unsafeWindow.users.length - 1; i >= 0; i -= 1) {
             if (unsafeWindow.users[i].id === id) {
                 user = unsafeWindow.users[i];
                 user.username = username;
@@ -123,7 +126,7 @@ function compareUser(a, b) {
     }
     if (a.permissions !== b.permissions) {
         return parseInt(b.permissions, 10) - parseInt(a.permissions, 10);
-    } else {
-        return a.username.localeCompare(b.username);
     }
+
+    return a.username.localeCompare(b.username);
 }

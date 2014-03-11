@@ -1,41 +1,50 @@
-/*
-    Copyright (C) 2014  fugXD, restructure, convert to jquery.
-*/
-var resultsPerPage = 9,
-    indexOfSearch,
-    entries = [],
-    partialEntries = [],
-    isPlaylist,
-    startIndex = 1,
-    searchTimeout,
-    divresults,
-    divremove,
-    divmore,
-    nextDisabled,
-    prevDisabled,
-    nextButton,
-    prevButton;
+function loadYoutbeSearchOnce() {
+    GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
+    searchResultTemplate = $('<a>', {
+        'target': '_blank'
+    }).append(
+        $('<img>').addClass('search-result-thumbnail')
+    ).append(
+        $('<p>').append(
+            $('<span>').addClass('text-shadow')
+        ).addClass('search-result-duration')
+    ).append(
+        $('<div>').append(
+            $('<div>', {
+                'class': 'controlIcon',
+                'title': 'Add Video'
+            }).append(
+                $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
+            ).addClass('search-result-add')
+        ).append(
+            $('<span>').addClass('text-shadow').addClass('search-result-title')
+        ).addClass('opacity0').addClass('search-result-inf')
+    ).addClass('search-result');
+}
 
 function loadYoutubeSearch() {
-    GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
-    // Search results container
-    divresults = $('<div id="search-results" />');
-    // Close button container
-    divremove = $('<div id="divclosesearch" />').addClass('x');
-
-    nextDisabled = false;
-    prevDisabled = false;
-    // 'Moar' link container
-    prevButton = $('<input id="prevButton" />').prop('disabled', true).prop('type', 'button').val('<< Prev');
-    nextButton = $('<input id="nextButton" />').prop('disabled', true).prop('type', 'button').val('Next >>');
-    divmore = $('<div id="divmore" />').append(
-        prevButton
-    ).append(
-        nextButton
-    );
-
     //insert search result container
-    $('.poll-container').before(divresults);
+    $('.poll-container').before(
+        $('<div>', {
+            'id': 'search-results'
+        }).append(
+            $('<div>', {
+                'id': 'divmore'
+            }).append(
+                $('<input>', {
+                    'id': 'prevButton'
+                }).prop('disabled', true).prop('type', 'button').val('<< Prev').click(prevPage)
+            ).append(
+                $('<input>', {
+                    'id': 'nextButton'
+                }).prop('disabled', true).prop('type', 'button').val('Next >>').click(nextPage)
+            )
+        ).append(
+            $('<div>', {
+                'id': 'divclosesearch'
+            }).addClass('x').click(closeResults)
+        )
+    );
 
     // Setting events on the URL input
     $("#URLinput").bind("keydown", function(event) {
@@ -53,211 +62,167 @@ function loadYoutubeSearch() {
 function startSearch() {
     searchTimeout = null;
     closeResults();
-    search();
+    searchFirst();
 }
-// Retrieve data from the search query
-function search() {
-    var query,
-        url,
-        urlInfo,
-        buildMoreEntries;
 
-    function success(data) {
-        var feed = data.feed;
-        partialEntries = feed.entry;
-
-        if (entries.length === 0) {
-            entries = partialEntries;
-        } else {
-            entries = entries.concat(partialEntries);
-        }
-
-        if (partialEntries.length >= 49) {
-            startIndex = startIndex + 50;
-        } else {
-            buildMoreEntries = false;
-        }
-    }
-
-    function error() {
-        buildMoreEntries = false;
-    }
-    query = document.getElementById('URLinput').value;
-    if (query) {
+function searchFirst() {
+    query = $("#URLinput").val();
+    if (query && query !== "") {
         urlInfo = parseUrl(query);
-        if (!urlInfo) { // is not a link
-            isPlaylist = false;
-            url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-            $.getJSON(url,
-                function(data) {
-                    var feed = data.feed;
-                    entries = feed.entry;
-                    showResults(entries, 0);
-                });
-        } else { // is a link
-            if (urlInfo.playlistId) { // is a playlist
-                entries = [];
-                buildMoreEntries = true;
-                startIndex = 1;
-                isPlaylist = true;
-                while (buildMoreEntries) {
-                    url = "https://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
-                    $.ajax({
-                        async: false,
-                        url: url,
-                        dataType: "json",
-                        success: success,
-                        error: error
-                    });
-                }
-                showResults(entries, 0);
-            }
-        }
+        entriesHistory = [];
+        page = 0;
+        $('#divmore').css('display', 'block');
+        search(0, true, true);
     }
 }
 
-// Parse data and display it
-function showResults(entries, index) {
-    indexOfSearch = index;
-    var i,
-        entry,
-        date,
-        durationSeconds,
-        durationColor,
-        duration,
-        thumbnailUrl,
-        title,
-        id,
-        link,
-        idtag,
-        feedURL,
-        infoURL;
+function prevPage() {
+    page--;
+    showResults(entriesHistory[page], page !== 0);
+    $('#nextButton').prop('disabled', false);
+}
 
-    divresults.empty();
-    if (entries.length === 0) {
+function nextPage() {
+    page++;
+    showResults(entriesHistory[page], true);
+    if (page === entriesHistory.length - 1) {
+        if (entriesHistory[page].length === 9) {
+            search((page + 1) * 9, false, false);
+        }
+    } else {
+        $('#nextButton').prop('disabled', false);
+    }
+}
+
+function search(startIndex, show, nextResults) {
+    startIndex = startIndex + 1;
+    var entries,
+        url,
+        prevButtonActive = startIndex !== 1;
+    if (!urlInfo) {
+        url = String.format("https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=9&q={0}&start-index={1}&safeSearch=none", query, startIndex);
+    } else { // is a link
+        if (urlInfo.playlistId) {
+            url = String.format("https://gdata.youtube.com/feeds/api/playlists/{0}?v=2&alt=json&max-results=9&start-index={1}&safeSearch=none", urlInfo.playlistId, startIndex);
+        }
+    }
+    if (!url) {
         return;
     }
-    for (i = indexOfSearch; i < Math.min(indexOfSearch + resultsPerPage, entries.length); i += 1) {
-        entry = entries[i];
-        if (entry.media$group.media$thumbnail !== undefined) { // won't do shit if the video was removed by youtube.
-            date = new Date(null);
-            durationSeconds = entry.media$group.yt$duration.seconds; // video duration in seconds
-            durationColor = 'white'; // color of shown duration
-            duration = ''; // the displayed duration text
-            thumbnailUrl = entry.media$group.media$thumbnail[0].url;
-            title = entry.title.$t;
-            link = "http://www.youtube.com/watch?v=";
-            if (!isPlaylist) {
-                idtag = [];
-                idtag = entry.id.$t.split(':');
-                id = idtag[3];
-            } else {
-                feedURL = entry.link[1].href;
-                infoURL = parseUrl(feedURL);
-                id = infoURL.id;
+    $.getJSON(url, function(data) {
+        entries = data.feed.entry;
+        if (entries && entries.length !== 0) {
+            entriesHistory.push(entries);
+            if (show) {
+                showResults(entries, prevButtonActive);
             }
-            if (durationSeconds > 60 * 15) {
-                durationColor = 'orange';
+            $('#nextButton').prop('disabled', false);
+            if (nextResults) {
+                search(startIndex + 9, false, false);
             }
-            if (durationSeconds > 60 * 25) {
-                durationColor = 'red';
-            }
-
-            // create duration text "12h34m56s", skipping leading zeros for hours and minutes
-            date.setSeconds(durationSeconds);
-            if (date.getUTCHours() !== 0) {
-                duration = date.getUTCHours() + 'h';
-            }
-            if ((date.getUTCMinutes() !== 0) || duration) {
-                duration += date.getUTCMinutes() + 'm';
-            }
-            if ((date.getUTCSeconds() !== 0) || duration) {
-                duration += date.getUTCSeconds() + 's';
-            }
-
-            link += id;
-
-            divresults.append(
-                $('<div>')
-            ).append(
-                $('<div>').append(
-                    $('<img>', {
-                        'src': thumbnailUrl
-                    })
-                ).append(
-                    $('<p>').append(
-                        $('<span>').text(title).css('background', 'rgba(0, 0, 0, 0.7)').css('color', 'white')
-                    ).css('position', 'absolute').css('top', '5px').css('left', '5px').css('display', 'none')
-                ).append(
-                    $('<p>').text(link).css('display', 'none').addClass('videourl')
-                ).append(
-                    $('<p>').append(
-                        $('<span>').text(duration).css('background', 'rgba(0, 0, 0, 0.7').css('color', durationColor)
-                    ).css('position', 'absolute').css('bottom', '0px').css('right', '0px')
-                ).addClass('search-result').click(addLinkToPl).hover(showTitle, hideTitle)
-            );
         } else {
-            divresults.append(
-                $('<div>', {
-                    'class': 'search-result'
-                }).text('Video Remove By Youtube').addClass('search-result').css('cursor', 'default')
-            );
+            $('#nextButton').prop('disabled', true);
         }
+    });
+}
+
+function showResults(entries, prevButtonActive) {
+    $('#prevButton').prop('disabled', !prevButtonActive);
+    $('#nextButton').prop('disabled', true);
+    $('.search-result').remove();
+    $('#search-results').css('display', 'initial');
+
+    var i;
+    for (i = 0; i < 9 - entries.length; i += 1) {
+        $('#search-results').prepend(
+            $('<div>').css('cursor', 'default').addClass('search-result')
+        );
     }
-    //fill empty spaces with empty divs 
-    if (Math.min(indexOfSearch + resultsPerPage, entries.length) % 3 !== 0) {
-        for (i = 0; i < 3 - Math.min(indexOfSearch + resultsPerPage, entries.length) % 3; i += 1) {
-            divresults.append(
-                $('<div>').css('cursor', 'default').addClass('search-result')
-            );
+    for (i = entries.length - 1; i >= 0; i -= 1) {
+        addEntry(entries[i]);
+    }
+
+}
+
+function addEntry(entry) {
+    var seconds,
+        url,
+        searchResult = searchResultTemplate.clone(false);
+
+    if (entry.media$group.media$thumbnail === undefined) { //video got removed
+        $('#search-results').prepend(
+            $('<div>', {
+                'class': 'search-result'
+            }).text('Video Remove By Youtube').addClass('search-result').css('cursor', 'default')
+        );
+    } else {
+        seconds = entry.media$group.yt$duration.seconds;
+
+        searchResult.attr('href', getUrlOfInfo(parseUrl(entry.link[1].href))).hover(toggleElements, toggleElements);
+        searchResult.find('>:eq(0)').attr('src', entry.media$group.media$thumbnail[0].url);
+        searchResult.find('>:eq(1)>:eq(0)').text(formatTime(seconds)).css('color', getDurationColor(seconds));
+        searchResult.find('>:eq(2)>:eq(1)').text(entry.title.$t);
+
+        if (GM_config.get('button-animations')) {
+            searchResult.find('>:eq(2)>:eq(0)').hover(function() {
+                addAnimation($(this).children().eq(0), 'pulse');
+            }, function() {
+                removeAnimation($(this).children().eq(0), 'pulse');
+            }).click(addSearchResultToPl);
+        } else {
+            searchResult.find('>:eq(2)>:eq(0)').click(addSearchResultToPl);
         }
+
+        $('#search-results').prepend(searchResult);
     }
-    divresults.append(divremove);
-    divresults.append(divmore);
-    divresults.css('display', 'block');
-    divremove.click(closeResults);
-
-    // update buttons
-    prevDisabled = (indexOfSearch > 0) ? false : true;
-    nextDisabled = (indexOfSearch < entries.length - resultsPerPage) ? false : true;
-
-    nextButton.attr('disabled', nextDisabled).click(getNextResultPage);
-    prevButton.attr('disabled', prevDisabled).click(getPreviousResultPage);
 }
 
-function getNextResultPage() {
-    indexOfSearch += resultsPerPage;
-    showResults(entries, indexOfSearch);
+function getDurationColor(seconds) {
+    if (seconds < 60 * 15) {
+        return 'white';
+    }
+    if (seconds < 60 * 25) {
+        return 'orange';
+    }
+    return 'red';
 }
 
-function getPreviousResultPage() {
-    indexOfSearch -= resultsPerPage;
-    showResults(entries, indexOfSearch);
+function formatTime(seconds) {
+    var date = new Date(null),
+        duration = '';
+    date.setSeconds(seconds);
+    if (date.getUTCHours() !== 0) {
+        duration = date.getUTCHours() + 'h';
+    }
+    if ((date.getUTCMinutes() !== 0) || duration) {
+        duration += date.getUTCMinutes() + 'm';
+    }
+    if ((date.getUTCSeconds() !== 0) || duration) {
+        duration += date.getUTCSeconds() + 's';
+    }
+    return duration;
 }
 
-// shows the video title on hover
-function showTitle(e) {
-    e.currentTarget.childNodes[1].style.display = 'block';
-}
-
-// hide the video title on mouse out
-function hideTitle(e) {
-    e.currentTarget.childNodes[1].style.display = 'none';
-}
-
-// Paste the title clicked in the add bar
-function addLinkToPl(e) {
-    var linkToPaste = e.currentTarget.childNodes[2].innerHTML,
-        addbox = document.getElementById("URLinput");
-    addbox.value = linkToPaste;
-}
-
-// closes the results and empties it
 function closeResults() {
-    divresults.empty();
-    entries = [];
-    partialEntries = [];
-    divresults.css('display', 'none');
+    $('#search-results').css('display', 'none');
 }
 
-preConnectFunctions.push(loadYoutubeSearch);
+function toggleElements() {
+    $(this).find('>:eq(2)').toggleClass('opacity0');
+}
+
+function addSearchResultToPl(event) {
+    unsafeWindow.global.sendcmd('add', {
+        URL: $(this).parent().parent().attr('href')
+    });
+    return false;
+}
+var page = 0,
+    query,
+    urlInfo,
+    entriesHistory,
+    searchResultTemplate,
+    searchTimeout;
+
+events.bind('onPreConnect', loadYoutubeSearch);
+events.bind('onExecuteOnce', loadYoutbeSearchOnce);
