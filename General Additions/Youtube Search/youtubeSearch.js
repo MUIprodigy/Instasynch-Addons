@@ -68,7 +68,7 @@ function startSearch() {
 function searchFirst() {
     query = $("#URLinput").val();
     if (query && query !== "") {
-        urlInfo = parseUrl(query);
+        urlInfo = urlParser.parse(query);
         entriesHistory = [];
         page = 0;
         $('#divmore').css('display', 'block');
@@ -158,7 +158,7 @@ function addEntry(entry) {
     } else {
         seconds = entry.media$group.yt$duration.seconds;
 
-        searchResult.attr('href', getUrlOfInfo(parseUrl(entry.link[1].href))).hover(toggleElements, toggleElements);
+        searchResult.attr('href', urlParser.createUrl(urlParser.parse(entry.link[1].href))).hover(toggleElements, toggleElements);
         searchResult.find('>:eq(0)').attr('src', entry.media$group.media$thumbnail[0].url);
         searchResult.find('>:eq(1)>:eq(0)').text(formatTime(seconds)).css('color', getDurationColor(seconds));
         searchResult.find('>:eq(2)>:eq(1)').text(entry.title.$t);

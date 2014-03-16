@@ -20,7 +20,7 @@ function loadHistory() {
                     $t: video.title
                 },
                 link: [{}, {
-                    href: getUrlOfInfo(video.info)
+                    href: urlParser.createUrl(video.info)
                 }]
             });
         }
