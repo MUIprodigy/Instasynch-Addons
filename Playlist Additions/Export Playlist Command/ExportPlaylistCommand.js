@@ -38,7 +38,7 @@ function exportPlaylist(params) {
     for (i = 0; i < unsafeWindow.playlist.length; i += 1) {
         line = '';
         videoxml = $('<video>');
-        line += getUrlOfInfo(unsafeWindow.playlist[i].info);
+        line += urlParser.createurl(unsafeWindow.playlist[i].info);
         videoxml.append($('<url>').text(line));
         if ((options & 2) !== 0) { //title
             line += " " + unsafeWindow.playlist[i].title;
