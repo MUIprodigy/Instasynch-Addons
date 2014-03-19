@@ -38,13 +38,15 @@ function loadModSpy() {
                 }
             }
             if (!filter) {
-                if (message.match(/ moved a video/g) && bumpCheck) {
-                    message = message.replace("moved", "bumped");
-                    bumpCheck = false;
-                } else if (message.match(/has (banned)|(kicked) a user\./)) {
-                    message = message.replace(/a user/, lastUser.username);
-                }
-                unsafeWindow.addMessage('', message, '', 'hashtext');
+                unsafeWindow.setTimeout(function() {
+                    if (message.match(/ moved a video/g) && bumpCheck) {
+                        message = message.replace("moved", "bumped");
+                        bumpCheck = false;
+                    } else if (message.match(/has (banned)|(kicked) a user\./)) {
+                        message = message.replace(/a user/, lastUser.username);
+                    }
+                    unsafeWindow.addMessage('', message, '', 'hashtext');
+                }, 500);
             }
         }
         oldLog.apply(unsafeWindow.console, arguments);

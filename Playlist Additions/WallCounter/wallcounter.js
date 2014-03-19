@@ -19,10 +19,14 @@ function loadWallCounter() {
 
     unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
         if (username === '' && message === 'Video added successfully.') {
-            resetWallCounter();
-            message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
+            unsafeWindow.setTimeout(function() {
+                resetWallCounter();
+                message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
+                oldAddMessage(username, message, userstyle, textstyle);
+            }, 500);
+        } else {
+            oldAddMessage(username, message, userstyle, textstyle);
         }
-        oldAddMessage(username, message, userstyle, textstyle);
     };
 
     /*
