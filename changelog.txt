@@ -1,3 +1,8 @@
+1.35.0.6
+ • Fixed modspy
+ • Fixed wallcounter
+ • Fixed 'bump [position], added 'bump [url]
+
 1.35.0.5
  • Rewrote playlist browser / youtubesearch / history
 

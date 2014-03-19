@@ -129,6 +129,18 @@ function getUsernameArray(lowerCase) {
     return arr;
 }
 
+function videoInfoEquals(info1, info2) {
+    if (!info1 || !info2) {
+        return false;
+    }
+    if (info1.provider && info1.provider === info2.provider &&
+        info1.mediaType && info1.mediaType === info2.mediaType &&
+        info1.id && info1.id === info2.id) {
+        return true;
+    }
+    return false;
+}
+
 var thisUsername;
 
 /*
