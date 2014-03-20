@@ -31,7 +31,7 @@ function loadNameAutocomplete() {
                         //check for partial matches with other found users
                         for (j = partToComplete.length; j >= 0; j -= 1) {
                             sub = partToComplete.substring(0, j);
-                            if (usernames[i].indexOf(sub) === 0) {
+                            if (usernames[i].toLowerCase().indexOf(sub) === 0) {
                                 partToComplete = sub;
                                 break;
                             }
