@@ -23,7 +23,7 @@ function loadWallCounter() {
                 resetWallCounter();
                 message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
                 oldAddMessage(username, message, userstyle, textstyle);
-            }, 500);
+            }, 750);
         } else {
             oldAddMessage(username, message, userstyle, textstyle);
         }
@@ -85,7 +85,7 @@ function printMyWallCounter() {
     var output = "",
         timeToWall = 0,
         i;
-    for (i = getActiveVideoIndex(); i < unsafeWindow.playlist.length; i += 1) {
+    for (i = Math.max(getActiveVideoIndex(), 0); i < unsafeWindow.playlist.length; i += 1) {
         if (unsafeWindow.playlist[i].addedby.toLowerCase() === thisUsername.toLowerCase()) {
             break;
         }
