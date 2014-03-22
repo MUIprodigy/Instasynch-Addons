@@ -1,0 +1,318 @@
+/*main colors*/
+
+.controlIcon:hover {
+        background-color: #2284B5;
+}
+.friendsList .friendsList-expand {
+        background-color: #2eb6e6;
+}
+.friendsList .friendsList-expand:hover {
+        background-color: #2284B5;
+}
+.friendsList .friendsList-list .category {
+        background-color: #2eb6e6;
+}
+.friendsList .friendsList-list .category:hover {
+        background-color: #2284B5;
+}
+.click-nav ul .clicker {
+        background: #2eb6e6;
+        color: #FFF;
+}
+.click-nav ul .clicker:hover {
+        background: #2284B5;
+}
+#progressbar{
+	background-color:#2284B5;
+}
+#addons-clicker {
+	background: #2eb6e6 !important;
+	color: #FFF !important;
+}
+#addons-clicker:hover {
+	background: #2284B5 !important;
+}
+#volumebar{
+    background-color:lime;
+}
+
+/*logos*/
+#room-logo {
+	height: 60px;
+	position: relative;
+	top: -1px;
+	width: 237px;
+	float: left;
+	background-image: url(http://i.imgur.com/4AyXQt0.png);
+	background-size: contain;
+}
+
+#visits-logo{
+	height: 17px;
+	width: 30px;
+	background-image: url(http://i.imgur.com/4ZEPN8D.png);
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+#viewing-logo {
+	background-image: url(http://i.imgur.com/ehkt2RB.png);
+	height: 10px;
+	width: 17px;
+	margin-left: 9px;
+	margin-right: 9px;
+	margin-top: 5px;
+}
+
+.top-descr {
+	height: 49px;
+}
+
+/*controls*/
+.controlIcon {
+        float: right;
+        margin-right: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.2s ease-in-out;
+        -webkit-transition: background-color 0.2s ease-in-out;
+        -moz-transition: background-color 0.2s ease-in-out;
+        background-color: #2eb6e6;
+}
+
+.basic-btn-btnbar {
+        width: calc(100% - 11px) !important;
+}
+
+.animationContainer {
+        pointer-events: none;
+        width: 23px;
+        height: 23px;
+}
+#skip {
+        float: none;
+        margin-right: 0px;
+        margin-left: 0px;
+        background-image: url(http://i.imgur.com/FhBdt3X.png);
+}
+#skipCounter {
+        height: 23px;
+        margin-left: 0px;
+        padding: 4px 2px 0px 3px;
+        cursor: default;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+}
+#skipContainer {
+        float: left;
+        width: 70px;
+}
+#URLinput {
+        height: 23px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 4px;
+        margin-right: 0px;
+        border-width: 0px;
+        width: 200px;
+}
+#addUrl {
+        float: none;
+        margin-left: 0px;
+}
+#addVid {
+        float: left;
+        display: flex!important;
+}
+#toggleplaylistlock {
+        float: right;
+        margin-right: 0px;
+        background-color: initial;
+        height: 23px;
+        cursor: pointer;
+        width: 17px;
+        margin-left: 1px;
+}
+
+#opacity-sliders {
+        width: 80%;
+        height: 1px;
+        display: none!important;
+}
+
+#opacity-sliders > span {
+        position: relative;
+        top: -5px;
+        left: -6px;
+        font-size: 11px;
+        color: #BBBBBB;
+}
+
+#chat-slider, #poll-slider, #playlist-slider  {
+        width: 29%;
+        height: inherit;
+        margin-right: 5px;
+        margin-left: 5px;
+}
+
+#chat-slider > span, #poll-slider > span, #playlist-slider > span  {
+        position: relative;
+        top: -8px;
+        pointer-events: none;
+        font-size: 11px;
+        color: #BBBBBB;
+}
+#chat-slider > a, #poll-slider > a, #playlist-slider > a  {
+        height: 0.5em; 
+        width: 0.5em;
+}
+#chat-slider > span{
+        left: calc(50% - 12px);
+}
+#poll-slider > span{
+        left: calc(50% - 10px);
+}
+#playlist-slider > span{
+        left: calc(50% - 20px);
+}
+
+/*volume bar*/
+#volumebar-container{
+	float:left;
+	width:0px;
+	position:relative;
+}
+
+#volumebar {
+	height:0px;
+	width:5px;
+	position:absolute;
+	left:-8px;
+    display:none;
+    /*copyright 2013, NeoLexx Fair License; http://opensource.org/licenses/Fair
+    http://userscripts.org/scripts/review/158749*/
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'autocall\' x=\'-300%\' width=\'500%\'><feGaussianBlur stdDeviation=\'5\'/></filter></svg>#autocall");
+}
+
+/*progress bar*/
+#progressbar-container {
+	height:20px;
+
+}
+#progressbar-container img{
+	width:30;
+	height:21;
+	position:relative;
+	top:1px;
+	left:-25px;
+}
+#progressbar{
+	margin:10px 0px 0px 0px;
+	width:0px;
+	float:left;
+	height:10px;
+    border-width:0px 0px 0px 0px;
+    position:relative;
+    /*copyright 2013, NeoLexx Fair License; http://opensource.org/licenses/Fair
+    http://userscripts.org/scripts/review/158749*/
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'autocall\' y=\'-100%\' height=\'300%\'><feGaussianBlur stdDeviation=\'5\'/></filter></svg>#autocall");
+}
+
+/*youtube search*/
+#search-results {
+	float: right;
+	width: 380px;
+	margin-top: 10px;
+	background-color: #DFDFDF;
+	padding: 5px;
+	display: none;
+	position: relative;
+	right: 10px;
+}
+#divclosesearch {
+	right: 0px;
+	top: 0px;
+	position: absolute;
+	z-index: 2;
+}
+#prevButton, #nextButton, .searchResult {
+	cursor: pointer;
+}
+#divmore {
+	text-align: center;
+	height: auto;
+	width: 380px;
+	position: relative;
+	z-index: 1;
+}
+.search-result {
+	overflow: hidden;
+	position: relative;
+	float: left;
+	height: 90px;
+	width: 120px;
+	margin: 1px;
+	z-index: 2;
+}
+.search-result-thumbnail {
+	height: 90px;
+	width: 120px;
+}
+.search-result-duration {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+.search-result-inf {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	opacity: 0.7;
+}
+.search-result-add{
+	margin: 0px;
+	float: left;
+}
+.search-result-title {
+	color: white;
+}
+#addons-menu {
+	color: white;
+	float: left;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+#loginfrm {
+	display: flex;
+	padding-right: 185px;
+}
+.friendsList {
+	left: initial!important;
+	float: right;
+
+}
+#loggedInAs {
+	margin-right: 5px!important;
+}
+
+/*layout selector*/
+.layoutClickable {                     
+    margin: 0 2px 0 2px;                
+    cursor: pointer;                    
+    color: #ccc;                        
+    text-decoration: underline;         
+}                                       
+.layoutNotClickable {                   
+    color: white;                       
+    text-decoration: none!important;    
+    cursor: default;                    
+}                                       
+#layoutSelector {                       
+    color: white;                       
+    text-align: center;                 
+    font-size: 13px;                    
+    height: 20px;                       
+    margin-top: 7px;                    
+}
