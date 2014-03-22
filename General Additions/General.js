@@ -73,6 +73,8 @@ function loadGeneralStuff() {
     if (unsafeWindow.userInfo) {
         isConnected = true;
     }
+
+    GM_addStyle(GM_getResourceText('generalCSS'));
 }
 
 function htmlDecode(value) {
