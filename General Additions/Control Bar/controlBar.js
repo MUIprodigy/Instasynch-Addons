@@ -180,7 +180,6 @@ function loadControlBar() {
 }
 
 function loadControlBarOnce() {
-    GM_addStyle(GM_getResourceText('controlBarCSS'));
     var oldDisplayAnimations = GM_config.get('button-animations'),
         oldLayoutCSS = '',
         fullscreenCSS = GM_getResourceText('fullscreenCSS');

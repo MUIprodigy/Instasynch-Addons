@@ -21,7 +21,6 @@ function loadLayoutOnce() {
         }
     });
 
-    GM_addStyle(GM_getResourceText('largeLayoutSelectorCSS'));
     largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
     $('head').append($('<style>', {
         'id': 'layoutStyles'

@@ -26,7 +26,7 @@ setField({
         'label': 'Custom CSS Mode',
         'type': 'radio',
         'options': ['append', 'replace'],
-        'default': 'replace'
+        'default': 'append'
     },
     'section': 'General Additions',
     'subsection': 'Themes'
@@ -77,5 +77,3 @@ function applyThemes() {
         $('#theme-append').attr('href', GM_config.get('CustomCSS'));
     }
 }
-
-events.bind('onExecuteOnce', loadThemesOnce);

@@ -141,11 +141,11 @@
 #mirrorPlayer > div {
 	background-image: url(http://i.imgur.com/YqmK8gZ.png);
 }
-#resynchPlayer > div {
-	background-image: url(http://i.imgur.com/k5gajYE.png);
-}
 #resynchPlayer {
 	background-image: url(http://i.imgur.com/f5JSbHv.png);
+}
+#resynchPlayer > div {
+	background-image: url(http://i.imgur.com/k5gajYE.png);
 }
 #reloadPlayer {
 	background-image: url(http://i.imgur.com/ai1NM0v.png);

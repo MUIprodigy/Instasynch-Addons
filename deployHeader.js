@@ -129,7 +129,9 @@ events.bind('onExecuteOnce', loadNewLoadUserlist);
 events.bind('onExecuteOnce', loadGeneralStuff);
 events.bind('onExecuteOnce', loadCommandLoaderOnce);
 events.bind('onExecuteOnce', loadSettingsLoader);
+events.bind('onExecuteOnce', loadThemesOnce);
 events.bind('onExecuteOnce', loadBigPlaylistOnce);
+
 
 events.bind('onPreConnect', loadBigPlaylist);
 events.bind('onPreConnect', loadControlBar);
