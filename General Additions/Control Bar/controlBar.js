@@ -74,7 +74,7 @@ function loadControlBar() {
                 'class': 'controlIcon',
                 'title': 'Skip'
             }).append(
-                $('<div>').css('background-image', 'url(http://i.imgur.com/ceHuy2q.png)').addClass('animationContainer')
+                $('<div>').addClass('animationContainer')
             ).click(function() {
                 if (unsafeWindow.userInfo.loggedin) {
                     unsafeWindow.global.sendcmd('skip', null);
@@ -106,7 +106,7 @@ function loadControlBar() {
                 'title': 'Add Video'
                 //.css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)')
             }).append(
-                $('<div>').css('background-image', 'url(http://i.imgur.com/Fv1wJk5.png)').addClass('animationContainer')
+                $('<div>').addClass('animationContainer')
             ).click(function() {
                 var url = $('#URLinput').val();
                 if ($('#URLinput').val().trim() !== '') {
@@ -133,8 +133,8 @@ function loadControlBar() {
             'title': 'Reload',
             'class': 'controlIcon'
         }).append(
-            $('<div>').css('background-image', 'url(http://i.imgur.com/ARxZzeE.png)').addClass('animationContainer')
-        ).css('background-image', 'url(http://i.imgur.com/ai1NM0v.png)').click(function() {
+            $('<div>').addClass('animationContainer')
+        ).click(function() {
             unsafeWindow.video.destroyPlayer();
             unsafeWindow.global.sendcmd('reload', null);
         })
@@ -144,8 +144,8 @@ function loadControlBar() {
             'title': 'Resynch',
             'class': 'controlIcon'
         }).append(
-            $('<div>').css('background-image', 'url(http://i.imgur.com/k5gajYE.png)').addClass('animationContainer')
-        ).css('background-image', 'url(http://i.imgur.com/f5JSbHv.png)').click(function() {
+            $('<div>').addClass('animationContainer')
+        ).click(function() {
             unsafeWindow.global.sendcmd('resynch', null);
         })
     ).append(
@@ -153,7 +153,7 @@ function loadControlBar() {
             'id': 'mirrorPlayer',
             'title': 'Mirror Player',
             'class': 'controlIcon'
-        }).append($('<div>').css('background-image', 'url(http://i.imgur.com/YqmK8gZ.png)').addClass('animationContainer')).click(function() {
+        }).append($('<div>').addClass('animationContainer')).click(function() {
             toggleMirrorPlayer();
         })
     ).append(
@@ -162,7 +162,7 @@ function loadControlBar() {
             'title': 'Fullscreen',
             'class': 'controlIcon'
         }).append(
-            $('<div>').css('background-image', 'url(http://i.imgur.com/7zZxALJ.png)').addClass('animationContainer')
+            $('<div>').addClass('animationContainer')
         ).click(toggleFullscreen)
     ).append(
         $('<div>', {
@@ -170,7 +170,7 @@ function loadControlBar() {
             'title': 'NND Mode (scrolling Text)',
             'class': 'controlIcon'
         }).append(
-            $('<div>').css('background-image', 'url(http://i.imgur.com/uyx7rvg.png)').addClass('animationContainer')
+            $('<div>').addClass('animationContainer')
         ).click(function() {
             GM_config.set('NNDMode', !GM_config.get('NNDMode'));
             saveSettings();

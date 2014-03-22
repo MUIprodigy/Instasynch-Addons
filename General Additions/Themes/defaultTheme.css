@@ -1,26 +1,26 @@
 /*main colors*/
 
 .controlIcon:hover {
-        background-color: #2284B5;
+	background-color: #2284B5;
 }
 .friendsList .friendsList-expand {
-        background-color: #2eb6e6;
+	background-color: #2eb6e6;
 }
 .friendsList .friendsList-expand:hover {
-        background-color: #2284B5;
+	background-color: #2284B5;
 }
 .friendsList .friendsList-list .category {
-        background-color: #2eb6e6;
+	background-color: #2eb6e6;
 }
 .friendsList .friendsList-list .category:hover {
-        background-color: #2284B5;
+	background-color: #2284B5;
 }
 .click-nav ul .clicker {
-        background: #2eb6e6;
-        color: #FFF;
+	background: #2eb6e6;
+	color: #FFF;
 }
 .click-nav ul .clicker:hover {
-        background: #2284B5;
+	background: #2284B5;
 }
 #progressbar{
 	background-color:#2284B5;
@@ -70,112 +70,139 @@
 
 /*controls*/
 .controlIcon {
-        float: right;
-        margin-right: 2px;
-        margin-left: 2px;
-        cursor: pointer;
-        position: relative;
-        transition: background-color 0.2s ease-in-out;
-        -webkit-transition: background-color 0.2s ease-in-out;
-        -moz-transition: background-color 0.2s ease-in-out;
-        background-color: #2eb6e6;
+	float: right;
+	margin-right: 2px;
+	margin-left: 2px;
+	cursor: pointer;
+	position: relative;
+	transition: background-color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out;
+	-moz-transition: background-color 0.2s ease-in-out;
+	background-color: #2eb6e6;
 }
 
 .basic-btn-btnbar {
-        width: calc(100% - 11px) !important;
+	width: calc(100% - 11px) !important;
 }
 
 .animationContainer {
-        pointer-events: none;
-        width: 23px;
-        height: 23px;
+	pointer-events: none;
+	width: 23px;
+	height: 23px;
 }
 #skip {
-        float: none;
-        margin-right: 0px;
-        margin-left: 0px;
-        background-image: url(http://i.imgur.com/FhBdt3X.png);
+	float: none;
+	margin-right: 0px;
+	margin-left: 0px;
+	background-image: url(http://i.imgur.com/FhBdt3X.png);
+}
+#skip > div {
+	background-image: url(http://i.imgur.com/ceHuy2q.png);
 }
 #skipCounter {
-        height: 23px;
-        margin-left: 0px;
-        padding: 4px 2px 0px 3px;
-        cursor: default;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
+	height: 23px;
+	margin-left: 0px;
+	padding: 4px 2px 0px 3px;
+	cursor: default;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 #skipContainer {
-        float: left;
-        width: 70px;
+	float: left;
+	width: 70px;
 }
 #URLinput {
-        height: 23px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        padding-left: 4px;
-        margin-right: 0px;
-        border-width: 0px;
-        width: 200px;
+	height: 23px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 4px;
+	margin-right: 0px;
+	border-width: 0px;
+	width: 200px;
 }
 #addUrl {
-        float: none;
-        margin-left: 0px;
+	float: none;
+	margin-left: 0px;
+}
+#addUrl > div {
+	background-image: url(http://i.imgur.com/Fv1wJk5.png);
 }
 #addVid {
-        float: left;
-        display: flex!important;
+	float: left;
+	display: flex!important;
+}
+#nnd-Mode > div {
+	background-image: url(http://i.imgur.com/uyx7rvg.png);
+}
+#fullscreen > div {
+	background-image: url(http://i.imgur.com/7zZxALJ.png);
+}
+#mirrorPlayer > div {
+	background-image: url(http://i.imgur.com/YqmK8gZ.png);
+}
+#resynchPlayer > div {
+	background-image: url(http://i.imgur.com/k5gajYE.png);
+}
+#resynchPlayer {
+	background-image: url(http://i.imgur.com/f5JSbHv.png);
+}
+#reloadPlayer {
+	background-image: url(http://i.imgur.com/ai1NM0v.png);
+}
+#reloadPlayer > div {
+	background-image: url(http://i.imgur.com/ARxZzeE.png);
 }
 #toggleplaylistlock {
-        float: right;
-        margin-right: 0px;
-        background-color: initial;
-        height: 23px;
-        cursor: pointer;
-        width: 17px;
-        margin-left: 1px;
+	float: right;
+	margin-right: 0px;
+	background-color: initial;
+	height: 23px;
+	cursor: pointer;
+	width: 17px;
+	margin-left: 1px;
 }
 
 #opacity-sliders {
-        width: 80%;
-        height: 1px;
-        display: none!important;
+	width: 80%;
+	height: 1px;
+	display: none!important;
 }
 
 #opacity-sliders > span {
-        position: relative;
-        top: -5px;
-        left: -6px;
-        font-size: 11px;
-        color: #BBBBBB;
+	position: relative;
+	top: -5px;
+	left: -6px;
+	font-size: 11px;
+	color: #BBBBBB;
 }
 
 #chat-slider, #poll-slider, #playlist-slider  {
-        width: 29%;
-        height: inherit;
-        margin-right: 5px;
-        margin-left: 5px;
+	width: 29%;
+	height: inherit;
+	margin-right: 5px;
+	margin-left: 5px;
 }
 
 #chat-slider > span, #poll-slider > span, #playlist-slider > span  {
-        position: relative;
-        top: -8px;
-        pointer-events: none;
-        font-size: 11px;
-        color: #BBBBBB;
+	position: relative;
+	top: -8px;
+	pointer-events: none;
+	font-size: 11px;
+	color: #BBBBBB;
 }
 #chat-slider > a, #poll-slider > a, #playlist-slider > a  {
-        height: 0.5em; 
-        width: 0.5em;
+	height: 0.5em; 
+	width: 0.5em;
 }
 #chat-slider > span{
-        left: calc(50% - 12px);
+	left: calc(50% - 12px);
 }
 #poll-slider > span{
-        left: calc(50% - 10px);
+	left: calc(50% - 10px);
 }
 #playlist-slider > span{
-        left: calc(50% - 20px);
+	left: calc(50% - 20px);
 }
 
 /*volume bar*/
@@ -298,21 +325,21 @@
 }
 
 /*layout selector*/
-.layoutClickable {                     
-    margin: 0 2px 0 2px;                
-    cursor: pointer;                    
-    color: #ccc;                        
-    text-decoration: underline;         
-}                                       
-.layoutNotClickable {                   
-    color: white;                       
+.layoutClickable {	     
+    margin: 0 2px 0 2px;	
+    cursor: pointer;	    
+    color: #ccc;	
+    text-decoration: underline;	 
+}	       
+.layoutNotClickable {	   
+    color: white;	       
     text-decoration: none!important;    
-    cursor: default;                    
-}                                       
-#layoutSelector {                       
-    color: white;                       
-    text-align: center;                 
-    font-size: 13px;                    
-    height: 20px;                       
-    margin-top: 7px;                    
+    cursor: default;	    
+}	       
+#layoutSelector {	       
+    color: white;	       
+    text-align: center;	 
+    font-size: 13px;	    
+    height: 20px;	       
+    margin-top: 7px;	    
 }
