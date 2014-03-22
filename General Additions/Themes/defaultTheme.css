@@ -343,3 +343,11 @@
     height: 20px;	       
     margin-top: 7px;	    
 }
+
+/*poll seal*/
+.st-poll{
+	background: url(http://i.imgur.com/YR9hGSt.png) 0 0 #DFDFDF;
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}

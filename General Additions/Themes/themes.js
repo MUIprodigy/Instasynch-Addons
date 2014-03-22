@@ -1,10 +1,10 @@
 setField({
     'name': 'Theme',
     'data': {
-        'label': '<a style="color:white;" href="https://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Themes" target="_blank">Theme</a>',
+        'label': '<a style="color:white;" href="https://github.com/Bibbytube/Instasynch-Addons/tree/master/General%20Additions/Themes" target="_blank">Theme</a>',
         'type': 'select',
         'options': ['default'],
-        'default': 'normal'
+        'default': 'default'
     },
     'section': 'General Additions',
     'subsection': 'Themes'
@@ -14,7 +14,6 @@ setField({
     'data': {
         'label': 'Custom CSS url',
         'type': 'text',
-        'options': 'default',
         'default': ''
     },
     'section': 'General Additions',
@@ -23,7 +22,7 @@ setField({
 setField({
     'name': 'CustomCSSMode',
     'data': {
-        'label': 'Custom CSS Mode',
+        'label': 'Custom CSS mode',
         'type': 'radio',
         'options': ['append', 'replace'],
         'default': 'append'
@@ -58,6 +57,9 @@ function loadThemesOnce() {
             oldCustomCSS !== GM_config.get('CustomCSS') ||
             oldCustomCSSMode !== GM_config.get('CustomCSSMode')) {
             applyThemes();
+            oldTheme = GM_config.get('Theme'),
+            oldCustomCSS = GM_config.get('CustomCSS'),
+            oldCustomCSSMode = GM_config.get('CustomCSSMode');
         }
     });
 
