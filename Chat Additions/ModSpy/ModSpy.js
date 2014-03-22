@@ -18,9 +18,13 @@ function loadModSpy() {
         ],
         filter,
         i,
-        lastUser;
+        match;
     events.bind('onRemoveUser', function(id, user) {
-        lastUser = user;
+        if (lastAction) {
+            unsafeWindow.addMessage('', String.format('{0} has {1} {2}', actiontaker, lastAction, user.username), '', 'hashtext');
+            lastAction = undefined;
+            actiontaker = undefined;
+        }
     });
     events.bind('onMoveVideo', function(vidinfo, position, oldPosition) {
         if (Math.abs(getActiveVideoIndex() - position) <= 10 && Math.abs(oldPosition - position) > 10) { // "It's a bump ! " - Amiral Ackbar
@@ -38,21 +42,27 @@ function loadModSpy() {
                 }
             }
             if (!filter) {
-                unsafeWindow.setTimeout(function() {
-                    if (message.match(/ moved a video/g) && bumpCheck) {
-                        message = message.replace("moved", "bumped");
-                        bumpCheck = false;
-                    } else if (message.match(/has (banned)|(kicked) a user\./)) {
-                        message = message.replace(/a user/, lastUser.username);
-                    }
+                if (message.match(/ moved a video/g) && bumpCheck) {
+                    message = message.replace("moved", "bumped");
+                    bumpCheck = false;
+                } else if ((match = message.match(/([^\s]+) has banned a user\./))) {
+                    lastAction = 'banned';
+                    actiontaker = match[1];
+                } else if ((match = message.match(/([^\s]+) has kicked a user\./))) {
+                    lastAction = 'kicked';
+                    actiontaker = match[1];
+                }
+                if (!lastAction) {
                     unsafeWindow.addMessage('', message, '', 'hashtext');
-                }, 500);
+                }
             }
         }
         oldLog.apply(unsafeWindow.console, arguments);
     };
 }
-var bumpCheck = false;
+var bumpCheck = false,
+    lastAction,
+    actiontaker;
 events.bind('onResetVariables', function() {
     bumpCheck = false;
 });

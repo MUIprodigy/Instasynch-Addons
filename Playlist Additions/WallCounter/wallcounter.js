@@ -11,20 +11,17 @@ function loadWallCounter() {
     events.bind('onAddVideo', function(vidinfo) {
         resetWallCounter();
         value = wallCounter[vidinfo.addedby];
-        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername) {
-            output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
-            unsafeWindow.addMessage('', output, '', 'hashtext');
+        if (vidinfo.addedby === thisUsername) {
+            unsafeWindow.addMessage('', String.format('Video added successfully. WallCounter: [{0}]', unsafeWindow.secondsToTime(value)), '', 'hashtext');
+            if (isBibbyRoom() && value >= 3600) {
+                output = String.format('Watch out {0} ! You\'re being a faggot by adding more than 1 hour of videos !', thisUsername);
+                unsafeWindow.addMessage('', output, '', 'hashtext');
+            }
         }
     });
 
     unsafeWindow.addMessage = function(username, message, userstyle, textstyle) {
-        if (username === '' && message === 'Video added successfully.') {
-            unsafeWindow.setTimeout(function() {
-                resetWallCounter();
-                message += String.format('WallCounter: [{0}]', unsafeWindow.secondsToTime(wallCounter[thisUsername]));
-                oldAddMessage(username, message, userstyle, textstyle);
-            }, 750);
-        } else {
+        if (!(username === '' && message === 'Video added successfully.')) {
             oldAddMessage(username, message, userstyle, textstyle);
         }
     };
