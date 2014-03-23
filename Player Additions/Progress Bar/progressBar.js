@@ -62,9 +62,7 @@ function loadProgressbar() {
                 'id': 'progressbar'
             }).addClass('blur5')
         ).append(
-            $('<img>', {
-                'src': 'http://i.imgur.com/GiBiY.png'
-            }).addClass('mirror')
+            $('<div>').addClass('mirror')
         ).css('display', GM_config.get('ProgressBar') ? 'flex' : 'none')
     );
 }
