@@ -31,13 +31,13 @@
 // @icon        http://i.imgur.com/bw2Zthys.jpg
 // @icon64      http://i.imgur.com/f3vYHNNs.jpg
 
-// @resource    fullscreenCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/fullscreen.css
-// @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayout.css
-// @resource    GM_configCSS http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
-// @resource    bigPlaylistCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Playlist%20Additions/BigPlaylist/bigPlaylist.css
-// @resource    generalCSS http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/general.css
+// @resource    fullscreenCSS https://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/fullscreen.css
+// @resource    largeLayoutCSS https://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayout.css
+// @resource    GM_configCSS https://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
+// @resource    bigPlaylistCSS https://raw.github.com/Bibbytube/Instasynch-Addons/master/Playlist%20Additions/BigPlaylist/bigPlaylist.css
+// @resource    generalCSS https://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/general.css
 
-// @resource    defaultTheme http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Themes/defaultTheme.css
+// @resource    defaultTheme https://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Themes/defaultTheme.css
 // ==/UserScript==
 /*
     <InstaSynch - Watch Videos with friends.>
