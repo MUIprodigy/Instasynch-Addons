@@ -11,6 +11,7 @@
 // @contributor Rollermiam
 // @contributor BigBubba
 // @contributor dirtyharry
+// @contributor Catmosphere
 
 // @grant       unsafeWindow
 // @grant       GM_getValue
@@ -93,17 +94,20 @@ var settingsFields = {},
             }
         };
         this.fire = function(eventName, parameters, preOld) {
-            var i;
+            var i,
+                listenersCopy;
             preOld = preOld | false;
             if (listeners[eventName] === undefined) {
                 return;
             }
-            for (i = 0; i < listeners[eventName].length; i += 1) {
-                if (!(listeners[eventName][i].preOld ^ preOld)) {
+            listenersCopy = [].concat(listeners[eventName]);
+
+            for (i = 0; i < listenersCopy.length; i += 1) {
+                if (!(listenersCopy[i].preOld ^ preOld)) {
                     try {
-                        listeners[eventName][i].callback.apply(this, parameters);
+                        listenersCopy[i].callback.apply(this, parameters);
                     } catch (err) {
-                        logError(listeners[eventName][i].callback, err);
+                        logError(listenersCopy[i].callback, err);
                     }
                 }
             }
