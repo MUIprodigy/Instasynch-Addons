@@ -1,6 +1,4 @@
 function loadSettingsLoader() {
-    //add styles for the button
-    GM_addStyle(GM_getResourceText('settingsLoaderCSS'));
     //add the button
     $('#loginfrm > :first-child').before(
         $('<div>', {

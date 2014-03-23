@@ -1,37 +1,3 @@
-.controlIcon {
-        float: right;
-        margin-right: 2px;
-        margin-left: 2px;
-        cursor: pointer;
-        position: relative;
-        transition: background-color 0.2s ease-in-out;
-        -webkit-transition: background-color 0.2s ease-in-out;
-        -moz-transition: background-color 0.2s ease-in-out;
-        background-color: #2eb6e6;
-}
-.controlIcon:hover {
-        background-color: #2284B5;
-}
-.friendsList .friendsList-expand {
-        background-color: #2eb6e6;
-}
-.friendsList .friendsList-expand:hover {
-        background-color: #2284B5;
-}
-.friendsList .friendsList-list .category {
-        background-color: #2eb6e6;
-}
-.friendsList .friendsList-list .category:hover {
-        background-color: #2284B5;
-}
-.click-nav ul .clicker {
-        background: #2eb6e6;
-        color: #FFF;
-}
-.click-nav ul .clicker:hover {
-        background: #2284B5;
-}
-
 .spiral {
         -webkit-animation: spiral 1s linear 0s infinite reverse;
         -moz-animation: spiral 1s linear 0s infinite reverse;
@@ -58,9 +24,6 @@
 @keyframes spiral {
         0% {transform: rotate(360deg);}
         100% {transform: rotate(0deg);}
-}
-.basic-btn-btnbar {
-        width: calc(100% - 11px) !important;
 }
 .spinner {
         -webkit-animation: spinner 1s linear 0s infinite reverse;
@@ -204,56 +167,6 @@
         -o-animation-play-state: running;
         animation-play-state: running;
 }
-.animationContainer {
-        pointer-events: none;
-        width: 23px;
-        height: 23px;
-}
-#skip {
-        float: none;
-        margin-right: 0px;
-        margin-left: 0px;
-        background-image: url(http://i.imgur.com/FhBdt3X.png);
-}
-#skipCounter {
-        height: 23px;
-        margin-left: 0px;
-        padding: 4px 2px 0px 3px;
-        cursor: default;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-}
-#skipContainer {
-        float: left;
-        width: 70px;
-}
-#URLinput {
-        height: 23px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        padding-left: 4px;
-        margin-right: 0px;
-        border-width: 0px;
-        width: 200px;
-}
-#addUrl {
-        float: none;
-        margin-left: 0px;
-}
-#addVid {
-        float: left;
-        display: flex!important;
-}
-#toggleplaylistlock {
-        float: right;
-        margin-right: 0px;
-        background-color: initial;
-        height: 23px;
-        cursor: pointer;
-        width: 17px;
-        margin-left: 1px;
-}
 .mirror { 
         -moz-transform: scaleX(-1); 
         -o-transform: scaleX(-1); 
@@ -261,45 +174,15 @@
         transform: scaleX(-1);
         filter: FlipH;
 }
-
-#opacity-sliders {
-        width: 80%;
-        height: 1px;
-        display: none!important;
+.blur5 {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -ms-filter: blur(5px);
+    -o-filter: blur(5px);
 }
-
-#opacity-sliders > span {
-        position: relative;
-        top: -5px;
-        left: -6px;
-        font-size: 11px;
-        color: #BBBBBB;
+.opacity0 {
+	opacity: 0!important;
 }
-
-#chat-slider, #poll-slider, #playlist-slider  {
-        width: 29%;
-        height: inherit;
-        margin-right: 5px;
-        margin-left: 5px;
-}
-
-#chat-slider > span, #poll-slider > span, #playlist-slider > span  {
-        position: relative;
-        top: -8px;
-        pointer-events: none;
-        font-size: 11px;
-        color: #BBBBBB;
-}
-#chat-slider > a, #poll-slider > a, #playlist-slider > a  {
-        height: 0.5em; 
-        width: 0.5em;
-}
-#chat-slider > span{
-        left: calc(50% - 12px);
-}
-#poll-slider > span{
-        left: calc(50% - 10px);
-}
-#playlist-slider > span{
-        left: calc(50% - 20px);
+.text-shadow {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; 
 }

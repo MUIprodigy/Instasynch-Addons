@@ -26,6 +26,7 @@ function loadWallCounter() {
         }
     };
 
+    events.unbind('onPostConnect', loadWallCounter);
     /*
      * Commented since this shit isnt working and I have no idea why
      */
@@ -95,4 +96,4 @@ function printMyWallCounter() {
 events.bind('onResetVariables', function() {
     wallCounter = {};
 });
-events.bind('onExecuteOnce', loadWallCounter);
+events.bind('onPostConnect', loadWallCounter);

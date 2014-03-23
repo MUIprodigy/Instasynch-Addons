@@ -13,8 +13,6 @@ function loadProgressbarOnce() {
         progressbarInterval,
         oldProgressBarSetting = GM_config.get('ProgressBar');
 
-    GM_addStyle(GM_getResourceText('progressbarCSS'));
-
     events.bind('onSettingsOpen', function() {
         oldProgressBarSetting = GM_config.get('ProgressBar');
     });

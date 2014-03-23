@@ -30,16 +30,13 @@
 // @icon        http://i.imgur.com/bw2Zthys.jpg
 // @icon64      http://i.imgur.com/f3vYHNNs.jpg
 
-// @resource    controlBarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/controlBar.css
 // @resource    fullscreenCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Control%20Bar/fullscreen.css
-// @resource    youtubeSearchCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Youtube%20Search/youtubeSearch.css
 // @resource    largeLayoutCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayout.css
-// @resource    largeLayoutSelectorCSS https://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Large%20Layout/largeLayoutSelector.css
-// @resource    settingsLoaderCSS https://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/settingsLoader.css
-// @resource    GM_configCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
-// @resource    volumebarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Player%20Additions/Mousewheel%20Volumecontrol/volumebar.css
-// @resource    progressbarCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Player%20Additions/Progress%20Bar/progressbar.css
+// @resource    GM_configCSS http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Settings%20Loader/GMconfig.css
 // @resource    bigPlaylistCSS http://raw.github.com/Bibbytube/Instasynch-Addons/master/Playlist%20Additions/BigPlaylist/bigPlaylist.css
+// @resource    generalCSS http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/general.css
+
+// @resource    defaultTheme http://raw.githubusercontent.com/Bibbytube/Instasynch-Addons/master/General%20Additions/Themes/defaultTheme.css
 // ==/UserScript==
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -79,6 +76,10 @@ var settingsFields = {},
                 callback: callback,
                 preOld: preOld | false
             });
+        };
+        this.once = function(eventName, callback, preOld) {
+            this.unbind(eventName, callback);
+            this.bind(eventName, callback, preOld);
         };
         this.unbind = function(eventName, callback) {
             var i;
@@ -125,17 +126,19 @@ function setField(field) {
 
 function postConnect() {
     events.fire('onPostConnect');
-    events.unbind('onUserlist', postConnect);
 }
 
 events.bind('onExecuteOnce', loadNewLoadUserlist);
 events.bind('onExecuteOnce', loadGeneralStuff);
 events.bind('onExecuteOnce', loadCommandLoaderOnce);
 events.bind('onExecuteOnce', loadSettingsLoader);
+events.bind('onExecuteOnce', loadThemesOnce);
 events.bind('onExecuteOnce', loadBigPlaylistOnce);
+
 
 events.bind('onPreConnect', loadBigPlaylist);
 events.bind('onPreConnect', loadControlBar);
 events.bind('onPreConnect', loadEvents);
+events.bind('onPreConnect', loadLayout);
 
 //events.bind('onPostConnect', );

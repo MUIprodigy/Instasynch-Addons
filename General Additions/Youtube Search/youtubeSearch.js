@@ -1,5 +1,4 @@
 function loadYoutbeSearchOnce() {
-    GM_addStyle(GM_getResourceText('youtubeSearchCSS'));
     searchResultTemplate = $('<a>', {
         'target': '_blank'
     }).append(

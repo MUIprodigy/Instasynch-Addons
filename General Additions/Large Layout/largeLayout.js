@@ -21,7 +21,6 @@ function loadLayoutOnce() {
         }
     });
 
-    GM_addStyle(GM_getResourceText('largeLayoutSelectorCSS'));
     largeLayoutCSS = GM_getResourceText('largeLayoutCSS');
     $('head').append($('<style>', {
         'id': 'layoutStyles'
@@ -32,10 +31,6 @@ function loadLayout() {
     $('#playlistcontrols').css('width', '100%');
     $('.sliderContainer').css('width', '100%');
     $('.roomFooter ').css('margin-top', '0px');
-
-    if (GM_config.get('Layout') !== 'normal') {
-        changeLayout();
-    }
 
     function setLayout() {
         if (GM_config.get('Layout') !== $(this).text()) {
@@ -61,6 +56,8 @@ function loadLayout() {
         'id': 'layoutSelector'
     }).text('layout:').insertBefore('#roomFooter');
     $('#layoutSelector').append(normal).append(large);
+
+    changeLayout();
 }
 var largeLayoutCSS;
 
@@ -76,10 +73,13 @@ function changeLayout() {
             $('#layoutStyles').text(largeLayoutCSS);
             break;
     }
+    setPlayerDimension();
+}
+
+function setPlayerDimension() {
     playerWidth = $('#media').width();
     playerHeight = $('#media').height();
 }
 
 
-events.bind('onPreConnect', loadLayout);
 events.bind('onExecuteOnce', loadLayoutOnce);
