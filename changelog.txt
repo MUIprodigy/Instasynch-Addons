@@ -1,9 +1,22 @@
-1.35.0.6
+1.34.1.2
+ • Fixed resource urls being wrong, causing broken layout
+
+1.34.1.1
+ • Fixed logInOffMessages spamming when entering a room
+
+1.34.1
+ • Moved most of the css in a single file to allow the addition of themes
+ • Added theme loader (more themes to come)
+ • Support for custom css urls
+ • Fixed wallcounter spamming when entering a room
+
+
+1.34.0.6
  • Fixed modspy
  • Fixed wallcounter
  • Fixed 'bump [position], added 'bump [url]
 
-1.35.0.5
+1.34.0.5
  • Rewrote playlist browser / youtubesearch / history
 
 1.34.0.4
