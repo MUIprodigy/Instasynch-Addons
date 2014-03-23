@@ -74,7 +74,7 @@ var advancedTags = {
         '\\[sanic\\]': '<MARQUEE behavior="scroll" direction="right" width="100%" scrollamount="50">',
         '\\[/sanic\\]': '</marquee>',
 
-        '\\[spoiler\\]': "<span style=\"background-color: #000;\" onmouseover=\"this.style.backgroundColor='#FFF';\" onmouseout=\"this.style.backgroundColor='#000';\">",
+        '\\[spoiler\\]': "<span class=\"spoiler\">",
         '\\[/spoiler\\]': '</span>',
 
         '\\[italic\\]': '<span style="font-style:italic">',

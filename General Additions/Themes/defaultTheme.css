@@ -1,5 +1,10 @@
 /*main colors*/
-
+.spoiler{
+	background-color: #000;
+}
+.spoiler:hover{
+	background-color: #FFF;
+}
 .controlIcon:hover {
 	background-color: #2284B5;
 }
