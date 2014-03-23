@@ -2,10 +2,11 @@ unsafeWindow.addEventListener('load', function() {
     function loadStuff() {
         if (unsafeWindow.global.page.name === 'room') {
             events.fire('onResetVariables');
-            //events.bind('onPreConnect',);
+
             events.fire('onPreConnect');
-            events.unbind('onPostConnect', loadAutoComplete);
-            events.bind('onPostConnect', loadAutoComplete);
+
+            events.once('onPostConnect', loadAutoComplete);
+            events.once('onPostConnect', setPlayerDimension);
             if (isConnected) {
                 events.fire('onPostConnect');
             } else {

@@ -77,6 +77,10 @@ var settingsFields = {},
                 preOld: preOld | false
             });
         };
+        this.once = function(eventName, callback, preOld) {
+            this.unbind(eventName, callback);
+            this.bind(eventName, callback, preOld);
+        };
         this.unbind = function(eventName, callback) {
             var i;
             if (listeners[eventName] !== undefined) {
@@ -122,7 +126,6 @@ function setField(field) {
 
 function postConnect() {
     events.fire('onPostConnect');
-    events.unbind('onUserlist', postConnect);
 }
 
 events.bind('onExecuteOnce', loadNewLoadUserlist);
@@ -136,5 +139,6 @@ events.bind('onExecuteOnce', loadBigPlaylistOnce);
 events.bind('onPreConnect', loadBigPlaylist);
 events.bind('onPreConnect', loadControlBar);
 events.bind('onPreConnect', loadEvents);
+events.bind('onPreConnect', loadLayout);
 
 //events.bind('onPostConnect', );
