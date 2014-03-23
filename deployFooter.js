@@ -8,9 +8,9 @@ unsafeWindow.addEventListener('load', function() {
             events.once('onPostConnect', loadAutoComplete);
             events.once('onPostConnect', setPlayerDimension);
             if (isConnected) {
-                events.fire('onPostConnect');
+                postConnect();
             } else {
-                events.bind('onUserlist', postConnect);
+                events.once('onUserlist', postConnect);
             }
             unsafeWindow.addMessage('', String.format('<strong>Script {0} loaded.<br>Changelog: {1}</strong>', GM_info.script.version, 'https://github.com/Bibbytube/Instasynch-Addons/blob/master/changelog.txt'), '', 'hashtext');
         }
